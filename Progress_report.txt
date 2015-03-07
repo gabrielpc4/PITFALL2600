@@ -1,0 +1,29 @@
+02-18-2015
+. Created class Rect
+. Created class Polygon
+. Created class Sprite
+. Created class Color
+. Commented class Rect
+. Commented class Polygon
+. Commented class Sprite
+. Commented class Color
+
+02-19-2015
+. Created World:
+	undergroundFloor
+	undergroundWall
+	undergroundRoof
+	ground
+	sky
+	threes
+	threesBranches
+
+02-20-2015
+. Finished treeLeafs
+. Created stairs
+. Created stairsHole
+
+03-05-2015
+. Created PlayerSprite Class
+. Created the  player first animation frame
+
