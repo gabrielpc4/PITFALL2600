@@ -12,25 +12,36 @@ private:
 	int _height;
 	int _width;
 	int lookingDirection;
-	bool jumping;
-	int _speed;
+	bool _jumping;
+	Point playerSpeed;
 	int animationFrame;
-	int ground_y;
-	bool falling;
+	
+	bool _falling;
 	bool _moving;
+	bool _climbing;
 public:
 	Player();
 	Player(GLint startX, GLint startY);
 	void draw();
 	void drawBasicShape();
+	void animate();
 	bool isJumping();
 	void move();
+	void jumping(bool state);
 	void jump();
 	void look(int DIRECTION);
 	bool isLooking(int DIRECTION);
-	void setSpeed(int speed);
-	int speed();
+	void setSpeedX(int speed);
+	void setSpeedY(int speed);
+	Point speed();
 	void moving(bool state);
 	bool isMoving();
+	int ground_y;
+	void falling(bool state);
+	bool isFalling();
+	void fall();	
+	void climbing(bool state);
+	bool isClimbing();
+	void climb();
 };
 #endif

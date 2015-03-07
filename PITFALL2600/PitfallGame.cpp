@@ -34,13 +34,17 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			player->moving(false);
 		}
 	}
+	if (key == GLUT_KEY_UP)
+	{
+
+	}
 }
 
 void PitfallGame::handleKeyboardInput(unsigned char c)
 {
 	if (c == SPACE_BAR)
 	{	
-		player->jump();
+		player->jumping(true);
 	}
 }
 
@@ -55,13 +59,57 @@ void PitfallGame::drawAll()
 {		
 	world->draw();
 	player->draw();	
-
 }
 
 void PitfallGame::moveAll()
 {	
 	player->move();
 
+	if (world->stairs != NULL)
+	{
+		if (checkColisionX(player, world->stairs))
+		{
+			if (player->ground_y >= world->ground.y())
+			{
+				if (!player->isJumping())
+				{
+					player->ground_y = world->tunnelFloor.topY();
+					player->falling(true);
+				}
+			}
+			else
+			{
+				/*if ((player->topY() / 2.0) < world->stairs->hole->y())
+				{
+					player->climbing(true);
+				}
+				else
+				{
+					player->jump();
+					player->climbing(false);
+				}*/
+			}
+		}
+	}
+	
+}
+
+bool PitfallGame::checkColisionX(Player* player, GameObject* object)
+{
+	int compareX;
+	if (player->isLooking(RIGHT))
+	{
+		compareX = player->x();
+	}
+	else
+	{
+		compareX = player->rightX();
+	}
+	if (compareX >= world->stairs->x() && compareX <= world->stairs->rightX())
+	{
+		return true;
+	}
+	return false;
 }
 
 

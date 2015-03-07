@@ -27,19 +27,14 @@ Stairs::Stairs(GLint startX, GLint startY) :
 	}
 
 	// Creates and draws the stair hole	
-	stairsHole = new GameObject(this->x(), this->topY() + 10);	// Defines the start position of the sprite stairHole in relation to the stair
-	stairsHole->sprite->push_back(Rect(Point(0, 0), Point(this->width(), 6)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
-	stairsHole->sprite->push_back(Rect(Point(0, 6), Point(this->width(), 12)), Color(67.0, 0.0, 0.0));   // DarkRed rectangle: width:stairs.width() height: 12 - 6 = 6	
+	hole = new GameObject(this->x(), this->topY() + 10);	// Defines the start position of the sprite stairHole in relation to the stair
+	hole->sprite->push_back(Rect(Point(0, 0), Point(this->width(), 6)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
+	hole->sprite->push_back(Rect(Point(0, 6), Point(this->width(), 12)), Color(67.0, 0.0, 0.0));   // DarkRed rectangle: width:stairs.width() height: 12 - 6 = 6	
 }
 
 
 void Stairs::draw()
 {	
 	this->sprite->drawSprite(this->x(),this->y());		// Draws the stair
-    stairsHole->drawSprite(stairsHole->x(), stairsHole->y());	// Draws the stairHole
-}
-
-GameObject* Stairs::hole()
-{
-	return stairsHole;
+    hole->drawSprite(hole->x(), hole->y());	// Draws the stairHole
 }

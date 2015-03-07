@@ -34,7 +34,7 @@ public:
 	Rect ground;
 		
 	// Other elements	
-	Stairs stairs;
+	Stairs* stairs;
 	BrickWall* brickWall;
 	World();
 	World(int scenarioNumber);						// Defines the Positions of the basic scenario

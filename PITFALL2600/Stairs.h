@@ -9,13 +9,12 @@ class Stairs :
 {
 private:
 	Rect stairsBorder;
-	Rect step;
-	GameObject* stairsHole;
+	Rect step;	
 public:
 	Stairs();
 	Stairs(GLint startX, GLint startY);
 	void draw();
-	GameObject* hole();
+	GameObject* hole;
 };
 
 #endif

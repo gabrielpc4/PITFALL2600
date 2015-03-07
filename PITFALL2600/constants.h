@@ -15,6 +15,8 @@ static double MAGNIFICATION = 2;
 #define RIGHT 3
 
 #define PLAYER_SPEED 4
+#define FALLING_SPEED 3
+#define CLIMBING_SPEED 3
 #define JUMP_SPEED 3
 #define ANIMATION_REFRESH_INTERVAL 2
 

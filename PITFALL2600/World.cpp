@@ -68,7 +68,7 @@ void World::buildScenario(int scenarioNumber)
 	{
 	case(0) :
 	{
-		stairs = Stairs(245, tunnelFloor.topY());	
+		stairs = new Stairs(245, tunnelFloor.topY());	
 		brickWall = new BrickWall(461, tunnelFloor.topY());
 	}break;
 	}
@@ -86,7 +86,7 @@ void World::draw()
 	{
 	case(0) :
 	{
-		stairs.draw();
+		stairs->draw();
 		brickWall->draw();
 	}break;
 	}
