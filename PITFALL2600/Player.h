@@ -19,6 +19,7 @@ private:
 	bool _falling;
 	bool _moving;
 	bool _climbing;
+	int _climbingDirection;
 public:
 	Player();
 	Player(GLint startX, GLint startY);
@@ -42,6 +43,9 @@ public:
 	void fall();	
 	void climbing(bool state);
 	bool isClimbing();
+	void climb(int direction);
 	void climb();
+	int climbingDirection();
+	bool willFall(GameObject* hole);
 };
 #endif

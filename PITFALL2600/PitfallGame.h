@@ -16,6 +16,7 @@ public:
 	void handleKeyboardInput(int key, int keyState);
 	void handleKeyboardInput(unsigned char c);
 	bool checkColisionX(Player* player, GameObject* object);
+	bool checkColisionY(Player* player, GameObject* object);
 };
 
 #endif

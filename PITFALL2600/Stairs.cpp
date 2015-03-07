@@ -11,10 +11,10 @@ Stairs::Stairs(GLint startX, GLint startY) :
 {
 	this->sprite = new Sprite();
 	// Defines the stair border
-	stairsBorder = Rect(Point(0, 0), Point(28, 94));
+	stairsBorder = Rect(Point(0, 0), Point(33, 94));
 
 	// Defines the position and color of the first step of the stair
-	step = Rect(Point(stairsBorder.x() + 7, stairsBorder.y() + 4), Point(stairsBorder.x() + 21, stairsBorder.y() + 8));
+	step = Rect(Point(stairsBorder.x() + 7, stairsBorder.y() + 4), Point(stairsBorder.x() + 26, stairsBorder.y() + 8));
 	step.setColor(Color(148, 91, 0));
 
 	sprite->push_back(stairsBorder, Color(67.0, 0.0, 0.0));	// Adds the starts border to the stairs sprite

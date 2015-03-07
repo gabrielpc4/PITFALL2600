@@ -39,6 +39,7 @@ public:
 	World();
 	World(int scenarioNumber);						// Defines the Positions of the basic scenario
 	void draw();	// Calls the function drawBasicScenario and loads the first Scenario
+	void drawStairHoleCover();
 	
 };
 #endif

@@ -3,7 +3,6 @@
 using namespace std;
 void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
-
 	if (key == GLUT_KEY_RIGHT)
 	{
 		if (keyState == DOWN)
@@ -34,9 +33,41 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			player->moving(false);
 		}
 	}
-	if (key == GLUT_KEY_UP)
+	if (!player->isFalling())
 	{
+		if (key == GLUT_KEY_UP)
+		{
+			if (keyState == DOWN)
+			{
+				if (world->stairs != NULL)
+				{
+					if (checkColisionX(player, world->stairs) && player->y() + CLIMBING_SPEED <= world->stairs->hole->y())
+					{
+						player->climbing(true);
+						player->climb(UP);
+					}
+				}
+			}
+			else
+			{
+				player->climb(NONE);
+			}
 
+		}
+		if (key == GLUT_KEY_DOWN)
+		{
+			if (keyState == DOWN)
+			{
+				if (player->isClimbing())
+				{
+					player->climb(DOWN);
+				}
+			}
+			else
+			{
+				player->climb(NONE);
+			}
+		}
 	}
 }
 
@@ -58,7 +89,12 @@ PitfallGame::PitfallGame()
 void PitfallGame::drawAll()
 {		
 	world->draw();
-	player->draw();	
+	player->draw();
+
+	if (world->stairs != NULL)
+	{
+		world->drawStairHoleCover();
+	}
 }
 
 void PitfallGame::moveAll()
@@ -66,10 +102,10 @@ void PitfallGame::moveAll()
 	player->move();
 
 	if (world->stairs != NULL)
-	{
-		if (checkColisionX(player, world->stairs))
-		{
-			if (player->ground_y >= world->ground.y())
+	{	
+		if (player->willFall(world->stairs->hole) && !player->isClimbing() && !player->isJumping())
+		{		
+			if (player->y() >= world->ground.y())
 			{
 				if (!player->isJumping())
 				{
@@ -77,35 +113,45 @@ void PitfallGame::moveAll()
 					player->falling(true);
 				}
 			}
-			else
+		}
+		if (player->isClimbing())
+		{
+			if (player->climbingDirection() == DOWN)
 			{
-				/*if ((player->topY() / 2.0) < world->stairs->hole->y())
+				if (player->y() - CLIMBING_SPEED <= world->tunnelFloor.topY())
 				{
-					player->climbing(true);
-				}
-				else
-				{
-					player->jump();
 					player->climbing(false);
-				}*/
+					player->setSpeedY(0);
+					player->setY(world->tunnelFloor.topY());
+				}
+			}
+			else if (player->climbingDirection() == UP)
+			{
+				if (player->y() + CLIMBING_SPEED >= world->stairs->hole->y())
+				{										
+					player->setY(140);
+					player->setSpeedX(+PLAYER_SPEED);
+					player->jumping(true);	
+					player->climbing(false);
+				}
 			}
 		}
-	}
-	
+	}	
 }
 
 bool PitfallGame::checkColisionX(Player* player, GameObject* object)
+{	
+	if (player->rightX() >= object->x() && player->x() <= object->rightX())
+	{		
+		return true;
+	}
+	return false;
+}
+
+
+bool PitfallGame::checkColisionY(Player* player, GameObject* object)
 {
-	int compareX;
-	if (player->isLooking(RIGHT))
-	{
-		compareX = player->x();
-	}
-	else
-	{
-		compareX = player->rightX();
-	}
-	if (compareX >= world->stairs->x() && compareX <= world->stairs->rightX())
+	if (player->y() <= object->topY() && player->topY() >= object->y())
 	{
 		return true;
 	}

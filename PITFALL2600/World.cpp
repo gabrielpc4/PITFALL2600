@@ -225,5 +225,11 @@ void World::drawTreeLeafs()
 	treeLeafs.drawPolygon(0, 262);
 }
 
+void World::drawStairHoleCover()
+{
+	Rect cover(Point(stairs->hole->x(), ground.y()), Point(stairs->hole->rightX(), stairs->hole->y()), ground.color());
+	cover.draw();
+}
+
 
 

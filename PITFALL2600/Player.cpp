@@ -19,6 +19,7 @@ Player::Player(GLint startX, GLint startY)
 	_falling = false;
 	_moving = false;
 	_climbing = false;
+	_climbingDirection = UP;
 
 	animationFrame = 0;
 	loop = 0;
@@ -47,6 +48,7 @@ void Player::draw()
 	int difference_x = backup.x() - (backup.x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
 	
+	cout << "Climbing:" << isClimbing() << endl;
 	sprite->drawSprite(backup.x() - difference_x, backup.y() + difference_y);
 }
 
@@ -63,8 +65,7 @@ void Player::jumping(bool state)
 	else
 	{
 		_jumping = false;
-	}
-	
+	}	
 }
 
 void Player::jump()
@@ -106,10 +107,7 @@ void Player::jump()
 }
 
 
-bool Player::isJumping()
-{
-	return _jumping;
-}
+
 
 void Player::fall()
 {
@@ -155,7 +153,7 @@ void Player::animate()
 
 void Player::move()
 {
-	if (this->isMoving() || isJumping())
+	if ((this->isMoving() || isJumping()) && !_climbing)
 	{
 		if (isJumping())
 		{
@@ -175,15 +173,16 @@ void Player::move()
 		}
 	}
 
-	if (isFalling() && !_jumping)
+	if (isFalling() && !_jumping && !_climbing)
 	{
 		fall();
 	}
-
+	
 	if (isClimbing())
 	{
 		climb();
 	}
+	
 
 	/*********** MOVES THE PLAYER ***********/
 	*this += playerSpeed;
@@ -195,6 +194,58 @@ void Player::move()
 	}
 }
 	
+
+void Player::climb(int direction)
+{
+	this->_climbingDirection = direction;
+}
+
+void Player::climb()
+{
+	setSpeedX(0);
+
+	if (_climbingDirection == NONE)
+	{
+		setSpeedY(0);
+	}
+	else if (this->_climbingDirection == UP)
+	{
+		setSpeedY(+CLIMBING_SPEED);
+	}
+	else
+	{
+		setSpeedY(-CLIMBING_SPEED);
+	}
+}
+
+
+bool Player::willFall(GameObject* hole)
+{
+		
+	if (this->lookingDirection == RIGHT)
+	{
+		if (this->x() > hole->x() && this->x() <= hole->rightX())
+		{
+			return true;
+		}
+	}
+	else
+	{
+		if (this->rightX() < hole->rightX() && this->x() >= hole->x())
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+int Player::climbingDirection()
+{
+	return _climbingDirection;
+}
+
+
 
 void Player::look(int DIRECTION)
 {
@@ -241,21 +292,14 @@ bool Player::isFalling()
 
 void Player::climbing(bool state)
 {
-	if (!_climbing)
-	{
-		_climbing = true;
-	}
-	else
-	{
-		_climbing = false;
-	}
+	_climbing = state;
 }
 bool Player::isClimbing()
 {
 	return _climbing;
 }
 
-void Player::climb()
+bool Player::isJumping()
 {
-	setSpeedY(CLIMBING_SPEED);
+	return _jumping;
 }

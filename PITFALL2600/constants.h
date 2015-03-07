@@ -11,6 +11,7 @@ static double MAGNIFICATION = 2;
 
 #define DOWN 0
 #define UP 1
+#define NONE -1
 #define LEFT 2
 #define RIGHT 3
 
