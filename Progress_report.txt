@@ -27,3 +27,11 @@
 . Created PlayerSprite Class
 . Created the  player first animation frame
 
+03-06-2015
+. Created all player animation frame.
+. Fixed animations height
+. Recreated the whole DrawSprite mechanism
+
+03-07-2015
+. Implemented the player jump
+
