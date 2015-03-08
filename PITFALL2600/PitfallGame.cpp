@@ -129,22 +129,22 @@ void PitfallGame::moveAll()
 
 	if (world->stairs != NULL)
 	{	
+		cout << player->willFall(world->stairs->hole) << endl;
 		if (player->willFall(world->stairs->hole) && (player->isClimbing() == false) && (player->isJumping() == false))
 		{		
-			if (player->y() >= world->ground.y())
-			{
+		
 				if (player->isJumping() == false)
 				{
 					player->floor = world->tunnelFloor.topY();
 					player->falling(true);
 				}
-			}
+			
 		}
 		if (player->isClimbing())
 		{
 			if (player->climbingDirection() == DOWN)
 			{
-				if (player->y() - CLIMBING_SPEED <= world->tunnelFloor.topY())
+				if (player->y() - CLIMBING_SPEED < world->tunnelFloor.topY())
 				{
 					player->climbing(false);
 					player->setSpeedY(0);					

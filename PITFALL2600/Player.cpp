@@ -68,7 +68,6 @@ void Player::draw()
 	sprite = new PlayerSprite(backup.x(), backup.y(), animationFrame, lookingDirection, isClimbing());
 	int difference_x = backup.x() - (backup.x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
-	cout << "j:" << _jumping << "  sY:" << playerSpeed.y() << "  f:" << floor <<endl;
 
 	sprite->drawSprite(backup.x() - difference_x, backup.y() + difference_y);
 }
@@ -175,8 +174,9 @@ void Player::animate(int minFrameNum, int maxFramenum)
 
 void Player::move()
 {
-
-	if ((isWalking() || isJumping()) && (isClimbing() == false))
+	// If the player is walking or jumping but not climbing
+	if ((isWalking() || isJumping()) 
+		&& (isClimbing() == false))
 	{
 		if (isJumping())
 		{
@@ -184,6 +184,7 @@ void Player::move()
 		}
 		else
 		{			
+			// Changes the player X speed
 			if (this->isLooking(RIGHT))
 			{
 				setSpeedX(+PLAYER_SPEED);
@@ -195,6 +196,7 @@ void Player::move()
 		}
 	}
 
+	// If the player is just falling
 	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
 	{
 		fall();
@@ -202,12 +204,18 @@ void Player::move()
 	
 	if (isClimbing())
 	{
+		// Prevents the player from false jumping, when getting off the stairs, when he initially got on the stairs while jumping
+		if (isJumping())
+		{
+			jumping(false);
+		}
 		climb();
 	}
 	
 	/*********** MOVES THE PLAYER ***********/
 	*this += playerSpeed;
 
+	// The (isJumping() == false) condition prevents the player from stopping the x position in the middle of a jump
 	if ((isWalking() == false) && (isJumping() == false))
 	{	
 		setSpeedX(0);
@@ -215,17 +223,16 @@ void Player::move()
 }
 	
 
-void Player::climb(int direction)
-{
-	_climbingDirection = direction;
-}
 
 void Player::climb()
 {
+	// Doesn't allow the player from moving horizontally when climbing
 	setSpeedX(0);
 
+	
 	if (_climbingDirection == NONE)
 	{
+		// Stops the player climbing
 		setSpeedY(0);
 	}
 	else if (_climbingDirection == UP)
@@ -240,35 +247,41 @@ void Player::climb()
 
 
 bool Player::willFall(GameObject* hole)
-{
-		
-	if (lookingDirection == RIGHT)
+{		
+	if (this->y() >= hole->y())  // Can only fall if it's on the top floor
 	{
-		if (this->x() > hole->x() && this->rightX() <= hole->rightX())
+		if (lookingDirection == RIGHT)
 		{
-			return true;
+			if (this->x() > hole->x() && this->rightX() <= hole->rightX())
+			{
+				return true;
+			}
 		}
-	}
-	else
-	{
-		if (this->rightX() < hole->rightX() && this->x() >= hole->x())
+		else
 		{
-			return true;
+			if (this->rightX() < hole->rightX() && this->x() >= hole->x())
+			{
+				return true;
+			}
 		}
-	}
-	
+	}	
 	return false;
 }
 
 bool Player::isAbleToClimbOut(GameObject* hole)
 {
-	this->floor = GROUND_Y;
 	return (((this->y() + this->height() / 2.0) + CLIMBING_SPEED) > hole->y());
 }
 
 void Player::climbOut(int direction)
 {
+	// Moves the floor to the top floor again
+	this->floor = GROUND_Y;
+
+	// Teleports the player to a position above the ground ( prevents player stucking)
 	setY(GROUND_Y + 5);
+	
+
 	if (direction == RIGHT)
 	{
 		setSpeedX(+PLAYER_SPEED);		
@@ -277,10 +290,19 @@ void Player::climbOut(int direction)
 	{
 		setSpeedX(-PLAYER_SPEED);
 	}
+
+	// Makes the player jump in the next loop, with the x direction specified by he's speed
 	this->jumping(true);
+
 	this->climbing(false);
 	
 }
+
+void Player::climb(int direction)
+{
+	_climbingDirection = direction;
+}
+
 
 int Player::climbingDirection()
 {
@@ -291,7 +313,6 @@ void Player::stopClimbing()
 {
 	_climbingDirection = NONE;
 }
-
 
 
 void Player::look(int DIRECTION)
