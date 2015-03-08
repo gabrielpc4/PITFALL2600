@@ -34,4 +34,7 @@
 
 03-07-2015
 . Implemented the player jump
+. Implemented player fall
+. Implemented player climbing logic
+. Implemented player climbing animation
 

@@ -9,7 +9,6 @@ Player::Player() :
 Player::Player(GLint startX, GLint startY) 
 	: GameObject(startX,startY),
 	playerSpeed(0,0)
-
 {		
 	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT, false);
 
@@ -17,13 +16,13 @@ Player::Player(GLint startX, GLint startY)
 	_width = this->sprite->width();
 	_height = this->sprite->height();
 	_falling = false;
-	_moving = false;
+	_walking = false;
 	_climbing = false;
 	_climbingDirection = UP;
 
 	animationFrame = 0;
 	loop = 0;
-	ground_y = startY;
+	floor = startY;
 	lookingDirection = RIGHT;
 }
 
@@ -43,7 +42,7 @@ void Player::draw()
 	
 	if (isClimbing() == false)
 	{
-		if (isMoving())
+		if (isWalking())
 		{
 			animate(1, 5);
 		}
@@ -52,27 +51,25 @@ void Player::draw()
 			animationFrame = 0;
 		}		
 	}
-	else
-	{
-		if (climbingDirection() != NONE)
-		{
-			animate(0, 1);
-		}		
-	}
-	if (isJumping())
+
+	if (isJumping() && (isClimbing() == false))
 	{
 		animationFrame = 5;
 	}
-	if (isFalling())
+	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
 	{
 		animationFrame = 0;
 	}
+	if (isClimbing())
+	{
+		animate(0, 1);
+	}
 	
 	sprite = new PlayerSprite(backup.x(), backup.y(), animationFrame, lookingDirection, isClimbing());
-
 	int difference_x = backup.x() - (backup.x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
-	
+	cout << "j:" << _jumping << "  sY:" << playerSpeed.y() << "  f:" << floor <<endl;
+
 	sprite->drawSprite(backup.x() - difference_x, backup.y() + difference_y);
 }
 
@@ -82,7 +79,6 @@ void Player::jumping(bool state)
 	{
 		if (isJumping() == false)
 		{
-			ground_y = this->y();
 			_jumping = true;
 		}
 	}
@@ -94,7 +90,7 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	int currentJumpHeight = (this->y() - ground_y);
+	int currentJumpHeight = (this->y() - floor);
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && (isFalling() == false))
 	{
@@ -105,25 +101,26 @@ void Player::jump()
 		_falling = true;
 	}
 
+
 	if (isFalling())
 	{
-		if (this->y() >= ground_y)
+		if (this->y() > floor)
 		{
-			if ((this->y() - ground_y) <= FALLING_SPEED)
+			if ((this->y() - floor) > FALLING_SPEED)
 			{
-				setY(ground_y);
+				setSpeedY(-FALLING_SPEED);			
+			}
+			else
+			{
+				setY(floor);
 				setSpeedY(0);
 				_falling = false;
 				_jumping = false;
 
-				if (isMoving() == false)
+				if (isWalking() == false)
 				{
 					setSpeedX(0);
 				}
-			}
-			else
-			{
-				setSpeedY(-FALLING_SPEED);
 			}
 		}
 	}
@@ -133,17 +130,17 @@ void Player::fall()
 {
 	animationFrame = 0;
 	setSpeedX(0);
-	if (this->y() >= ground_y)
+	if (this->y() > floor)
 	{
-		if ((this->y() - ground_y) <= FALLING_SPEED)
+		if ((this->y() - floor) > FALLING_SPEED)
 		{
-			setY(ground_y);
-			setSpeedY(0);
-			_falling = false;
+			setSpeedY(-FALLING_SPEED);			
 		}
 		else
 		{
-			setSpeedY(-FALLING_SPEED);
+			setY(floor);
+			setSpeedY(0);
+			_falling = false;
 		}
 	}
 }
@@ -159,27 +156,27 @@ void Player::animate(int minFrameNum, int maxFramenum)
 	}
 	if (loop % refreshInterval == 0)
 	{
-		if (animationFrame >= maxFramenum)
-		{
-			animationFrame = minFrameNum;
-		}
-		else
+		if (isWalking() || (isClimbing() && climbingDirection() != NONE))
 		{
 			animationFrame++;
+		}
+		if (animationFrame > maxFramenum)
+		{
+			animationFrame = minFrameNum;
 		}
 
 		if (loop >= INT_MAX)
 		{
 			loop = 0;
 		}
-	}
-	
+	}	
 }
 
 
 void Player::move()
 {
-	if ((isMoving() || isJumping()) && (isClimbing() == false))
+
+	if ((isWalking() || isJumping()) && (isClimbing() == false))
 	{
 		if (isJumping())
 		{
@@ -211,7 +208,7 @@ void Player::move()
 	/*********** MOVES THE PLAYER ***********/
 	*this += playerSpeed;
 
-	if ((isMoving() == false) && (isJumping() == false))
+	if ((isWalking() == false) && (isJumping() == false))
 	{	
 		setSpeedX(0);
 	}
@@ -247,7 +244,7 @@ bool Player::willFall(GameObject* hole)
 		
 	if (lookingDirection == RIGHT)
 	{
-		if (this->x() > hole->x() && this->x() <= hole->rightX())
+		if (this->x() > hole->x() && this->rightX() <= hole->rightX())
 		{
 			return true;
 		}
@@ -265,12 +262,13 @@ bool Player::willFall(GameObject* hole)
 
 bool Player::isAbleToClimbOut(GameObject* hole)
 {
+	this->floor = GROUND_Y;
 	return (((this->y() + this->height() / 2.0) + CLIMBING_SPEED) > hole->y());
 }
 
 void Player::climbOut(int direction)
 {
-	setY(140);
+	setY(GROUND_Y + 5);
 	if (direction == RIGHT)
 	{
 		setSpeedX(+PLAYER_SPEED);		
@@ -281,6 +279,7 @@ void Player::climbOut(int direction)
 	}
 	this->jumping(true);
 	this->climbing(false);
+	
 }
 
 int Player::climbingDirection()
@@ -320,13 +319,13 @@ Point Player::speed()
 	return playerSpeed;
 }
 
-void Player::moving(bool state)
+void Player::walking(bool state)
 {
-	_moving = state;
+	_walking = state;
 }
-bool Player::isMoving()
+bool Player::isWalking()
 {
-	return _moving;
+	return _walking;
 }
 
 void Player::falling(bool state)
@@ -350,4 +349,9 @@ bool Player::isClimbing()
 bool Player::isJumping()
 {
 	return _jumping;
+}
+
+void Player::centerOnStair(GameObject* stairs)
+{
+	setX(stairs->x() + 8);
 }

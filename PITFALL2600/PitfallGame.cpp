@@ -10,11 +10,11 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			if (keyState == DOWN)
 			{
 				player->look(RIGHT);
-				player->moving(true);
+				player->walking(true);
 			}
 			else
 			{
-				player->moving(false);
+				player->walking(false);
 			}
 		}
 		else
@@ -34,11 +34,11 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			{
 
 				player->look(LEFT);
-				player->moving(true);
+				player->walking(true);
 			}
 			else
 			{
-				player->moving(false);
+				player->walking(false);
 			}
 		}
 		else
@@ -53,14 +53,15 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 	if (player->isFalling() == false)
 	{
 		if (key == GLUT_KEY_UP)
-		{
+		{				
 			if (keyState == DOWN)
 			{
 				if (world->stairs != NULL)
-				{
+				{					
 					if (checkColisionX(player, world->stairs) && (player->isAbleToClimbOut(world->stairs->hole) == false))
 					{
-						player->setX(world->stairs->x() + 10);
+						player->centerOnStair(world->stairs);
+						player->walking(false);
 						player->climbing(true);
 						player->climb(UP);
 					}
@@ -134,7 +135,7 @@ void PitfallGame::moveAll()
 			{
 				if (player->isJumping() == false)
 				{
-					player->ground_y = world->tunnelFloor.topY();
+					player->floor = world->tunnelFloor.topY();
 					player->falling(true);
 				}
 			}
@@ -146,7 +147,7 @@ void PitfallGame::moveAll()
 				if (player->y() - CLIMBING_SPEED <= world->tunnelFloor.topY())
 				{
 					player->climbing(false);
-					player->setSpeedY(0);
+					player->setSpeedY(0);					
 					player->setY(world->tunnelFloor.topY());
 				}
 			}

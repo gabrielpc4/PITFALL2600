@@ -17,7 +17,7 @@ private:
 	int animationFrame;
 	
 	bool _falling;
-	bool _moving;
+	bool _walking;
 	bool _climbing;
 	int _climbingDirection;
 public:
@@ -35,9 +35,9 @@ public:
 	void setSpeedX(int speed);
 	void setSpeedY(int speed);
 	Point speed();
-	void moving(bool state);
-	bool isMoving();
-	int ground_y;
+	void walking(bool state);
+	bool isWalking();
+	int floor;
 	void falling(bool state);
 	bool isFalling();
 	void fall();	
@@ -50,5 +50,6 @@ public:
 	bool willFall(GameObject* hole);
 	bool isAbleToClimbOut(GameObject* hole);
 	void climbOut(int direction);
+	void centerOnStair(GameObject* stairs);
 };
 #endif
