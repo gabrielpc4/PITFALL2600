@@ -11,7 +11,7 @@ Player::Player(GLint startX, GLint startY)
 	playerSpeed(0,0)
 
 {		
-	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT);
+	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT, false);
 
 	_jumping = false;		
 	_width = this->sprite->width();
@@ -40,11 +40,36 @@ void Player::draw()
 	}
 	Point backup(this->x(), this->y());	
 	delete sprite;
-
-
-	sprite = new PlayerSprite(backup.x(), backup.y(), animationFrame, lookingDirection);
-
 	
+	if (isClimbing() == false)
+	{
+		if (isMoving())
+		{
+			animate(1, 5);
+		}
+		else
+		{
+			animationFrame = 0;
+		}		
+	}
+	else
+	{
+		if (climbingDirection() != NONE)
+		{
+			animate(0, 1);
+		}		
+	}
+	if (isJumping())
+	{
+		animationFrame = 5;
+	}
+	if (isFalling())
+	{
+		animationFrame = 0;
+	}
+	
+	sprite = new PlayerSprite(backup.x(), backup.y(), animationFrame, lookingDirection, isClimbing());
+
 	int difference_x = backup.x() - (backup.x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
 	
@@ -69,9 +94,8 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	animationFrame = 5;
-
 	int currentJumpHeight = (this->y() - ground_y);
+
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && (isFalling() == false))
 	{
 		setSpeedY(JUMP_SPEED);
@@ -105,9 +129,6 @@ void Player::jump()
 	}
 }
 
-
-
-
 void Player::fall()
 {
 	animationFrame = 0;
@@ -127,15 +148,20 @@ void Player::fall()
 	}
 }
 
-void Player::animate()
+void Player::animate(int minFrameNum, int maxFramenum)
 {
 	loop++;
+	int refreshInterval = ANIMATION_REFRESH_INTERVAL;
 
-	if (loop % ANIMATION_REFRESH_INTERVAL == 0)
+	if (isClimbing())
 	{
-		if (animationFrame >= 5)
+		refreshInterval = CLIMBING_ANIMATION_REFRESH_INTERVAL;
+	}
+	if (loop % refreshInterval == 0)
+	{
+		if (animationFrame >= maxFramenum)
 		{
-			animationFrame = 1;
+			animationFrame = minFrameNum;
 		}
 		else
 		{
@@ -147,6 +173,7 @@ void Player::animate()
 			loop = 0;
 		}
 	}
+	
 }
 
 
@@ -159,7 +186,7 @@ void Player::move()
 			jump();
 		}
 		else
-		{
+		{			
 			if (this->isLooking(RIGHT))
 			{
 				setSpeedX(+PLAYER_SPEED);
@@ -167,8 +194,7 @@ void Player::move()
 			else
 			{
 				setSpeedX(-PLAYER_SPEED);
-			}
-			animate();
+			}		
 		}
 	}
 
@@ -182,14 +208,12 @@ void Player::move()
 		climb();
 	}
 	
-
 	/*********** MOVES THE PLAYER ***********/
 	*this += playerSpeed;
 
 	if ((isMoving() == false) && (isJumping() == false))
 	{	
 		setSpeedX(0);
-		animationFrame = 0;
 	}
 }
 	

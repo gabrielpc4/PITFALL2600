@@ -25,7 +25,7 @@ public:
 	Player(GLint startX, GLint startY);
 	void draw();
 	void drawBasicShape();
-	void animate();
+	void animate(int minFrameNum, int maxFramenum);
 	bool isJumping();
 	void move();
 	void jumping(bool state);

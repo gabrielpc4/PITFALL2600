@@ -7,7 +7,8 @@ class PlayerSprite :
 {
 public:
 	PlayerSprite();
-	PlayerSprite(int startX, int startY, int animationFrame, int direction);
+	PlayerSprite(int startX, int startY, int animationFrame, int direction, bool climbing);
 	void buildBasicShape();
+	void buildClimbingSprite();
 };
 #endif

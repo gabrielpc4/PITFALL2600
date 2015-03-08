@@ -58,7 +58,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			{
 				if (world->stairs != NULL)
 				{
-					if (checkColisionX(player, world->stairs) && player->isAbleToClimbOut(world->stairs->hole) == false)
+					if (checkColisionX(player, world->stairs) && (player->isAbleToClimbOut(world->stairs->hole) == false))
 					{
 						player->setX(world->stairs->x() + 10);
 						player->climbing(true);
