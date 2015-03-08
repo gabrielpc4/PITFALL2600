@@ -19,6 +19,7 @@ static double MAGNIFICATION = 2;
 #define FALLING_SPEED 3
 #define CLIMBING_SPEED 3
 #define JUMP_SPEED 3
+#define JUMP_MAX_HEIGHT 20
 #define ANIMATION_REFRESH_INTERVAL 2
 
 #define WAIT_TIME 30

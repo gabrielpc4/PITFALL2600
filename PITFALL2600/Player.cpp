@@ -48,7 +48,6 @@ void Player::draw()
 	int difference_x = backup.x() - (backup.x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
 	
-	cout << "Climbing:" << isClimbing() << endl;
 	sprite->drawSprite(backup.x() - difference_x, backup.y() + difference_y);
 }
 
@@ -56,7 +55,7 @@ void Player::jumping(bool state)
 {
 	if (state == true)
 	{
-		if (!_jumping)
+		if (isJumping() == false)
 		{
 			ground_y = this->y();
 			_jumping = true;
@@ -73,9 +72,9 @@ void Player::jump()
 	animationFrame = 5;
 
 	int currentJumpHeight = (this->y() - ground_y);
-	if (currentJumpHeight < 22 && !_falling)
+	if (currentJumpHeight < JUMP_MAX_HEIGHT && (isFalling() == false))
 	{
-		this->setSpeedY(JUMP_SPEED);
+		setSpeedY(JUMP_SPEED);
 	}
 	else
 	{
@@ -88,19 +87,19 @@ void Player::jump()
 		{
 			if ((this->y() - ground_y) <= FALLING_SPEED)
 			{
-				this->setY(ground_y);
-				this->setSpeedY(0);
+				setY(ground_y);
+				setSpeedY(0);
 				_falling = false;
 				_jumping = false;
 
-				if (!this->isMoving())
+				if (isMoving() == false)
 				{
-					this->setSpeedX(0);
+					setSpeedX(0);
 				}
 			}
 			else
 			{
-				this->setSpeedY(-FALLING_SPEED);
+				setSpeedY(-FALLING_SPEED);
 			}
 		}
 	}
@@ -117,13 +116,13 @@ void Player::fall()
 	{
 		if ((this->y() - ground_y) <= FALLING_SPEED)
 		{
-			this->setY(ground_y);
-			this->setSpeedY(0);
+			setY(ground_y);
+			setSpeedY(0);
 			_falling = false;
 		}
 		else
 		{
-			this->setSpeedY(-FALLING_SPEED);
+			setSpeedY(-FALLING_SPEED);
 		}
 	}
 }
@@ -153,7 +152,7 @@ void Player::animate()
 
 void Player::move()
 {
-	if ((this->isMoving() || isJumping()) && !_climbing)
+	if ((isMoving() || isJumping()) && (isClimbing() == false))
 	{
 		if (isJumping())
 		{
@@ -163,17 +162,17 @@ void Player::move()
 		{
 			if (this->isLooking(RIGHT))
 			{
-				this->setSpeedX(+PLAYER_SPEED);
+				setSpeedX(+PLAYER_SPEED);
 			}
 			else
 			{
-				this->setSpeedX(-PLAYER_SPEED);
+				setSpeedX(-PLAYER_SPEED);
 			}
 			animate();
 		}
 	}
 
-	if (isFalling() && !_jumping && !_climbing)
+	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
 	{
 		fall();
 	}
@@ -187,9 +186,9 @@ void Player::move()
 	/*********** MOVES THE PLAYER ***********/
 	*this += playerSpeed;
 
-	if (!_moving && !_jumping)
+	if ((isMoving() == false) && (isJumping() == false))
 	{	
-		this->setSpeedX(0);
+		setSpeedX(0);
 		animationFrame = 0;
 	}
 }
@@ -197,7 +196,7 @@ void Player::move()
 
 void Player::climb(int direction)
 {
-	this->_climbingDirection = direction;
+	_climbingDirection = direction;
 }
 
 void Player::climb()
@@ -208,7 +207,7 @@ void Player::climb()
 	{
 		setSpeedY(0);
 	}
-	else if (this->_climbingDirection == UP)
+	else if (_climbingDirection == UP)
 	{
 		setSpeedY(+CLIMBING_SPEED);
 	}
@@ -222,7 +221,7 @@ void Player::climb()
 bool Player::willFall(GameObject* hole)
 {
 		
-	if (this->lookingDirection == RIGHT)
+	if (lookingDirection == RIGHT)
 	{
 		if (this->x() > hole->x() && this->x() <= hole->rightX())
 		{
@@ -240,9 +239,34 @@ bool Player::willFall(GameObject* hole)
 	return false;
 }
 
+bool Player::isAbleToClimbOut(GameObject* hole)
+{
+	return (((this->y() + this->height() / 2.0) + CLIMBING_SPEED) > hole->y());
+}
+
+void Player::climbOut(int direction)
+{
+	setY(140);
+	if (direction == RIGHT)
+	{
+		setSpeedX(+PLAYER_SPEED);		
+	}	
+	else
+	{
+		setSpeedX(-PLAYER_SPEED);
+	}
+	this->jumping(true);
+	this->climbing(false);
+}
+
 int Player::climbingDirection()
 {
 	return _climbingDirection;
+}
+
+void Player::stopClimbing()
+{
+	_climbingDirection = NONE;
 }
 
 

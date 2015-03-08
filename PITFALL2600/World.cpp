@@ -90,6 +90,8 @@ void World::draw()
 		brickWall->draw();
 	}break;
 	}
+
+	
 }
 
 /*****************************************************************************************
@@ -227,8 +229,10 @@ void World::drawTreeLeafs()
 
 void World::drawStairHoleCover()
 {
-	Rect cover(Point(stairs->hole->x(), ground.y()), Point(stairs->hole->rightX(), stairs->hole->y()), ground.color());
-	cover.draw();
+	Rect cover1(Point(stairs->hole->x(), ground.y()), Point(stairs->hole->rightX(), stairs->hole->y()), ground.color());
+	Rect cover2(Point(stairs->hole->x(), stairs->hole->y()), Point(stairs->hole->rightX(), stairs->hole->y() + stairs->hole->height() / 2.0), Color(BLACK));
+	cover1.draw();
+	cover2.draw();
 }
 
 

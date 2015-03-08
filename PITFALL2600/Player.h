@@ -46,6 +46,9 @@ public:
 	void climb(int direction);
 	void climb();
 	int climbingDirection();
+	void stopClimbing();
 	bool willFall(GameObject* hole);
+	bool isAbleToClimbOut(GameObject* hole);
+	void climbOut(int direction);
 };
 #endif
