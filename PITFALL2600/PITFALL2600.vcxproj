@@ -80,7 +80,11 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="echo.h" />
+    <ClInclude Include="Enemies.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="LogSprite.h" />
     <ClInclude Include="ScenarioObjects.h" />
     <ClInclude Include="glut.h" />
     <ClInclude Include="PitfallGame.h" />
@@ -98,7 +102,10 @@
   <ItemGroup>
     <ClCompile Include="BrickWall.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PitfallGame.cpp" />
     <ClCompile Include="Player.cpp" />

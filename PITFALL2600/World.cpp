@@ -235,4 +235,7 @@ void World::drawStairHoleCover()
 }
 
 
-
+int World::getScenarioNumber()
+{
+	return scenarioNumber;
+}

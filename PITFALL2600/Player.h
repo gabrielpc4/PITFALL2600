@@ -8,14 +8,16 @@ class Player
 	: public GameObject
 {
 private: 
-	long loop;
+	int lives;
+	long framesWalking;
 	int _height;
 	int _width;
 	int lookingDirection;
-	bool _jumping;
+
 	Point playerSpeed;
 	int animationFrame;
-	
+
+	bool _jumping;
 	bool _falling;
 	bool _walking;
 	bool _climbing;
@@ -51,5 +53,7 @@ public:
 	bool isAbleToClimbOut(GameObject* hole);
 	void climbOut(int direction);
 	void centerOnStair(GameObject* stairs);
+	bool isUndeground();
+	int livesLeft();
 };
 #endif

@@ -108,7 +108,15 @@ PitfallGame::PitfallGame()
 {
 	world = new World(0);
 	player = new Player(39, 140);	
-
+	switch (world->getScenarioNumber())
+	{
+	case(0) :
+	{
+		log = new Log(422, GROUND_Y, false);
+	}
+	default:
+		break;
+	}
 }
 
 
@@ -117,10 +125,15 @@ void PitfallGame::drawAll()
 	world->draw();
 	player->draw();
 
-	if (world->stairs != NULL)
+	switch (world->getScenarioNumber())
 	{
+	case (0) :
+	{		
+		log->draw();
 		world->drawStairHoleCover();
-	}
+	}break;
+	default:break;
+	}	
 }
 
 void PitfallGame::moveAll()
@@ -129,16 +142,11 @@ void PitfallGame::moveAll()
 
 	if (world->stairs != NULL)
 	{	
-		cout << player->willFall(world->stairs->hole) << endl;
 		if (player->willFall(world->stairs->hole) && (player->isClimbing() == false) && (player->isJumping() == false))
-		{		
-		
-				if (player->isJumping() == false)
-				{
-					player->floor = world->tunnelFloor.topY();
-					player->falling(true);
-				}
-			
+		{						
+			player->floor = world->tunnelFloor.topY();
+			player->falling(true);
+
 		}
 		if (player->isClimbing())
 		{
@@ -160,6 +168,24 @@ void PitfallGame::moveAll()
 			}
 		}
 	}	
+	if (world->brickWall != NULL)
+	{
+		if (player->isUndeground())
+		{
+			if (checkColisionX(player,world->brickWall))
+			{
+				if (player->rightX() < world->brickWall->rightX())
+				{
+					player->setX(world->brickWall->x() - player->width());
+				}
+				else
+				{
+					player->setX(world->brickWall->rightX());
+				}
+				
+			}
+		}
+	}
 }
 
 bool PitfallGame::checkColisionX(Player* player, GameObject* object)

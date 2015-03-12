@@ -12,6 +12,7 @@ Player::Player(GLint startX, GLint startY)
 {		
 	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT, false);
 
+	
 	_jumping = false;		
 	_width = this->sprite->width();
 	_height = this->sprite->height();
@@ -20,8 +21,9 @@ Player::Player(GLint startX, GLint startY)
 	_climbing = false;
 	_climbingDirection = UP;
 
+	lives = 3;
 	animationFrame = 0;
-	loop = 0;
+	framesWalking = 0;
 	floor = startY;
 	lookingDirection = RIGHT;
 }
@@ -37,7 +39,7 @@ void Player::draw()
 	{
 		this->setX(WORLD_WINDOW_WIDTH - this->width());
 	}
-	Point backup(this->x(), this->y());	
+
 	delete sprite;
 	
 	if (isClimbing() == false)
@@ -65,11 +67,11 @@ void Player::draw()
 		animate(0, 1);
 	}
 	
-	sprite = new PlayerSprite(backup.x(), backup.y(), animationFrame, lookingDirection, isClimbing());
-	int difference_x = backup.x() - (backup.x() + this->sprite->x());
+	sprite = new PlayerSprite(this->x(), this->y(), animationFrame, lookingDirection, isClimbing());
+	int difference_x = this->x() - (this->x() + this->sprite->x());
 	int difference_y = this->_height - this->sprite->height();
 
-	sprite->drawSprite(backup.x() - difference_x, backup.y() + difference_y);
+	sprite->drawSprite(this->x() - difference_x, this->y() + difference_y);
 }
 
 void Player::jumping(bool state)
@@ -146,14 +148,14 @@ void Player::fall()
 
 void Player::animate(int minFrameNum, int maxFramenum)
 {
-	loop++;
+	framesWalking++;
 	int refreshInterval = ANIMATION_REFRESH_INTERVAL;
 
 	if (isClimbing())
 	{
 		refreshInterval = CLIMBING_ANIMATION_REFRESH_INTERVAL;
 	}
-	if (loop % refreshInterval == 0)
+	if (framesWalking % refreshInterval == 0)
 	{
 		if (isWalking() || (isClimbing() && climbingDirection() != NONE))
 		{
@@ -164,9 +166,9 @@ void Player::animate(int minFrameNum, int maxFramenum)
 			animationFrame = minFrameNum;
 		}
 
-		if (loop >= INT_MAX)
+		if (framesWalking >= INT_MAX)
 		{
-			loop = 0;
+			framesWalking = 0;
 		}
 	}	
 }
@@ -248,18 +250,18 @@ void Player::climb()
 
 bool Player::willFall(GameObject* hole)
 {		
-	if (this->y() >= hole->y())  // Can only fall if it's on the top floor
+	if (this->isUndeground() == false)  // Can only fall if it's on the top floor
 	{
 		if (lookingDirection == RIGHT)
 		{
-			if (this->x() > hole->x() && this->rightX() <= hole->rightX())
+			if (this->x() >= hole->x() && this->rightX() <= hole->rightX())
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if (this->rightX() < hole->rightX() && this->x() >= hole->x())
+			if (this->rightX() <= hole->rightX() && this->x() >= hole->x())
 			{
 				return true;
 			}
@@ -375,4 +377,14 @@ bool Player::isJumping()
 void Player::centerOnStair(GameObject* stairs)
 {
 	setX(stairs->x() + 8);
+}
+
+bool Player::isUndeground()
+{
+	return (this->y() < GROUND_Y);
+}
+
+int Player::livesLeft()
+{
+	return lives;
 }

@@ -57,6 +57,6 @@ BrickWall::BrickWall(int startX, int startY)
 
 void BrickWall::draw()
 {
-	//sprite->drawSprite(this->x(), this->y());
+	sprite->drawSprite(this->x(), this->y());
 }
 

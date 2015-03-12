@@ -2,13 +2,15 @@
 #ifndef PITFALLGAME_H_
 #define PITFALLGAME_H_
 #include "Player.h"
+#include "Enemies.h"
 #include "World.h"
 
 class PitfallGame
 {
 private:
-	Player* player;
+	Player* player;	
 	World* world;	
+	Log* log;
 public:
 	PitfallGame();
 	void drawAll();
