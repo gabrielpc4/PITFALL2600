@@ -2,7 +2,7 @@
 
 
 Log::Log()
-	: Log(442,GROUND_Y, false)
+	: Log(442,128, false)
 {
 }
 
@@ -45,7 +45,16 @@ void Log::draw()
 
 void Log::roll()
 {
-	*this += Point(-PLAYER_SPEED, 0);
+	if (this->rightX() == 0)
+	{
+		this->setX(WORLD_WINDOW_WIDTH);
+	}
+	else
+	{
+		*this += Point(-PLAYER_SPEED, 0);
+	}
+	
+	
 }
 
 bool Log::isRolling()

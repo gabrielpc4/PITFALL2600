@@ -19,7 +19,7 @@ static double MAGNIFICATION = 2;
 #define FALLING_SPEED 3
 #define CLIMBING_SPEED 3
 #define JUMP_SPEED 3
-#define JUMP_MAX_HEIGHT 20
+#define JUMP_MAX_HEIGHT 28
 #define ANIMATION_REFRESH_INTERVAL 2
 #define CLIMBING_ANIMATION_REFRESH_INTERVAL 4
 
@@ -27,7 +27,7 @@ static double MAGNIFICATION = 2;
 #define GROUND_Y 140
 #define TUNNEL_FLOOR_Y 32
 
-#define WAIT_TIME 30
+#define WAIT_TIME 25
 
 #define SPACE_BAR 32
 

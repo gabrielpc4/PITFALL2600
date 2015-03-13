@@ -25,6 +25,7 @@ void keyboard_func(unsigned char c, int x, int y)
 
 void timer_func(int data)
 {
+	pit->physics();
 	pit->moveAll();
 	glutTimerFunc(WAIT_TIME, timer_func, data);
 	glutPostRedisplay();

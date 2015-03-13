@@ -38,9 +38,7 @@ void Player::draw()
 	if (this->x() < 0)
 	{
 		this->setX(WORLD_WINDOW_WIDTH - this->width());
-	}
-
-	delete sprite;
+	}	
 	
 	if (isClimbing() == false)
 	{
@@ -54,7 +52,7 @@ void Player::draw()
 		}		
 	}
 
-	if (isJumping() && (isClimbing() == false))
+	if ((isJumping() || isTakingHit()) && (isClimbing() == false))
 	{
 		animationFrame = 5;
 	}
@@ -67,9 +65,17 @@ void Player::draw()
 		animate(0, 1);
 	}
 	
+
+	delete sprite;
 	sprite = new PlayerSprite(this->x(), this->y(), animationFrame, lookingDirection, isClimbing());
-	int difference_x = this->x() - (this->x() + this->sprite->x());
-	int difference_y = this->_height - this->sprite->height();
+
+	int difference_x = difference_x = this->x() - (this->x() + this->sprite->x());;
+	int difference_y = difference_y = this->_height - this->sprite->height();;
+
+	if (isTakingHit() && isJumping() == false && isClimbing() == false)
+	{
+		difference_y = 0;
+	}
 
 	sprite->drawSprite(this->x() - difference_x, this->y() + difference_y);
 }
@@ -387,4 +393,14 @@ bool Player::isUndeground()
 int Player::livesLeft()
 {
 	return lives;
+}
+
+void Player::takeHit(bool state)
+{
+	_takingHit = state;
+}
+
+bool Player::isTakingHit()
+{
+	return _takingHit;
 }

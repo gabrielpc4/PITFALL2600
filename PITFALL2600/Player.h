@@ -22,6 +22,7 @@ private:
 	bool _walking;
 	bool _climbing;
 	int _climbingDirection;
+	bool _takingHit;
 public:
 	Player();
 	Player(GLint startX, GLint startY);
@@ -55,5 +56,7 @@ public:
 	void centerOnStair(GameObject* stairs);
 	bool isUndeground();
 	int livesLeft();
+	void takeHit(bool state);
+	bool isTakingHit();
 };
 #endif
