@@ -1,40 +1,105 @@
 02-18-2015
+
 . Created class Rect
+
 . Created class Polygon
+
 . Created class Sprite
+
 . Created class Color
+
 . Commented class Rect
+
 . Commented class Polygon
+
 . Commented class Sprite
+
 . Commented class Color
 
+
+
 02-19-2015
+
 . Created World:
-	undergroundFloor
-	undergroundWall
-	undergroundRoof
-	ground
-	sky
-	threes
-	threesBranches
+	
+undergroundFloor
+	
+undergroundWall
+	
+undergroundRoof
+	
+ground
+	
+sky
+	
+threes
+	
+threesBranches
+
+
 
 02-20-2015
+
 . Finished treeLeafs
+
 . Created stairs
-. Created stairsHole
+
+. Created the brick wall
+
+
 
 03-05-2015
+
 . Created PlayerSprite Class
+. Created Player Class
+
+. Implemented the keyboard input handle
+. Created the Player moving logic
 . Created the  player first animation frame
 
+
+
 03-06-2015
-. Created all player animation frame.
-. Fixed animations height
+
+. Created all player animation frame
+. Fixed animations height differences
 . Recreated the whole DrawSprite mechanism
 
+
+
 03-07-2015
+
 . Implemented the player jump
+
 . Implemented player fall
+
+. Stair hole width slightly increased
 . Implemented player climbing logic
+
 . Implemented player climbing animation
 
+
+
+
+03-08-2015
+
+. Fixed all climbing bugs (there was a lot of them)
+. Collision between player and brickwall implemented
+
+03-12-2015
+. Created the "Enemy" class
+. Created the enemy "LogSprite" class
+. Created the enemy "Log" class
+. Built the logic to make the new classes work with the game
+. Fininshed drawing the static enemy Log
+. Created and tested a rolling Log
+. Implemented the collision between the log and the player
+. Player max jump height slightly increased
+. First scnario completely finished
+
+03-13-2015
+. Implemented the log to change scenarios
+. Solved memory leaking problems when changing the scenario
+. Player sprite while jumping now can't be reversed (just like the original game)
+. Enhanced Player collision with the brick wall
+. Comments added to the handlekeyboardinput methods and some other in the PitfallGame class

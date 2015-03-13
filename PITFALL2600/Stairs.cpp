@@ -2,7 +2,7 @@
 
 
 Stairs::Stairs() :
-	Stairs(0,0)// Creates the stairs on the point (0,0)
+	Stairs(245,32)// Creates the stairs on the point (0,0)
 {
 
 }

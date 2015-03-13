@@ -1,23 +1,25 @@
 #include "PitfallGame.h"
-#include <iostream>
-using namespace std;
+
 void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
 	if (key == GLUT_KEY_RIGHT)
 	{
-		if (player->isClimbing() == false)
+		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the right key is pressed
 		{
 			if (keyState == DOWN)
 			{
-				player->look(RIGHT);
-				player->walking(true);
-			}
-			else
+				if (player->isJumping() == false)	// Prevents the player sprite from changing direction while jumping
+				{
+					player->look(RIGHT);
+					player->walking(true);
+				}				
+			}			
+			else // If the user releases the key
 			{
 				player->walking(false);
 			}
 		}
-		else
+		else // If the player is climbing
 		{
 			if (player->isAbleToClimbOut(world->stairs->hole))
 			{
@@ -28,20 +30,23 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 	}
 	if (key == GLUT_KEY_LEFT)
 	{
-		if (player->isClimbing() == false)
+		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the left key is pressed
 		{
 			if (keyState == DOWN)
 			{
-
-				player->look(LEFT);
-				player->walking(true);
+				if (player->isJumping() == false) // Prevents the player sprite from changing direction while jumping
+				{
+					player->look(LEFT);
+					player->walking(true);
+				}
 			}
-			else
+			
+			else // If the user releases the key
 			{
 				player->walking(false);
 			}
 		}
-		else
+		else // If the player is climbing
 		{
 			if (player->isAbleToClimbOut(world->stairs->hole))
 			{
@@ -57,7 +62,8 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			if (keyState == DOWN)
 			{
 				if (world->stairs != NULL)
-				{					
+				{	
+					// If the player is in contact with the stairs and not about to climb out
 					if (checkCollisionX(player, world->stairs) && (player->isAbleToClimbOut(world->stairs->hole) == false))
 					{
 						player->centerOnStair(world->stairs);
@@ -67,7 +73,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					}
 				}
 			}
-			else
+			else // If the user releases the key
 			{
 				player->stopClimbing();
 			}
@@ -81,7 +87,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					player->climb(DOWN);
 				}
 			}
-			else
+			else // If the user releases the key
 			{
 				player->stopClimbing();
 			}
@@ -93,10 +99,12 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 {
 	if (c == SPACE_BAR)
 	{	
+		// Prevents the user from jumping while climbing or falling
 		if ((player->isClimbing() == false) && (player->isFalling() == false))
 		{
 			player->jumping(true);
 		}
+		// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
 		if (player->isClimbing() && player->isAbleToClimbOut(world->stairs->hole))
 		{
 			player->climbOut(RIGHT);
@@ -104,11 +112,9 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 	}
 }
 
-
 PitfallGame::PitfallGame()
 {	
 	log = NULL;
-
 	scenarioNumber = 0;
 	world = new World(scenarioNumber);
 	player = new Player(39, 140);	
@@ -116,25 +122,18 @@ PitfallGame::PitfallGame()
 	spawnEnemies();
 }
 
-void PitfallGame::spawnEnemies()
+void PitfallGame::run()
 {
-	switch (scenarioNumber)
-	{
-	case(0) :
-	{
-		log = new Log(422, 128, false);
-	}
-	default:
-		break;
-	}
+	moveAll();
+	physics();
+	checkCollisionsWithEnemies();
 }
 
-
 void PitfallGame::drawAll()
-{		
+{
 	world->draw(scenarioNumber);
 	player->draw();
-	
+
 	if (world->stairs != NULL)
 	{
 		world->drawStairHoleCover();
@@ -143,15 +142,15 @@ void PitfallGame::drawAll()
 	switch (scenarioNumber)
 	{
 	case (0) :
-	{		
-		log->draw();			
+	{
+		log->draw();
 	}break;
 	default:break;
-	}	
+	}
 }
 
 void PitfallGame::moveAll()
-{	
+{
 	player->move();
 	if (log != NULL)
 	{
@@ -159,8 +158,7 @@ void PitfallGame::moveAll()
 		{
 			log->roll();
 		}
-	}	
-
+	}
 	checkBoundaries();
 }
 
@@ -198,35 +196,28 @@ void PitfallGame::physics()
 			}
 		}
 	}
+	// Collision with the brick wall
 	if (world->brickWall != NULL)
 	{
 		if (player->isUndeground())
 		{
+			// If the player is colliding with the brick wall
 			if (checkCollisionX(player, world->brickWall))
 			{
+				// if the player is at the right side of the brick wall
 				if (player->rightX() < world->brickWall->rightX())
 				{
-					player->setX(world->brickWall->x() - player->width());
+					// Move the player away from the brickw wall
+					player->setX(world->brickWall->x() - 17);
 				}
-				else
+				else // if the player is at the left side of the brick wall
 				{
+					// Move the player away from the brickw wall
 					player->setX(world->brickWall->rightX());
 				}
 			}
 		}
-	}
-
-	if (log != NULL)
-	{		
-		if (checkCollisionX(player, log) && checkCollisionY(player, log))
-		{
-			player->takeHit(true);
-		}
-		else
-		{
-			player->takeHit(false);
-		}
-	}
+	}	
 }
 
 void PitfallGame::checkBoundaries()
@@ -240,7 +231,7 @@ void PitfallGame::checkBoundaries()
 	}
 
 	if (isOutOfBoundaries(player))
-	{			
+	{
 		deleteWorld();
 
 		if (player->rightX() >= WORLD_WINDOW_WIDTH)
@@ -252,11 +243,40 @@ void PitfallGame::checkBoundaries()
 		{
 			scenarioNumber--;
 			player->setX(WORLD_WINDOW_WIDTH - player->width() * 2);
-		}	
+		}
 		world = new World(scenarioNumber);
 		spawnEnemies();
 	}
-	
+
+}
+
+void PitfallGame::spawnEnemies()
+{
+	switch (scenarioNumber)
+	{
+	case(0) :
+	{
+		log = new Log(422, 128, false);
+	}
+	default:
+		break;
+	}
+}
+
+void PitfallGame::checkCollisionsWithEnemies()
+{
+	// Collision with the Enemy log
+	if (log != NULL)
+	{
+		if (checkCollisionX(player, log) && checkCollisionY(player, log))
+		{
+			player->takeHit(true);
+		}
+		else
+		{
+			player->takeHit(false);
+		}
+	}
 }
 
 bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
@@ -288,7 +308,6 @@ void PitfallGame::deleteWorld()
 	delete world;
 }
 
-
 bool PitfallGame::checkCollisionY(Player* player, GameObject* object)
 {
 	if (player->sprite->y() <= object->sprite->topY() && player->sprite->topY() >= object->sprite->y())
@@ -297,7 +316,6 @@ bool PitfallGame::checkCollisionY(Player* player, GameObject* object)
 	}
 	return false;
 }
-
 
 bool PitfallGame::isOutOfBoundaries(GameObject* object)
 {

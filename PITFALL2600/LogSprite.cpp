@@ -7,7 +7,7 @@ LogSprite::LogSprite()
 }
 
 LogSprite::LogSprite(GLint startX, GLint startY)	
-	: Sprite(Color(80,32,0))
+	: Sprite()
 {
 	Polygon log(Color(80, 32, 0));
 

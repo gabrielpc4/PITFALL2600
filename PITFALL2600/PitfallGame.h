@@ -18,11 +18,13 @@ private:
 	bool isOutOfBoundaries(GameObject* object);
 	void spawnEnemies();
 	void deleteWorld();
-public:
-	PitfallGame();
-	void drawAll();
+	void checkCollisionsWithEnemies();
 	void moveAll();
 	void physics();
+public:
+	PitfallGame();
+	void run();
+	void drawAll();
 	void handleKeyboardInput(int key, int keyState);
 	void handleKeyboardInput(unsigned char c);
 };
