@@ -14,6 +14,7 @@ Player::Player(GLint startX, GLint startY)
 
 	
 	_jumping = false;		
+	_takingHit = false;
 	_width = this->sprite->width();
 	_height = this->sprite->height();
 	_falling = false;

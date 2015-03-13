@@ -45,22 +45,13 @@ void Log::draw()
 
 void Log::roll()
 {
-	if (this->rightX() == 0)
-	{
-		this->setX(WORLD_WINDOW_WIDTH);
-	}
-	else
+	if (this->rightX() > 0)
 	{
 		*this += Point(-PLAYER_SPEED, 0);
-	}
-	
-	
+	}		
 }
 
 bool Log::isRolling()
 {
 	return rolling;
-}
-Log::~Log()
-{
 }

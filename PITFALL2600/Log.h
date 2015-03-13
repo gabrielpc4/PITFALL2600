@@ -16,6 +16,5 @@ public:
 	void roll();
 	void animate();
 	bool isRolling();
-	~Log();
 };
 #endif

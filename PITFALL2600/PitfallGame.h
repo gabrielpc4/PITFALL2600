@@ -11,8 +11,13 @@ private:
 	Player* player;	
 	World* world;	
 	Log* log;
+	int scenarioNumber;
 	bool checkCollisionX(Player* player, GameObject* object);
 	bool checkCollisionY(Player* player, GameObject* object);
+	void checkBoundaries();
+	bool isOutOfBoundaries(GameObject* object);
+	void spawnEnemies();
+	void deleteWorld();
 public:
 	PitfallGame();
 	void drawAll();

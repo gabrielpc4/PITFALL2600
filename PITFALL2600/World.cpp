@@ -8,7 +8,8 @@ World::World() : World(0)
 // Defines the Positions of the basic scenario
 World::World(int scenarioNumber)
 {	
-	this->scenarioNumber = scenarioNumber;
+	stairs = NULL;
+	brickWall = NULL;
 	buildBasicScenario();
 	buildScenario(scenarioNumber);		
 }
@@ -68,8 +69,11 @@ void World::buildScenario(int scenarioNumber)
 	{
 	case(0) :
 	{
-		stairs = new Stairs(245, tunnelFloor.topY());	
+		stairs = new Stairs(245, tunnelFloor.topY());
 		brickWall = new BrickWall(461, tunnelFloor.topY());
+	}break;
+	default:
+	{
 	}break;
 	}
 }
@@ -78,7 +82,7 @@ void World::buildScenario(int scenarioNumber)
 * Method: draw
 * Description: Calls the function drawBasicScenario and loads the first Scenario
 ******************************************************************************************/
-void World::draw()
+void World::draw(int scenarioNumber)
 {
 	drawBasicScenario();
 
@@ -227,15 +231,11 @@ void World::drawTreeLeafs()
 }
 
 void World::drawStairHoleCover()
-{
+{	
 	Rect cover1(Point(stairs->hole->x(), ground.y()), Point(stairs->hole->rightX(), stairs->hole->y()), ground.color());
 	Rect cover2(Point(stairs->hole->x(), stairs->hole->y()), Point(stairs->hole->rightX(), stairs->hole->y() + stairs->hole->height() / 2.0), Color(BLACK));
 	cover1.draw();
-	cover2.draw();
+	cover2.draw();			
 }
 
 
-int World::getScenarioNumber()
-{
-	return scenarioNumber;
-}

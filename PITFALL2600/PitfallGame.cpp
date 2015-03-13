@@ -104,12 +104,21 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 	}
 }
 
+
 PitfallGame::PitfallGame()
-{
-	world = new World(0);
+{	
+	log = NULL;
+
+	scenarioNumber = 0;
+	world = new World(scenarioNumber);
 	player = new Player(39, 140);	
 	
-	switch (world->getScenarioNumber())
+	spawnEnemies();
+}
+
+void PitfallGame::spawnEnemies()
+{
+	switch (scenarioNumber)
 	{
 	case(0) :
 	{
@@ -123,7 +132,7 @@ PitfallGame::PitfallGame()
 
 void PitfallGame::drawAll()
 {		
-	world->draw();
+	world->draw(scenarioNumber);
 	player->draw();
 	
 	if (world->stairs != NULL)
@@ -131,7 +140,7 @@ void PitfallGame::drawAll()
 		world->drawStairHoleCover();
 	}
 
-	switch (world->getScenarioNumber())
+	switch (scenarioNumber)
 	{
 	case (0) :
 	{		
@@ -139,9 +148,6 @@ void PitfallGame::drawAll()
 	}break;
 	default:break;
 	}	
-
-
-	
 }
 
 void PitfallGame::moveAll()
@@ -154,6 +160,8 @@ void PitfallGame::moveAll()
 			log->roll();
 		}
 	}	
+
+	checkBoundaries();
 }
 
 void PitfallGame::physics()
@@ -221,6 +229,36 @@ void PitfallGame::physics()
 	}
 }
 
+void PitfallGame::checkBoundaries()
+{
+	if (log != NULL)
+	{
+		if (log->rightX() <= 0)
+		{
+			log->setX(WORLD_WINDOW_WIDTH);
+		}
+	}
+
+	if (isOutOfBoundaries(player))
+	{			
+		deleteWorld();
+
+		if (player->rightX() >= WORLD_WINDOW_WIDTH)
+		{
+			scenarioNumber++;
+			player->setX(player->width());
+		}
+		if (player->x() < 0)
+		{
+			scenarioNumber--;
+			player->setX(WORLD_WINDOW_WIDTH - player->width() * 2);
+		}	
+		world = new World(scenarioNumber);
+		spawnEnemies();
+	}
+	
+}
+
 bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
 {	
 	if (player->sprite->rightX() >= object->sprite->x() && player->sprite->x() <= object->sprite->rightX())
@@ -230,11 +268,40 @@ bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
 	return false;
 }
 
+void PitfallGame::deleteWorld()
+{
+	delete log;
+	log = NULL;
+
+	if (world->stairs != NULL)
+	{
+		delete world->stairs->hole;
+		world->stairs->hole = NULL;
+	}
+
+	delete world->stairs;
+	world->stairs = NULL;
+	
+	delete world->brickWall;
+	world->brickWall = NULL;
+
+	delete world;
+}
+
 
 bool PitfallGame::checkCollisionY(Player* player, GameObject* object)
 {
-	
 	if (player->sprite->y() <= object->sprite->topY() && player->sprite->topY() >= object->sprite->y())
+	{
+		return true;
+	}
+	return false;
+}
+
+
+bool PitfallGame::isOutOfBoundaries(GameObject* object)
+{
+	if (object->x() < 0 || object->rightX() >= WORLD_WINDOW_WIDTH)
 	{
 		return true;
 	}

@@ -9,6 +9,7 @@ Stairs::Stairs() :
 Stairs::Stairs(GLint startX, GLint startY) : 
 	GameObject(startX, startY)
 {
+	hole = NULL;
 	this->sprite = new Sprite();
 	// Defines the stair border
 	stairsBorder = Rect(Point(0, 0), Point(33, 94));

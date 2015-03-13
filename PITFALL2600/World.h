@@ -15,7 +15,6 @@ using namespace std;
 class World
 {	
 private:
-	int scenarioNumber;
 	void drawBasicScenario();				// Draws a basic scenario, with the undeground, the ground, trees and leafs
 	void drawTreeBranch(int treeNum);		//Draws the branches corresponding to the tree number, given the tree color
 	void drawTreeLeafs();
@@ -38,9 +37,8 @@ public:
 	BrickWall* brickWall;
 	World();
 	World(int scenarioNumber);						// Defines the Positions of the basic scenario
-	void draw();	// Calls the function drawBasicScenario and loads the first Scenario
+	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
 	void drawStairHoleCover();
-	int getScenarioNumber();
 	
 };
 #endif

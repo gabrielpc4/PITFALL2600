@@ -59,4 +59,3 @@ void BrickWall::draw()
 {
 	sprite->drawSprite(this->x(), this->y());
 }
-
