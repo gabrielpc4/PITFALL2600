@@ -30,7 +30,8 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		{
 			if (keyState == DOWN)
 			{
-				if (player->isJumping() == false && player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
+				if (player->isJumping() == false 
+					&& player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
 				{
 					player->look(RIGHT);
 					player->walking(true);
@@ -132,6 +133,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			player->climbOut(RIGHT);
 		}
 	}
+
 }
 
 void PitfallGame::drawAll()

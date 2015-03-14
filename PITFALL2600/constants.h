@@ -15,13 +15,17 @@
 #define LEFT 2
 #define RIGHT 3
 
-#define PLAYER_SPEED 4
-#define FALLING_SPEED 4
-#define CLIMBING_SPEED 3
-static const float JUMP_SPEED = 3.3;
+static bool FAST_PC = false;
+static int GAME_SPEED = (FAST_PC ? 2 : 1);
+
+#define PLAYER_SPEED ((int)(4/GAME_SPEED))
+#define FALLING_SPEED ((int)4/GAME_SPEED)
+static float CLIMBING_SPEED = (float)(3 / (float)GAME_SPEED);
+static float JUMP_SPEED = (float)(3 / (float)GAME_SPEED);
 #define JUMP_MAX_HEIGHT 22
-#define ANIMATION_REFRESH_INTERVAL 2
-#define CLIMBING_ANIMATION_REFRESH_INTERVAL 4
+#define ANIMATION_REFRESH_INTERVAL ((int)2*GAME_SPEED)
+
+#define CLIMBING_ANIMATION_REFRESH_INTERVAL ((int)4*GAME_SPEED)
 
 #define PLAYER_ANIMATION_0_WIDTH 11
 #define PLAYER_ANIMATION_0_HEIGHT 42
@@ -31,7 +35,7 @@ static const float JUMP_SPEED = 3.3;
 #define GROUND_Y 140
 #define TUNNEL_FLOOR_Y 32
 
-#define WAIT_TIME 25
+static int WAIT_TIME = (FAST_PC ? 15 : 25);
 
 #define SPACE_BAR 32
 

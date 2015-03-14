@@ -225,15 +225,15 @@ void Player::move()
 		}
 		climb();
 	}
-	
-	/*********** MOVES THE PLAYER ***********/
-	*this += playerSpeed;
 
 	// The (isJumping() == false) condition prevents the player from stopping the x position in the middle of a jump
 	if ((isWalking() == false) && (isJumping() == false))
 	{	
 		setSpeedX(0);
 	}
+
+	/*********** MOVES THE PLAYER ***********/
+	*this += playerSpeed;
 }
 	
 
@@ -243,7 +243,6 @@ void Player::climb()
 	// Doesn't allow the player from moving horizontally when climbing
 	setSpeedX(0);
 
-	
 	if (_climbingDirection == NONE)
 	{
 		// Stops the player climbing
@@ -257,6 +256,7 @@ void Player::climb()
 	{
 		setSpeedY(-CLIMBING_SPEED);
 	}
+
 }
 
 
