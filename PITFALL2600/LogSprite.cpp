@@ -38,7 +38,6 @@ void LogSprite::animate()
 	if (frames % ANIMATION_REFRESH_INTERVAL  == 0)
 	{
 		Sprite::mirrorX();
-		cout << this->width() << endl;
 
 		if (frames >= INT_MAX)
 		{

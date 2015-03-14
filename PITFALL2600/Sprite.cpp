@@ -101,7 +101,6 @@ void Sprite::updateX()
 	// Goes through all the rectangles that makes the Sprite and get the smallest x value
 	int smallerX = WORLD_WINDOW_WIDTH;
 
-
 	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
 	{
 		if (it->x() < smallerX)
@@ -224,6 +223,7 @@ void Sprite::push_back(Rect rect)
 ****************************************************************************************/
 void Sprite::push_back(Rect rect, Color color)
 {
+	rect += Point(this->x(), this->y());
 	vector<Polygon>::push_back(Polygon(rect, color));
 	update();
 }

@@ -5,7 +5,7 @@
 #include "GameObject.h"
 
 class Stairs :
-	public GameObject
+	public Sprite
 {
 private:
 	Rect stairsBorder;
@@ -15,7 +15,7 @@ public:
 	Stairs();
 	Stairs(GLint startX, GLint startY);
 	void draw();
-	GameObject* hole;
+	Sprite* hole;
 	void drawCover();
 };
 

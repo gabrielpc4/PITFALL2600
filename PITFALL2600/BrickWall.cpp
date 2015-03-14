@@ -7,12 +7,10 @@ BrickWall::BrickWall() :
 }
 
 BrickWall::BrickWall(int startX, int startY) 
-	: GameObject(startX,startY)	// Defines the brickwall sprite initial position
+	: Sprite(startX,startY)	// Defines the brickwall sprite initial position
 {
-
-	this->sprite = new Sprite();
 	// Sprite that will be added the rectangles
-	Sprite pattern;
+	Sprite pattern(startX, startY);
 
 	// Creates the grey concrete division and adds it to the sprite
 	Rect concreteDivision(Point(0, 0), Point(25, 2), Color(142, 142, 142));
@@ -21,7 +19,7 @@ BrickWall::BrickWall(int startX, int startY)
 	// Creates the first brick level
 	Rect bricks(Point(0, concreteDivision.topY()), Point(concreteDivision.width(), concreteDivision.topY() + 6), Color(167, 26, 26));
 	pattern.push_back(bricks);
-
+	
 	// Will contain the tree back brick divisions necessary to make the pattern
 	Rect brickDivison[3];
 
@@ -45,17 +43,12 @@ BrickWall::BrickWall(int startX, int startY)
 	pattern.push_back(brickDivison[2]);
 
 	// PATTERN CREATED
-
-
 	// Do the same pattern 4 times, changing the height
 	for (int i = 0; i < 4; i++)
 	{
-		sprite->push_back(pattern);   // Adds the pattern to the final sprite		
+		Sprite::push_back(pattern);   // Adds the pattern to the final sprite	
 		pattern += Point(0, pattern.height()); // Moves the pattern to to top of the final sprite
 	}
+
 }
 
-void BrickWall::draw()
-{
-	sprite->drawSprite(this->x(), this->y());
-}
