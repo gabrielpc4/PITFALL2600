@@ -56,8 +56,9 @@ void Player::draw()
 		animationFrame = 0;
 	}
 
-	if ((isJumping() || isTakingHit()) && (isClimbing() == false) 
-		|| (isFalling() && this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
+	if ((isJumping()) 
+		|| (isTakingHit() && isFalling() == false) && (isClimbing() == false) 
+		|| (isFalling()) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
 	{
 		animationFrame = 5;
 	}

@@ -1,5 +1,27 @@
 #include "PitfallGame.h"
 
+PitfallGame::PitfallGame()
+{
+	log.clear();
+	scenarioNumber = 0;
+	score = 2000;
+	world = new World(scenarioNumber);
+	player = new Player(39, 140);
+	spawnEnemies();
+}
+
+void PitfallGame::run()
+{
+	moveAll();
+	physics();
+	checkCollisionsWithEnemies();
+
+	if (player->isTakingHit() && score > 0)
+	{
+		score--;
+	}
+}
+
 void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
 	if (key == GLUT_KEY_RIGHT)
@@ -112,22 +134,6 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 	}
 }
 
-PitfallGame::PitfallGame()
-{	
-	log.clear();
-	scenarioNumber = 1;
-	world = new World(scenarioNumber);
-	player = new Player(39,140);		
-	spawnEnemies();
-}
-
-void PitfallGame::run()
-{
-	moveAll();
-	physics();
-	checkCollisionsWithEnemies();
-}
-
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
@@ -138,7 +144,7 @@ void PitfallGame::drawAll()
 		world->stairs->drawCover();
 	}
 
-	for (int i = 0; i < world->groundHole.size(); i++)
+	for (unsigned i = 0; i < world->groundHole.size(); i++)
 	{
 		world->groundHole.at(i).drawCover();
 	}
@@ -148,6 +154,17 @@ void PitfallGame::drawAll()
 	{
 		log.at(i).draw();
 	}
+
+
+	string label = "Score: ";
+	printText(label + std::to_string(score), Point(10, 360));
+
+	label = "Lives: ";
+	for (int i = 0; i < player->livesLeft(); i++)
+	{
+		label += "l";
+	}
+	printText(label, Point(10, 340));
 }
 
 void PitfallGame::moveAll()
@@ -225,17 +242,15 @@ void PitfallGame::physics()
 						else
 						{
 							player->setX(world->brickWall->rightX());
-						}
-						
+						}						
 					}
 				}
 			}
 		}
 	}
 
-
 	// Makes the player fall if is in contact with a ground  hole		
-	for (int i = 0; i < world->groundHole.size(); i++)
+	for (unsigned i = 0; i < world->groundHole.size(); i++)
 	{
 		if (player->y() >= world->ground.y())
 		{
@@ -367,6 +382,25 @@ bool PitfallGame::isOutOfBoundaries(GameObject* object)
 	}
 	return false;
 }
+
+
+void  PitfallGame::printText(string text, Point p)
+{
+	glColor3f(1.0, 1.0, 1.0);
+	char *c;
+	float scale = 0.1;
+	float orientation = 0;
+	glPushMatrix();
+	glTranslatef(p.x(), p.y(), 0); // glTranslatef (dx, dy, dz)
+	glScalef(scale, scale, scale);	// glScalef (sx, sy, sz)
+	glRotatef(orientation, 0, 0, 1);	// glRotatef (angle, x, y, z)
+	for (c = (char*)text.c_str(); *c; c++)
+	{
+		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *c);
+	}
+	glPopMatrix();
+}
+
 
 void PitfallGame::deleteWorld()
 {
