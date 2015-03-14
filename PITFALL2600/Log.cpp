@@ -20,7 +20,7 @@ void Log::animate()
 
 	if (framesRolling % ANIMATION_REFRESH_INTERVAL == 0)
 	{
-		sprite->mirrorX();
+		//sprite->mirrorX();
 
 		if (framesRolling >= INT_MAX)
 		{
@@ -45,9 +45,9 @@ void Log::draw()
 
 void Log::roll()
 {
-	if (this->rightX() > 0)
+	if (this->sprite->rightX() > 0)
 	{
-		*this += Point(-PLAYER_SPEED, 0);
+		*(this) += Point(-PLAYER_SPEED, 0);
 	}		
 }
 

@@ -31,6 +31,8 @@ Sprite& Sprite::operator += (const Point& point)
 	{
 		*it += point;
 	}
+	this->_x += point.x();
+	this->_y += point.y();
 	return *this;
 }
 
@@ -44,6 +46,8 @@ Sprite& Sprite::operator -= (const Point& point)
 	{
 		*it -= point;
 	}
+	this->_x -= point.x();
+	this->_y -= point.y();
 	return *this;
 }
 
@@ -53,16 +57,43 @@ Sprite& Sprite::operator -= (const Point& point)
 ****************************************************************************************/
 int Sprite::x()
 {
+	return _x;
+}
+
+void Sprite::update()
+{
 	// Goes through all the rectangles that makes the Sprite and get the smallest x value
 	int smallerX = WORLD_WINDOW_WIDTH;
+	int smallerY = WORLD_WINDOW_HEIGHT;
+
+	int biggerX = 0;
+	int biggerY = 0;
+
 	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
 	{
 		if (it->x() < smallerX)
 		{
 			smallerX = it->x();
 		}
-	}	
-	return (smallerX);
+		if (it->y() < smallerY)
+		{
+			smallerY = it->y();
+		}
+		if (it->x() + it->width() > biggerX)
+		{
+			biggerX = it->x() + it->width();
+		}
+		if (it->y() + it->height() > biggerY)
+		{
+			biggerY = it->y() + it->height();
+		}
+	}
+
+	
+	this->_x = smallerX;
+	this->_y = smallerY;
+	this->_width = (biggerX - smallerX);
+	this->_height = (biggerY - smallerY);
 }
 
 
@@ -72,16 +103,7 @@ int Sprite::x()
 ****************************************************************************************/
 int Sprite::y()
 {
-	// Goes through all the rectangles that makes the Sprite and get the smallest y value
-	int smallerY = WORLD_WINDOW_HEIGHT;
-	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
-	{
-		if (it->y() < smallerY)
-		{
-			smallerY = it->y();
-		}
-	}
-	return (smallerY);
+	return _y;
 }
 
 
@@ -91,22 +113,7 @@ int Sprite::y()
 ****************************************************************************************/
 int Sprite::width()
 {
-	// Goes through all the rectangles that makes the Sprite and get 
-	// and smallest x value and calculates the difference, returning the width
-	int smallerX = WORLD_WINDOW_WIDTH;
-	int biggerX = 0;
-	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
-	{
-		if (it->x() < smallerX)
-		{
-			smallerX = it->x();
-		}
-		if (it->x() + it->width() > biggerX)
-		{
-			biggerX = it->x() + it->width();
-		}
-	}
-	return (biggerX - smallerX);
+	return this->_width;
 }
 
 /***************************************************************************************
@@ -115,22 +122,7 @@ int Sprite::width()
 ****************************************************************************************/
 int Sprite::height()
 {
-	// Goes through all the rectangles that makes the Sprite and get 
-	// and smallest y value and calculates the difference, returning the height
-	int smallerY = WORLD_WINDOW_HEIGHT;
-	int biggerY = 0;
-	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
-	{
-		if (it->y() < smallerY)
-		{
-			smallerY = it->y();
-		}
-		if (it->y() + it->height() > biggerY)
-		{
-			biggerY = it->y() + it->height();
-		}
-	}
-	return (biggerY - smallerY);
+	return _height;
 }
 
 /***************************************************************************************
@@ -203,6 +195,7 @@ void Sprite::draw()
 void Sprite::push_back(Rect rect)
 {
 	vector<Polygon>::push_back(Polygon(rect));
+	update();
 }
 
 
@@ -213,6 +206,7 @@ void Sprite::push_back(Rect rect)
 void Sprite::push_back(Rect rect, Color color)
 {
 	vector<Polygon>::push_back(Polygon(rect, color));
+	update();
 }
 /***************************************************************************************
 * Method Name: push_back(Polygon)
@@ -221,6 +215,7 @@ void Sprite::push_back(Rect rect, Color color)
 void Sprite::push_back(Polygon pol)
 {
 	vector<Polygon>::push_back(pol);
+	update();
 }
 
 /***************************************************************************************
@@ -233,6 +228,7 @@ void Sprite::push_back(Sprite sprite)
 	{
 		vector<Polygon>::push_back(*it);
 	}
+	update();
 }
 
 void Sprite::mirrorX()
@@ -248,8 +244,9 @@ void Sprite::mirrorX()
 
 void Sprite::drawSprite(int x, int y)
 {
-
 	*this += Point(-(this->x()), -(this->y()));
+	this->_x = x;
+	this->_y = y;
 	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
 	{
 		it->drawPolygon(x, y);

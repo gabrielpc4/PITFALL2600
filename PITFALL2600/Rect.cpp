@@ -262,7 +262,7 @@ Color Rect::color()
 {
 	return (_color);
 }
-#include "echo.h"
+
 void Rect::drawRect(int x, int y, Color color)
 {
 		glColor3ub(color.r(), color.g(), color.b());

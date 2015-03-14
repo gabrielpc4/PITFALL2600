@@ -271,10 +271,10 @@ void PitfallGame::physics()
 }
 
 void PitfallGame::checkBoundaries()
-{
+{	
 	for (unsigned i = 0; i < log.size(); i++)
-	{
-		if (log.at(i).rightX() <= 0)
+	{		
+		if (log.at(i).sprite->rightX() <= 0)
 		{
 			log.at(i).setX(WORLD_WINDOW_WIDTH);
 		}

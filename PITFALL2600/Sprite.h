@@ -13,12 +13,21 @@ using namespace std;
 class Sprite :
 	public vector < Polygon >
 {
+private:
+	float _x;
+	float _y;
+	int _width;
+	int _height;
 public:
 	/***************************************************************************************
 	* Method: Default Constructor
 	* Description: It does nothing
 	****************************************************************************************/
 	Sprite() {}
+
+	Sprite(GLint startX, GLint startY) { _x = startX; _y = startY; }
+
+	void update();
 	
 
 	/***************************************************************************************

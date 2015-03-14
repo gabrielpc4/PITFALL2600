@@ -265,7 +265,7 @@ void Polygon::mirrorX(int currentX)
 		*it -= Point((2 * (it->x() - currentX) + it->width()), 0);
 	}
 }
-#include "echo.h"
+
 void Polygon::drawPolygon(int x, int y)
 {
 	for (vector<Rect>::iterator it = this->begin(); it != this->end(); ++it)
