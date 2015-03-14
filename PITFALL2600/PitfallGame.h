@@ -10,7 +10,7 @@ class PitfallGame
 private:
 	Player* player;	
 	World* world;	
-	Log* log;
+	vector<Log> log;
 	int scenarioNumber;
 	bool checkCollisionX(Player* player, GameObject* object);
 	bool checkCollisionY(Player* player, GameObject* object);

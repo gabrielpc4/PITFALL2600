@@ -99,9 +99,9 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	int currentJumpHeight = (this->topY() - (floor + 42));
+	int currentJumpHeight = (this->sprite->topY() - (floor + 42));
 
-	if (currentJumpHeight <= JUMP_MAX_HEIGHT && _down == false)
+	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
 	{
 		_down = false;
 		setSpeedY(JUMP_SPEED);

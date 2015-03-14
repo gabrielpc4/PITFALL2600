@@ -114,7 +114,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 
 PitfallGame::PitfallGame()
 {	
-	log = NULL;
+	log.clear();
 	scenarioNumber = 1;
 	world = new World(scenarioNumber);
 	player = new Player(39,140);		
@@ -138,34 +138,26 @@ void PitfallGame::drawAll()
 		world->stairs->drawCover();
 	}
 
-	if (world->groundHole.size() != 0)
+	for (int i = 0; i < world->groundHole.size(); i++)
 	{
-		for (int i = 0; i < 2; i++)
-		{
-			world->groundHole.at(i).drawCover();
-		}
-		
+		world->groundHole.at(i).drawCover();
 	}
 
 
-	switch (scenarioNumber)
+	for (unsigned i = 0; i < log.size(); i++)
 	{
-	case (0) :
-	{
-		log->draw();
-	}break;
-	default:break;
+		log.at(i).draw();
 	}
 }
 
 void PitfallGame::moveAll()
 {
 	player->move();
-	if (log != NULL)
+	for (unsigned i = 0; i < log.size(); i++)
 	{
-		if (log->isRolling())
+		if (log.at(i).isRolling())
 		{
-			log->roll();
+			log.at(i).roll();
 		}
 	}
 	checkBoundaries();
@@ -242,33 +234,32 @@ void PitfallGame::physics()
 	}
 
 
-	// Makes the player fall if is in contact with a ground  hole
-	if (world->groundHole.size() != 0) // if there is a ground hole
+	// Makes the player fall if is in contact with a ground  hole		
+	for (int i = 0; i < world->groundHole.size(); i++)
 	{
 		if (player->y() >= world->ground.y())
 		{
-			for (int i = 0; i < 2; i++)
-			{				
-				if (player->willFall(&(world->groundHole.at(i))))
+			if (player->willFall(&(world->groundHole.at(i))))
+			{
+				if (player->isJumping() == false)
 				{
-					if (player->isJumping() == false)
-					{
-						player->floor = world->tunnelFloor.topY();
-						player->falling(true);
-					}								
+					player->floor = world->tunnelFloor.topY();
+					player->falling(true);
 				}
 			}
-		}		
+		}
 	}
+				
+	
 }
 
 void PitfallGame::checkBoundaries()
 {
-	if (log != NULL)
+	for (unsigned i = 0; i < log.size(); i++)
 	{
-		if (log->rightX() <= 0)
+		if (log.at(i).rightX() <= 0)
 		{
-			log->setX(WORLD_WINDOW_WIDTH);
+			log.at(i).setX(WORLD_WINDOW_WIDTH);
 		}
 	}
 
@@ -298,11 +289,12 @@ void PitfallGame::spawnEnemies()
 	{
 	case(0) :
 	{
-		log = new Log(422, 128, false);
-	}
+		log.push_back(Log(422, 128, false));
+	}break;
 	case (1) :
 	{
-
+		log.push_back(Log(417, 128, true));
+		log.push_back(Log(475, 128, true));
 	}break;
 	default:
 		break;
@@ -326,15 +318,12 @@ int PitfallGame::relativePosition(Player* player, GameObject* object)
 void PitfallGame::checkCollisionsWithEnemies()
 {
 	// Collision with the Enemy log
-	if (log != NULL)
+	player->takeHit(false);
+	for (unsigned i = 0; i < log.size(); i++)
 	{
-		if (checkCollisionX(player, log) && checkCollisionY(player, log))
+		if (checkCollisionX(player, &log.at(i)) && checkCollisionY(player, &log.at(i)))
 		{
 			player->takeHit(true);
-		}
-		else
-		{
-			player->takeHit(false);
 		}
 	}
 }
@@ -381,8 +370,7 @@ bool PitfallGame::isOutOfBoundaries(GameObject* object)
 
 void PitfallGame::deleteWorld()
 {
-	delete log;
-	log = NULL;
+	log.clear();
 
 	if (world->stairs != NULL)
 	{
@@ -396,10 +384,8 @@ void PitfallGame::deleteWorld()
 	delete world->brickWall;
 	world->brickWall = NULL;
 
-	if (world->groundHole.size() != 0)
-	{
-		world->groundHole.empty();
-	}
-
+	
+	world->groundHole.clear();
+	
 	delete world;
 }

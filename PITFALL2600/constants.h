@@ -15,8 +15,8 @@
 #define LEFT 2
 #define RIGHT 3
 
-#define PLAYER_SPEED 3
-#define FALLING_SPEED 3
+#define PLAYER_SPEED 4
+#define FALLING_SPEED 4
 #define CLIMBING_SPEED 3
 static const float JUMP_SPEED = 3.3;
 #define JUMP_MAX_HEIGHT 22

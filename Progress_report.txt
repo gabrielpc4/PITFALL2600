@@ -95,7 +95,7 @@ threesBranches
 . Created and tested a rolling Log
 . Implemented the collision between the log and the player
 . Player max jump height slightly increased
-. First scnario completely finished
+. First scenario completely finished
 
 03-13-2015
 . Implemented the logic to change scenarios
@@ -109,3 +109,7 @@ threesBranches
 . Fixed ground hole falling bugs
 . Added ground hole cover
 . Finished and tested groundhole fall
+. Added 2 rolling logs on the second scenario
+. Second scenario completely finished
+. Added score
+. Fixed player jump height again
