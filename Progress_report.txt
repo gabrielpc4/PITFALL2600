@@ -106,3 +106,6 @@ threesBranches
 . Fixed player height
 . Ground holes sizes back to normal
 . Refined jump height and time
+. Fixed ground hole falling bugs
+. Added ground hole cover
+. Finished and tested groundhole fall

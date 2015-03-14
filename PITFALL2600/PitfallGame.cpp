@@ -221,12 +221,20 @@ void PitfallGame::physics()
 					if (relativePosition(player, world->brickWall) == RIGHT)
 					{
 						// Moves the player away from the brick wall
-						player->setX(world->brickWall->x() - 17);
+						player->setX(world->brickWall->x() - PLAYER_ANIMATION_0_WIDTH);
 					}
 					else // if the player is at the right side of the brick wall
 					{
-						// Move the player away from the brick wall
-						player->setX(world->brickWall->rightX());
+						if (player->isLooking(LEFT)) // Prevents the player getting stuck when changing the look direction
+						{
+							// Move the player away from the brick wall
+							player->setX(world->brickWall->rightX() - PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION);
+						}
+						else
+						{
+							player->setX(world->brickWall->rightX());
+						}
+						
 					}
 				}
 			}
@@ -338,14 +346,14 @@ bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
 {
 	if (player->isLooking(RIGHT))
 	{
-		if (player->x() + 11 > object->x() && player->x() < object->rightX())
+		if (player->x() + PLAYER_ANIMATION_0_WIDTH > object->x() && player->x() < object->rightX())
 		{
 			return true;
 		}
 	}
 	else
 	{
-		if (player->x() + 4 < object->rightX() && player->x() + 11 > object->x())
+		if (player->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION < object->rightX() && player->x() + PLAYER_ANIMATION_0_WIDTH > object->x())
 		{
 			return true;
 		}

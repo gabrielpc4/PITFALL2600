@@ -10,8 +10,6 @@ class Player
 private: 
 	int lives;
 	long framesWalking;
-	int _height;
-	int _width;
 	int lookingDirection;
 
 	Point playerSpeed;

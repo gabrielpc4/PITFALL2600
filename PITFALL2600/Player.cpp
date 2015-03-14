@@ -15,8 +15,6 @@ Player::Player(GLint startX, GLint startY)
 	_down = false;
 	_jumping = false;		
 	_takingHit = false;
-	_width = 11;
-	_height = 42;
 	_falling = false;
 	_walking = false;
 	_climbing = false;
@@ -73,8 +71,8 @@ void Player::draw()
 	delete sprite;
 	sprite = new PlayerSprite(this->x(), this->y(), animationFrame, lookingDirection, isClimbing());
 
-	int difference_x = difference_x = this->x() - (this->x() + this->sprite->x());;
-	int difference_y = difference_y = this->_height - this->sprite->height();;
+	int difference_x = this->x() - (this->x() + this->sprite->x());;
+	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->sprite->height();;
 
 	if (isTakingHit() && isJumping() == false && isClimbing() == false)
 	{
@@ -267,14 +265,15 @@ bool Player::willFall(GameObject* hole)
 	{
 		if (lookingDirection == RIGHT)
 		{
-			if (this->x() >= hole->x() && this->x() + _width <= hole->rightX())
+			if (this->x() >= hole->x() && this->x() + PLAYER_ANIMATION_0_WIDTH <= hole->rightX())
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if (this->x() + (_width + 4) <= hole->rightX() && this->x() + 4 >= hole->x())
+			if (this->x() + (PLAYER_ANIMATION_0_WIDTH + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION) <= hole->rightX() 
+			&& this->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION >= hole->x())
 			{
 				return true;
 			}
