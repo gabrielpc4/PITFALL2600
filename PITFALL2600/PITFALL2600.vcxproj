@@ -84,6 +84,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GroundHole.h" />
+    <ClInclude Include="Hole.h" />
+    <ClInclude Include="HoleSprite.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
     <ClInclude Include="ScenarioObjects.h" />
@@ -106,6 +108,8 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GroundHole.cpp" />
+    <ClCompile Include="Hole.cpp" />
+    <ClCompile Include="HoleSprite.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />

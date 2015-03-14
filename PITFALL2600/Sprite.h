@@ -18,16 +18,17 @@ private:
 	float _y;
 	int _width;
 	int _height;
+	void updateX();
+
 public:
 	/***************************************************************************************
 	* Method: Default Constructor
 	* Description: It does nothing
 	****************************************************************************************/
 	Sprite() {}
-
 	Sprite(GLint startX, GLint startY) { _x = startX; _y = startY; }
-
 	void update();
+	
 	
 
 	/***************************************************************************************

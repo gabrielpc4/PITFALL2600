@@ -96,6 +96,24 @@ void Sprite::update()
 	this->_height = (biggerY - smallerY);
 }
 
+void Sprite::updateX()
+{
+	// Goes through all the rectangles that makes the Sprite and get the smallest x value
+	int smallerX = WORLD_WINDOW_WIDTH;
+
+
+	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
+	{
+		if (it->x() < smallerX)
+		{
+			smallerX = it->x();
+		}
+	}
+
+	this->_x = smallerX;
+}
+
+
 
 /***************************************************************************************
 * Method Name: y
@@ -194,6 +212,7 @@ void Sprite::draw()
 ****************************************************************************************/
 void Sprite::push_back(Rect rect)
 {
+	rect += Point(this->x(), this->y());
 	vector<Polygon>::push_back(Polygon(rect));
 	update();
 }
@@ -214,6 +233,7 @@ void Sprite::push_back(Rect rect, Color color)
 ****************************************************************************************/
 void Sprite::push_back(Polygon pol)
 {
+	pol += Point(this->x(), this->y());
 	vector<Polygon>::push_back(pol);
 	update();
 }
@@ -233,11 +253,12 @@ void Sprite::push_back(Sprite sprite)
 
 void Sprite::mirrorX()
 {
+	updateX();
 	int spriteX = this->x();
 	for (vector<Polygon>::iterator it = this->begin(); it != this->end(); ++it)
 	{		
 		it->mirrorX(spriteX);
-	}
+	}	
 	*this += Point((this->width()), 0);	
 }
 

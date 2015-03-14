@@ -223,7 +223,7 @@ Color Polygon::color()
 * Description: Adds a given polygon to the current polygon
 ****************************************************************************************/
 void Polygon::push_back(Rect rect)
-{
+{	
 	if (rect.color().notInformed())
 	{
 		Rect temp = Rect(rect.p1(), rect.p2(), _color);

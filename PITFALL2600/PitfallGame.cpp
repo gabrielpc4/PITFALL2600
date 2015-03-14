@@ -3,22 +3,42 @@
 PitfallGame::PitfallGame()
 {
 	log.clear();
-	scenarioNumber = 0;
+	scenarioNumber = 1;
 	score = 2000;
 	world = new World(scenarioNumber);
 	player = new Player(39, 140);
+
 	spawnEnemies();
 }
 
 void PitfallGame::run()
 {
 	moveAll();
+	//checkBoundaries();
 	physics();
 	checkCollisionsWithEnemies();
 
 	if (player->isTakingHit() && score > 0)
 	{
 		score--;
+	}
+}
+
+void PitfallGame::spawnEnemies()
+{
+	switch (scenarioNumber)
+	{
+	case(0) :
+	{
+		log.push_back(Log(422, 128, false));
+	}break;
+	case (1) :
+	{
+		log.push_back(Log(417, 128, true));
+		log.push_back(Log(475, 128, true));
+	}break;
+	default:
+		break;
 	}
 }
 
@@ -95,6 +115,12 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 						player->climb(UP);
 					}
 				}
+
+				// Prevents the user from jumping while climbing or falling
+				if ((player->isClimbing() == false) && (player->isFalling() == false))
+				{
+					player->jumping(true);
+				}
 			}
 			else // If the user releases the key
 			{
@@ -115,6 +141,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 				player->stopClimbing();
 			}
 		}
+
 	}
 }
 
@@ -179,7 +206,6 @@ void PitfallGame::moveAll()
 			log.at(i).roll();
 		}
 	}
-	checkBoundaries();
 }
 
 void PitfallGame::physics()
@@ -274,7 +300,7 @@ void PitfallGame::checkBoundaries()
 {	
 	for (unsigned i = 0; i < log.size(); i++)
 	{		
-		if (log.at(i).sprite->rightX() <= 0)
+		if (log.at(i).rightX() <= 0)
 		{
 			log.at(i).setX(WORLD_WINDOW_WIDTH);
 		}
@@ -297,26 +323,9 @@ void PitfallGame::checkBoundaries()
 		world = new World(scenarioNumber);
 		spawnEnemies();
 	}
-
 }
 
-void PitfallGame::spawnEnemies()
-{
-	switch (scenarioNumber)
-	{
-	case(0) :
-	{
-		log.push_back(Log(422, 128, false));
-	}break;
-	case (1) :
-	{
-		log.push_back(Log(417, 128, true));
-		log.push_back(Log(475, 128, true));
-	}break;
-	default:
-		break;
-	}
-}
+
 
 int PitfallGame::relativePosition(Player* player, GameObject* object)
 {
@@ -338,10 +347,10 @@ void PitfallGame::checkCollisionsWithEnemies()
 	player->takeHit(false);
 	for (unsigned i = 0; i < log.size(); i++)
 	{
-		if (checkCollisionX(player, &log.at(i)) && checkCollisionY(player, &log.at(i)))
+		/*if (checkCollisionX(player, log.at(i)) && checkCollisionY(player, log.at(i)))
 		{
 			player->takeHit(true);
-		}
+		}*/
 	}
 }
 
