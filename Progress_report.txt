@@ -98,8 +98,11 @@ threesBranches
 . First scnario completely finished
 
 03-13-2015
-. Implemented the log to change scenarios
+. Implemented the logic to change scenarios
 . Solved memory leaking problems when changing the scenario
 . Player sprite while jumping now can't be reversed (just like the original game)
 . Enhanced Player collision with the brick wall
 . Comments added to the handlekeyboardinput methods and some other in the PitfallGame class
+. Fixed player height
+. Ground holes sizes back to normal
+. Refined jump height and time

@@ -13,7 +13,7 @@ Point::Point()
 * Method: 2 Params Constructor
 * Description: Initializes a Point at the specified x and y position
 **********************************************************************/
-Point::Point(GLint x, GLint y)
+Point::Point(float x, float y)
 {
 	_x = x;
 	_y = y;
@@ -78,16 +78,16 @@ const Point Point::operator-(const Point& p2) const
 * Method Name: x
 * Description: Returns the x value
 **********************************************************************/
-GLint Point::x() const
+float Point::x() const
 {
-	return (_x);
+	return _x;
 }
 
 /**********************************************************************
 * Method Name: y
 * Description: Returns the y value
 **********************************************************************/
-GLint Point::y() const
+float Point::y() const
 {
 	return _y;
 }
@@ -96,7 +96,7 @@ GLint Point::y() const
 * Method Name: setX
 * Description: Sets the x value
 **********************************************************************/
-void Point::setX(GLint x)
+void Point::setX(float x)
 {
 	_x = x;
 }
@@ -105,7 +105,7 @@ void Point::setX(GLint x)
 * Method Name: setY
 * Description: Sets the y value
 **********************************************************************/
-void Point::setY(GLint y)
+void Point::setY(float y)
 {
 	_y = y;
 }

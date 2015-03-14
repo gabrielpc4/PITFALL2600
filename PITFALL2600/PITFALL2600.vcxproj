@@ -83,6 +83,7 @@
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GroundHole.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
     <ClInclude Include="ScenarioObjects.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GroundHole.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />

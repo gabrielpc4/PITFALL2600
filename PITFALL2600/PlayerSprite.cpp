@@ -22,21 +22,21 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 		{
 		case(0) :
 		{
-			Rect rightFeet(Point(0, 0), Point(8, 2), legColor);
-			Rect leftFeet(Point(4, 4), Point(11, 6), legColor);
+			Rect rightFeet(Point(0, 0), Point(7, 2), legColor);
+			Rect leftFeet(Point(3, 4), Point(11, 6), legColor);
 
 			Sprite::push_back(rightFeet);
 			Sprite::push_back(leftFeet);
 
 
 			Rect rightLeg(Point(0, 2), Point(4, 14), legColor);
-			Rect leftLeg(Point(4, 6), Point(8, 14), legColor);
+			Rect leftLeg(Point(4, 6), Point(7, 14), legColor);
 
 			Sprite::push_back(rightLeg);
 			Sprite::push_back(leftLeg);
 
 
-			Rect rightArm(Point(8, 24), Point(11, 28), armColor);
+			Rect rightArm(Point(7, 24), Point(11, 28), armColor);
 			Sprite::push_back(rightArm);
 
 			Rect rightHand(Point(11, 26), Point(15, 30), armColor);
@@ -54,7 +54,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 
 			Sprite::push_back(rightLeg);
 
-			Rect leftLeg(Point(8, 6), Point(11, 16), legColor);
+			Rect leftLeg(Point(7, 6), Point(11, 16), legColor);
 
 			Sprite::push_back(leftLeg);
 
@@ -67,7 +67,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 			Rect leftArm(Point(-4, 22), Point(0, 30), armColor);
 			Sprite::push_back(leftArm);
 
-			Rect rightArm(Point(8, 22), Point(11, 26), armColor);
+			Rect rightArm(Point(7, 22), Point(11, 26), armColor);
 			Sprite::push_back(rightArm);
 
 			Rect rightRand(Point(11, 24), Point(15, 28), armColor);
@@ -92,7 +92,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 
 			Sprite::push_back(leftLeg);
 
-			Rect rightRand(Point(8, 20), Point(12, 24), armColor);
+			Rect rightRand(Point(7, 20), Point(12, 24), armColor);
 			Sprite::push_back(rightRand);
 		}break;
 		case(3) :
@@ -114,7 +114,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 			leftLeg.push_back(Rect(Point(7, 12), Point(11, 18)));
 			Sprite::push_back(leftLeg);
 
-			Rect rightRand(Point(8, 22), Point(12, 26), armColor);
+			Rect rightRand(Point(7, 22), Point(12, 26), armColor);
 			Sprite::push_back(rightRand);
 		}break;
 		case(4) :
@@ -140,7 +140,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 			Rect leftArm(Point(-4, 22), Point(0, 30), armColor);
 			Sprite::push_back(leftArm);
 
-			Rect rightArm(Point(8, 22), Point(11, 26), armColor);
+			Rect rightArm(Point(7, 22), Point(11, 26), armColor);
 			Sprite::push_back(rightArm);
 
 			Rect rightRand(Point(11, 24), Point(15, 28), armColor);
@@ -162,7 +162,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 
 			Polygon leftLeg(legColor);
 			leftLeg.push_back(Rect(Point(12, 10), Point(16, 18)));
-			leftLeg.push_back(Rect(Point(8, 16), Point(12, 20)));
+			leftLeg.push_back(Rect(Point(7, 16), Point(12, 20)));
 			Sprite::push_back(leftLeg);
 
 			Rect leftArm(Point(-3, 26), Point(0, 30), armColor);
@@ -171,7 +171,7 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 			Rect leftHand(Point(-7, 22), Point(-3, 28), armColor);
 			Sprite::push_back(leftHand);
 
-			Rect rightArm(Point(8, 26), Point(12, 30), armColor);
+			Rect rightArm(Point(7, 26), Point(12, 30), armColor);
 			Sprite::push_back(rightArm);
 
 			Rect rightRand(Point(12, 28), Point(16, 32), armColor);
@@ -205,15 +205,15 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 
 void PlayerSprite::buildBasicShape()
 {
-	Rect hips(Point(0, 14), Point(8, 20), Color(16, 80, 0));
+	Rect hips(Point(0, 14), Point(7, 20), Color(16, 80, 0));
 	Sprite::push_back(hips);
 
-	Rect torso(Point(0, 20), Point(8, 34), Color(48, 192, 48));
+	Rect torso(Point(0, 20), Point(7, 34), Color(48, 192, 48));
 	Sprite::push_back(torso);
 
 	Rect neck(Point(0, 34), Point(4, 36), Color(240, 176, 144));
-	Rect face(Point(0, 36), Point(8, 42), neck.color());
-	Rect hat(Point(0, 42), Point(8, 44), Color(80, 32, 0));
+	Rect face(Point(0, 36), Point(7, 40), neck.color());
+	Rect hat(Point(0, 40), Point(7, 42), Color(80, 32, 0));
 	Sprite::push_back(neck);
 	Sprite::push_back(face);
 	Sprite::push_back(hat);

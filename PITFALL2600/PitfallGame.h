@@ -21,6 +21,7 @@ private:
 	void checkCollisionsWithEnemies();
 	void moveAll();
 	void physics();
+	int relativePosition(Player* player, GameObject* object);
 public:
 	PitfallGame();
 	void run();

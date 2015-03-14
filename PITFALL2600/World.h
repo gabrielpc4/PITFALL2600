@@ -31,14 +31,15 @@ public:
 	Rect tunnelFloor;
 	Rect tunnelTop;
 	Rect ground;
+
 		
 	// Other elements	
 	Stairs* stairs;
 	BrickWall* brickWall;
+	vector<GroundHole> groundHole;
 	World();
 	World(int scenarioNumber);						// Defines the Positions of the basic scenario
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
-	void drawStairHoleCover();
 	
 };
 #endif

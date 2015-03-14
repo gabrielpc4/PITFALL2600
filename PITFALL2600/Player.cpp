@@ -12,11 +12,11 @@ Player::Player(GLint startX, GLint startY)
 {		
 	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT, false);
 
-	
+	_down = false;
 	_jumping = false;		
 	_takingHit = false;
-	_width = this->sprite->width();
-	_height = this->sprite->height();
+	_width = 11;
+	_height = 42;
 	_falling = false;
 	_walking = false;
 	_climbing = false;
@@ -31,7 +31,6 @@ Player::Player(GLint startX, GLint startY)
 
 void Player::draw()
 {
-	
 	if (this->rightX() > WORLD_WINDOW_WIDTH)
 	{
 		this->setX(1);
@@ -53,14 +52,18 @@ void Player::draw()
 		}		
 	}
 
-	if ((isJumping() || isTakingHit()) && (isClimbing() == false))
-	{
-		animationFrame = 5;
-	}
+	
 	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
 	{
 		animationFrame = 0;
 	}
+
+	if ((isJumping() || isTakingHit()) && (isClimbing() == false) 
+		|| (isFalling() && this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
+	{
+		animationFrame = 5;
+	}
+
 	if (isClimbing())
 	{
 		animate(0, 1);
@@ -98,51 +101,50 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	int currentJumpHeight = (this->y() - floor);
+	int currentJumpHeight = (this->topY() - (floor + 42));
 
-	if (currentJumpHeight < JUMP_MAX_HEIGHT && (isFalling() == false))
+	if (currentJumpHeight <= JUMP_MAX_HEIGHT && _down == false)
 	{
+		_down = false;
 		setSpeedY(JUMP_SPEED);
 	}
 	else
 	{
-		_falling = true;
+		_down = true;
 	}
 
 
-	if (isFalling())
+	if (_down)
 	{
 		if (this->y() > floor)
 		{
-			if ((this->y() - floor) > FALLING_SPEED)
-			{
-				setSpeedY(-FALLING_SPEED);			
-			}
-			else
-			{
-				setY(floor);
-				setSpeedY(0);
-				_falling = false;
-				_jumping = false;
-
-				if (isWalking() == false)
-				{
-					setSpeedX(0);
-				}
-			}
+			setSpeedY(-JUMP_SPEED);
 		}
+		else
+		{
+			setY(floor);
+			setSpeedY(0);
+			_falling = false;
+			_jumping = false;
+			_down = false;
+
+			if (isWalking() == false)
+			{
+				setSpeedX(0);
+			}
+		}				
 	}
 }
 
 void Player::fall()
-{
+{	
 	animationFrame = 0;
 	setSpeedX(0);
 	if (this->y() > floor)
 	{
 		if ((this->y() - floor) > FALLING_SPEED)
 		{
-			setSpeedY(-FALLING_SPEED);			
+			setSpeedY(-FALLING_SPEED);
 		}
 		else
 		{
@@ -206,8 +208,12 @@ void Player::move()
 	}
 
 	// If the player is just falling
-	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
+	if (isFalling() && (isClimbing() == false))
 	{
+		if (isJumping())
+		{
+			jumping(false);
+		}
 		fall();
 	}
 	
@@ -261,18 +267,19 @@ bool Player::willFall(GameObject* hole)
 	{
 		if (lookingDirection == RIGHT)
 		{
-			if (this->x() >= hole->x() && this->rightX() <= hole->rightX())
+			if (this->x() >= hole->x() && this->x() + _width <= hole->rightX())
 			{
 				return true;
 			}
 		}
 		else
 		{
-			if (this->rightX() <= hole->rightX() && this->x() >= hole->x())
+			if (this->x() + (_width + 4) <= hole->rightX() && this->x() + 4 >= hole->x())
 			{
 				return true;
 			}
 		}
+		return false;
 	}	
 	return false;
 }
@@ -334,12 +341,12 @@ bool Player::isLooking(int DIRECTION)
 	return (DIRECTION == lookingDirection);
 }
 
-void Player::setSpeedX(int speed)
+void Player::setSpeedX(float speed)
 {
 	playerSpeed.setX(speed);
 }
 
-void Player::setSpeedY(int speed)
+void Player::setSpeedY(float speed)
 {
 	playerSpeed.setY(speed);
 }
@@ -383,12 +390,12 @@ bool Player::isJumping()
 
 void Player::centerOnStair(GameObject* stairs)
 {
-	setX(stairs->x() + 8);
+	setX(stairs->x() + 5);
 }
 
 bool Player::isUndeground()
 {
-	return (this->y() < GROUND_Y);
+	return (this->y() < 132);
 }
 
 int Player::livesLeft()

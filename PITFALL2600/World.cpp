@@ -72,10 +72,19 @@ void World::buildScenario(int scenarioNumber)
 		stairs = new Stairs(245, tunnelFloor.topY());
 		brickWall = new BrickWall(461, tunnelFloor.topY());
 	}break;
+	case(1) :
+	{
+		stairs = new Stairs(245, tunnelFloor.topY());	
+		brickWall = new BrickWall(461, tunnelFloor.topY());
+		groundHole.push_back(GroundHole(144, tunnelTop.y()));
+		groundHole.push_back(GroundHole(331, tunnelTop.y()));
+	}break;
 	default:
 	{
 	}break;
 	}
+
+	
 }
 
 /*****************************************************************************************
@@ -83,18 +92,26 @@ void World::buildScenario(int scenarioNumber)
 * Description: Calls the function drawBasicScenario and loads the first Scenario
 ******************************************************************************************/
 void World::draw(int scenarioNumber)
-{
+{	
 	drawBasicScenario();
 
-	switch (scenarioNumber)
-	{
-	case(0) :
+	if (stairs != NULL)
 	{
 		stairs->draw();
-		brickWall->draw();
-	}break;
 	}
 
+	if (brickWall != NULL)
+	{
+		brickWall->draw();
+	}
+
+	if (groundHole.size() != 0)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			groundHole.at(i).draw();
+		}
+	}	
 }
 
 /*****************************************************************************************
@@ -228,14 +245,6 @@ void World::drawTreeLeafs()
 	treeLeafs.push_back(Rect(Point(504, 4), Point(518, WORLD_WINDOW_HEIGHT)));
 	treeLeafs.push_back(Rect(Point(518, 0), Point(WORLD_WINDOW_WIDTH, WORLD_WINDOW_HEIGHT)));
 	treeLeafs.drawPolygon(0, 262);
-}
-
-void World::drawStairHoleCover()
-{	
-	Rect cover1(Point(stairs->hole->x(), ground.y()), Point(stairs->hole->rightX(), stairs->hole->y()), ground.color());
-	Rect cover2(Point(stairs->hole->x(), stairs->hole->y()), Point(stairs->hole->rightX(), stairs->hole->y() + stairs->hole->height() / 2.0), Color(BLACK));
-	cover1.draw();
-	cover2.draw();			
 }
 
 

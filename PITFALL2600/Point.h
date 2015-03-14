@@ -11,8 +11,8 @@
 class Point
 {
 protected:
-	GLint _x;
-	GLint _y;
+	float _x;
+	float _y;
 public:
 	/********************************************************************
 	* Method: Default Constructor
@@ -24,7 +24,7 @@ public:
 	* Method: 2 Params Constructor
 	* Description: Initializes a Point at the specified x and y position
 	********************************************************************/
-	Point(GLint x, GLint y);
+	Point(float x, float y);
 
 	/********************************************************************
 	* Method: Overloaded = operator
@@ -60,25 +60,25 @@ public:
 	* Method Name: x
 	* Description: Returns the x value
 	********************************************************************/
-	GLint x() const;
+	float x() const;
 
 	/********************************************************************
 	* Method Name: y
 	* Description: Returns the y value
 	********************************************************************/
-	GLint y() const;
+	float y() const;
 
 	/********************************************************************
 	* Method Name: setX
 	* Description: Sets the x value
 	********************************************************************/
-	void setX(GLint x);
+	void setX(float x);
 
 	/********************************************************************
 	* Method Name: setY
 	* Description: Sets the y value
 	********************************************************************/
-	void setY(GLint y);
+	void setY(float y);
 
 	void clear();
 };

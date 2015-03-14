@@ -21,6 +21,7 @@ private:
 	bool _falling;
 	bool _walking;
 	bool _climbing;
+	bool _down;
 	int _climbingDirection;
 	bool _takingHit;
 public:
@@ -35,8 +36,8 @@ public:
 	void jump();
 	void look(int DIRECTION);
 	bool isLooking(int DIRECTION);
-	void setSpeedX(int speed);
-	void setSpeedY(int speed);
+	void setSpeedX(float speed);
+	void setSpeedY(float speed);
 	Point speed();
 	void walking(bool state);
 	bool isWalking();

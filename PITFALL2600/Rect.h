@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Color.h"
 #include <stdlib.h>
+#include <cmath>
 #include "glut.h"  // Custom glut.h to work with stdlib.h
 /***********************************************************************************************
 * Class: Rect

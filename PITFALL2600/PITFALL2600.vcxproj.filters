@@ -28,6 +28,18 @@
     <Filter Include="Header Files\includes">
       <UniqueIdentifier>{f3b839de-3f1b-4260-b07f-07d47498b9bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Enemies">
+      <UniqueIdentifier>{bac83b8a-c795-429b-a773-52c71c029d53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WorldObjects">
+      <UniqueIdentifier>{ead222f0-70d8-4db7-9de1-8e6181c5f3ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WorldObjects">
+      <UniqueIdentifier>{ae4b88ed-e457-4f86-84a5-11b30cfed109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enemies">
+      <UniqueIdentifier>{8ff23da5-4622-4d58-876a-7d0390edbafa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PitfallGame.h">
@@ -66,12 +78,6 @@
     <ClInclude Include="ScenarioObjects.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
-    <ClInclude Include="Stairs.h">
-      <Filter>Header Files\Sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="BrickWall.h">
-      <Filter>Header Files\Sprites</Filter>
-    </ClInclude>
     <ClInclude Include="glut.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
@@ -93,8 +99,17 @@
     <ClInclude Include="Enemies.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
+    <ClInclude Include="BrickWall.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundHole.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Stairs.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
     <ClInclude Include="Log.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,12 +143,6 @@
     <ClCompile Include="PlayerSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
-    <ClCompile Include="Stairs.cpp">
-      <Filter>Source Files\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="BrickWall.cpp">
-      <Filter>Source Files\Sprites</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -143,8 +152,17 @@
     <ClCompile Include="LogSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
+    <ClCompile Include="Stairs.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundHole.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickWall.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
     <ClCompile Include="Log.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

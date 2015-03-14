@@ -10,11 +10,13 @@ class Stairs :
 private:
 	Rect stairsBorder;
 	Rect step;	
+	Sprite cover;
 public:
 	Stairs();
 	Stairs(GLint startX, GLint startY);
 	void draw();
 	GameObject* hole;
+	void drawCover();
 };
 
 #endif

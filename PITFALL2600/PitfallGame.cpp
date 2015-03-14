@@ -8,7 +8,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		{
 			if (keyState == DOWN)
 			{
-				if (player->isJumping() == false)	// Prevents the player sprite from changing direction while jumping
+				if (player->isJumping() == false && player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
 				{
 					player->look(RIGHT);
 					player->walking(true);
@@ -34,7 +34,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		{
 			if (keyState == DOWN)
 			{
-				if (player->isJumping() == false) // Prevents the player sprite from changing direction while jumping
+				if (player->isJumping() == false && player->isFalling() == false) // Prevents the player sprite from changing direction while jumping
 				{
 					player->look(LEFT);
 					player->walking(true);
@@ -115,10 +115,9 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 PitfallGame::PitfallGame()
 {	
 	log = NULL;
-	scenarioNumber = 0;
+	scenarioNumber = 1;
 	world = new World(scenarioNumber);
-	player = new Player(39, 140);	
-	
+	player = new Player(39,140);		
 	spawnEnemies();
 }
 
@@ -135,9 +134,19 @@ void PitfallGame::drawAll()
 	player->draw();
 
 	if (world->stairs != NULL)
-	{
-		world->drawStairHoleCover();
+	{		
+		world->stairs->drawCover();
 	}
+
+	if (world->groundHole.size() != 0)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			world->groundHole.at(i).drawCover();
+		}
+		
+	}
+
 
 	switch (scenarioNumber)
 	{
@@ -167,12 +176,14 @@ void PitfallGame::physics()
 	if (world->stairs != NULL)
 	{
 		// Makes the player fall
-		if (player->willFall(world->stairs->hole) && (player->isClimbing() == false) && (player->isJumping() == false))
+		if (player->willFall(world->stairs->hole) && (player->isClimbing() == false))
 		{
-			player->floor = world->tunnelFloor.topY();
-			player->falling(true);
+			if (player->isJumping() == false)
+			{
+				player->floor = world->tunnelFloor.topY();
+				player->falling(true);
+			}
 		}
-
 		// Makes the player be able to climb
 		if (player->isClimbing())
 		{
@@ -198,26 +209,49 @@ void PitfallGame::physics()
 	}
 	// Collision with the brick wall
 	if (world->brickWall != NULL)
-	{
+	{	
 		if (player->isUndeground())
 		{
-			// If the player is colliding with the brick wall
-			if (checkCollisionX(player, world->brickWall))
-			{
-				// if the player is at the right side of the brick wall
-				if (player->rightX() < world->brickWall->rightX())
+			if (world->brickWall->sprite->x() != 0) // Prevents the collision check bug when the brickwall's sprite is being 		
+			{										// created and still is at the origin and was not moved to the right position yet
+				// If the player is colliding with the brick wall
+				if (checkCollisionX(player, world->brickWall))
 				{
-					// Move the player away from the brickw wall
-					player->setX(world->brickWall->x() - 17);
-				}
-				else // if the player is at the left side of the brick wall
-				{
-					// Move the player away from the brickw wall
-					player->setX(world->brickWall->rightX());
+					// if the player is at the left side of the brick wall
+					if (relativePosition(player, world->brickWall) == RIGHT)
+					{
+						// Moves the player away from the brick wall
+						player->setX(world->brickWall->x() - 17);
+					}
+					else // if the player is at the right side of the brick wall
+					{
+						// Move the player away from the brick wall
+						player->setX(world->brickWall->rightX());
+					}
 				}
 			}
 		}
-	}	
+	}
+
+
+	// Makes the player fall if is in contact with a ground  hole
+	if (world->groundHole.size() != 0) // if there is a ground hole
+	{
+		if (player->y() >= world->ground.y())
+		{
+			for (int i = 0; i < 2; i++)
+			{				
+				if (player->willFall(&(world->groundHole.at(i))))
+				{
+					if (player->isJumping() == false)
+					{
+						player->floor = world->tunnelFloor.topY();
+						player->falling(true);
+					}								
+				}
+			}
+		}		
+	}
 }
 
 void PitfallGame::checkBoundaries()
@@ -242,7 +276,7 @@ void PitfallGame::checkBoundaries()
 		if (player->x() < 0)
 		{
 			scenarioNumber--;
-			player->setX(WORLD_WINDOW_WIDTH - player->width() * 2);
+			player->setX(WORLD_WINDOW_WIDTH - 32);
 		}
 		world = new World(scenarioNumber);
 		spawnEnemies();
@@ -258,9 +292,27 @@ void PitfallGame::spawnEnemies()
 	{
 		log = new Log(422, 128, false);
 	}
+	case (1) :
+	{
+
+	}break;
 	default:
 		break;
 	}
+}
+
+int PitfallGame::relativePosition(Player* player, GameObject* object)
+{
+	int object_center_x = (object->x() + (object->width() / 2.0));
+	if (player->x() < object_center_x)
+	{
+		return RIGHT;
+	}
+	else if (player->rightX() > object_center_x)
+	{
+		return LEFT;
+	}
+	return NONE;
 }
 
 void PitfallGame::checkCollisionsWithEnemies()
@@ -279,33 +331,26 @@ void PitfallGame::checkCollisionsWithEnemies()
 	}
 }
 
+
+
+
 bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
-{	
-	if (player->sprite->rightX() >= object->sprite->x() && player->sprite->x() <= object->sprite->rightX())
-	{		
-		return true;
+{
+	if (player->isLooking(RIGHT))
+	{
+		if (player->x() + 11 > object->x() && player->x() < object->rightX())
+		{
+			return true;
+		}
+	}
+	else
+	{
+		if (player->x() + 4 < object->rightX() && player->x() + 11 > object->x())
+		{
+			return true;
+		}
 	}
 	return false;
-}
-
-void PitfallGame::deleteWorld()
-{
-	delete log;
-	log = NULL;
-
-	if (world->stairs != NULL)
-	{
-		delete world->stairs->hole;
-		world->stairs->hole = NULL;
-	}
-
-	delete world->stairs;
-	world->stairs = NULL;
-	
-	delete world->brickWall;
-	world->brickWall = NULL;
-
-	delete world;
 }
 
 bool PitfallGame::checkCollisionY(Player* player, GameObject* object)
@@ -326,5 +371,27 @@ bool PitfallGame::isOutOfBoundaries(GameObject* object)
 	return false;
 }
 
+void PitfallGame::deleteWorld()
+{
+	delete log;
+	log = NULL;
 
+	if (world->stairs != NULL)
+	{
+		delete world->stairs->hole;
+		world->stairs->hole = NULL;
+	}
 
+	delete world->stairs;
+	world->stairs = NULL;
+
+	delete world->brickWall;
+	world->brickWall = NULL;
+
+	if (world->groundHole.size() != 0)
+	{
+		world->groundHole.empty();
+	}
+
+	delete world;
+}
