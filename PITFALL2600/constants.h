@@ -7,7 +7,7 @@
 // Window Size
 #define WORLD_WINDOW_WIDTH 550
 #define WORLD_WINDOW_HEIGHT 380
-#define MAGNIFICATION 1
+#define MAGNIFICATION 2
 
 #define DOWN 0
 #define UP 1

@@ -112,15 +112,15 @@ void World::buildScenario(int scenarioNumber)
 	{
 	case(0) :
 	{
-		//stairs = new Stairs(245, tunnelFloor.topY());
-		brickWall = new BrickWall(461, tunnelFloor.topY());
+		stairs = new Stairs(245,32);
+		brickWall = new BrickWall(461,32);
 	}break;
 	case(1) :
 	{
-		//stairs = new Stairs(245, tunnelFloor.topY());	
-		brickWall = new BrickWall(461, tunnelFloor.topY());
-		groundHole.push_back(GroundHole(144, tunnelTop.y()));
-		groundHole.push_back(GroundHole(331, tunnelTop.y()));
+		stairs = new Stairs(245,32);	
+		brickWall = new BrickWall(461, 32);
+		groundHole.push_back(GroundHole(144, 96));
+		groundHole.push_back(GroundHole(331, 96));
 	}break;
 	default:
 	{
@@ -143,14 +143,14 @@ void World::draw(int scenarioNumber)
 
 	if (brickWall != NULL)
 	{
-		brickWall->draw();
+		//brickWall->draw();
 	}
 
 	if (groundHole.size() != 0)
 	{
 		for (int i = 0; i < 2; i++)
 		{
-			groundHole.at(i).draw();
+			//groundHole.at(i).draw();
 		}
 	}	
 }

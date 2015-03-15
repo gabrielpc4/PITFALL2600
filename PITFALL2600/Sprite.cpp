@@ -11,7 +11,7 @@ Sprite::Sprite(GLint startX, GLint startY)
 	_x = startX;
 	_y = startY;
 	this->startX = startX;
-	this->startX = startY;
+	this->startY = startY;
 }
 
 Sprite::Sprite(Rect rect, Color color)
@@ -111,17 +111,18 @@ void Sprite::update()
 			biggerY = currentRect->y() + currentRect->height();
 		}
 	}
-	Point::_x = smallerX;
-	Point::_y = smallerY;
-	Rect::_width = (biggerX - smallerX);
-	Rect::_height = (biggerY - smallerY);
+	this->_x = smallerX;
+	this->_y = smallerY;
+	this->_width = (biggerX - smallerX);
+	this->_height = (biggerY - smallerY);
 }
 
 
 void Sprite::push_back(Rect rect)
 {
-	rect += Point(startX, startY);
-	vector<Polygon>::push_back(rect);
+	Polygon p(startX, startY);
+	p.push_back(rect);
+	vector<Polygon>::push_back(p);
 	this->update();
 }
 

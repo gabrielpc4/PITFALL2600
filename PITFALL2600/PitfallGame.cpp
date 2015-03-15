@@ -8,15 +8,15 @@ PitfallGame::PitfallGame()
 	world = new World(scenarioNumber);
 	player = new Player(39, 140);
 
-	spawnEnemies();
+	//spawnEnemies();
 }
 
 void PitfallGame::run()
 {
-	moveAll();
+	//moveAll();
 	//checkBoundaries();
-	physics();
-	checkCollisionsWithEnemies();
+	//physics();
+	//checkCollisionsWithEnemies();
 
 	if (player->isTakingHit() && score > 0)
 	{
