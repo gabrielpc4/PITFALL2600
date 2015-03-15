@@ -1,17 +1,12 @@
 #include "World.h"
 
-World::World() : World(0)
-{
-
-}
-
 // Defines the Positions of the basic scenario
-World::World(int scenarioNumber)
+World::World()
 {	
 	stairs = NULL;
 	brickWall = NULL;
 	buildBasicScenario();
-	buildScenario(scenarioNumber);		
+	buildScenario(0);		
 }
 
 void World::buildBasicScenario()
@@ -243,8 +238,6 @@ void World::buildTreeBranch(Polygon& branch, int treeNum)
 	}
 	// Centers the branches in the middle of the tree trunk
 	branch -= Point((int)(branch.width() / 4.0) - 1, 0);	
-
-
 }
 
 

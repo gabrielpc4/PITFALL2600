@@ -25,6 +25,9 @@ private:
 	void physics();
 	int relativePosition(Player* player, Sprite* object);
 	void static printText(string text, Point p);
+	bool isAbleToClimbOut(Player* player);
+	void centerOnStair(Player* player);
+	bool willFall(Player* player, Sprite* hole);
 public:
 	PitfallGame();
 	void run();

@@ -7,11 +7,15 @@ class PlayerSprite :
 {
 private:
 	long frames;
+	float _realY;
 protected:
 	int lookingDirection;
 	bool _climbing;
 	bool _walking;
 	int _climbingDirection;
+	bool _takingHit;
+	bool _jumping;
+	bool _falling;
 public:
 	PlayerSprite();
 	PlayerSprite(float startX, float startY);
@@ -22,5 +26,8 @@ public:
 	void push_back(Polygon pol);
 	void animate(int& animationFrame, int min, int max);
 	void mirrorX();
+	float y();
+	float topY();
+	void update();
 };
 #endif

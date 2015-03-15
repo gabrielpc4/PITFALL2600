@@ -13,13 +13,12 @@ private:
 	Point playerSpeed;
 	int animationFrame;
 
-	bool _jumping;
-	bool _falling;
+
 
 	
 	bool _down;
 	
-	bool _takingHit;
+
 public:
 	Player();
 	Player(GLint startX, GLint startY);
@@ -46,10 +45,7 @@ public:
 	void climb();
 	int climbingDirection();
 	void stopClimbing();
-	bool willFall(Sprite* hole);
-	bool isAbleToClimbOut(Sprite* hole);
 	void climbOut(int direction);
-	void centerOnStair(Sprite* stairs);
 	bool isUndeground();
 	int livesLeft();
 	void takeHit(bool state);

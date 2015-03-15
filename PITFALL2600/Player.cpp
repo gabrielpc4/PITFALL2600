@@ -111,7 +111,7 @@ void Player::jump()
 
 	if (_down)
 	{
-		if (this->y() > floor)
+		if (this->y() - 10 > floor)
 		{
 			setSpeedY(-JUMP_SPEED);
 		}
@@ -231,34 +231,6 @@ void Player::climb()
 }
 
 
-bool Player::willFall(Sprite* hole)
-{		
-	if (this->isUndeground() == false)  // Can only fall if it's on the top floor
-	{
-		if (lookingDirection == RIGHT)
-		{
-			if (this->x() >= hole->x() && this->x() + PLAYER_ANIMATION_0_WIDTH <= hole->rightX())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			if (this->x() + (PLAYER_ANIMATION_0_WIDTH + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION) <= hole->rightX() 
-			&& this->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION >= hole->x())
-			{
-				return true;
-			}
-		}
-		return false;
-	}	
-	return false;
-}
-
-bool Player::isAbleToClimbOut(Sprite* hole)
-{
-	return ((this->y() + (this->height() / 2.0)) > hole->y());
-}
 
 void Player::climbOut(int direction)
 {
@@ -359,14 +331,10 @@ bool Player::isJumping()
 	return _jumping;
 }
 
-void Player::centerOnStair(Sprite* stairs)
-{
-	setX(stairs->x() + 5);
-}
 
 bool Player::isUndeground()
 {
-	return (this->y() < 132);
+	return (this->y() < 136);
 }
 
 int Player::livesLeft()

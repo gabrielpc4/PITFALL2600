@@ -36,6 +36,7 @@ static float JUMP_SPEED = (float)(3 / (float)GAME_SPEED);
 #define TUNNEL_FLOOR_Y 32
 
 static int WAIT_TIME = (FAST_PC ? 15 : 25);
+//static int WAIT_TIME = 2000;
 
 #define SPACE_BAR 32
 

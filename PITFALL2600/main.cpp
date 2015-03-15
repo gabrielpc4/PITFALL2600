@@ -56,7 +56,7 @@ void idle_func()
 ****************************************************************************************/
 void init()
 {
-	glClearColor(1.0, 1.0, 1.0, 0);		// Defines the background color (Black)
+	glClearColor(0.0, 0.0, 0.0, 0);		// Defines the background color (Black)
 	glDisable(GL_DEPTH_TEST);			// The depth buffer is not updated if the depth test is disabled.
 	glMatrixMode(GL_PROJECTION);		// Applies subsequent matrix operations to the projection matrix stack.
 	glLoadIdentity();					// Replace the current matrix with the identity matrix (Resets the matrix)

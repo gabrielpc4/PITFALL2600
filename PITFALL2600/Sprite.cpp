@@ -121,6 +121,8 @@ void Sprite::update()
 	_height = (biggerY - smallerY);
 }
 
+
+
 void Sprite::updateWH()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
@@ -181,6 +183,8 @@ void Sprite::push_back(Sprite sprite)
 	{
 		vector<Polygon>::push_back(*currentPolygon);
 	}
+	this->update();
+	
 }
 
 void Sprite::mirrorX()

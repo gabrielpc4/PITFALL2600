@@ -20,7 +20,6 @@ private:
 	void drawTreeLeafs();
 	void buildBasicScenario();
 	void buildTreeLeafs();
-	void buildScenario(int scenarioNumber);
 	Rect sky;
 	Rect treeTrunk[4];
 	Polygon treeLeafs;
@@ -39,8 +38,8 @@ public:
 	Stairs* stairs;
 	BrickWall* brickWall;
 	vector<TunnelHole> tunnelHole;
-	World();
-	World(int scenarioNumber);						// Defines the Positions of the basic scenario
+	World();				
+	void buildScenario(int scenarioNumber);
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
 	
 };

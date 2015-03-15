@@ -26,15 +26,8 @@ void PlayerSprite::mirrorX()
 PlayerSprite::PlayerSprite(float startX, float startY)
 	: Sprite(startX,startY)
 {
-
-	_climbing = false;
-	_walking = false;
-	lookingDirection = RIGHT;
-	_climbingDirection = NONE;
-	frames = 0;
-
-	buildSprite(0);
-	
+	frames = 0;	
+	buildSprite(0);	
 }
 
 void PlayerSprite::animate(int& animationFrame, int minFrameNum, int maxFramenum)
@@ -231,6 +224,7 @@ void PlayerSprite::buildSprite(int animationFrame)
 
 			Rect rightRand(Point(12, 28), Point(16, 32), armColor);
 			this->push_back(rightRand);
+
 		}break;
 		default:;
 		}
@@ -255,7 +249,9 @@ void PlayerSprite::buildSprite(int animationFrame)
 		}break;
 		}
 	}
-	updateWH();
+	this->update();
+
+
 }
 
 void PlayerSprite::buildBasicShape()
@@ -319,16 +315,67 @@ void PlayerSprite::buildClimbingSprite()
 
 void PlayerSprite::push_back(Rect rect)
 {
-	Polygon p(this->_x, this->_y);
+	Polygon p(Sprite::_x, Sprite::_y);
+
+	if (_takingHit && _falling == false && _jumping == false)
+	{
+		rect += Point(0, -10);
+	}
 	p.push_back(rect);
 	vector<Polygon>::push_back(p);
 }
 
 void PlayerSprite::push_back(Polygon pol)
 {
-	Polygon p(this->_x, this->_y);
+	Polygon p(Sprite::_x, Sprite::_y);
+	if (_takingHit && _falling == false && _jumping == false)
+	{
+		pol += Point(0, -10);
+	}
 	p.push_back(pol);
 	vector<Polygon>::push_back(p);
+}
+
+void PlayerSprite::update()
+{
+	int smallerX = WORLD_WINDOW_WIDTH;
+	int smallerY = WORLD_WINDOW_HEIGHT;
+
+	int biggerX = 0;
+	int biggerY = 0;
+
+	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	{
+		if (currentPolygon->x() < smallerX)
+		{
+			smallerX = currentPolygon->x();
+		}
+		if (currentPolygon->y() < smallerY)
+		{
+			smallerY = currentPolygon->y();
+		}
+		if (currentPolygon->rightX() > biggerX)
+		{
+			biggerX = currentPolygon->rightX();
+		}
+		if (currentPolygon->topY() > biggerY)
+		{
+			biggerY = currentPolygon->topY();
+		}
+	}
+	_width = (biggerX - smallerX);
+	_height = (biggerY - smallerY);
+	_realY = smallerY;
+}
+
+float PlayerSprite::topY()
+{
+	return (_realY + _height);
+}
+
+float PlayerSprite::y()
+{
+	return _realY;
 }
 
 
