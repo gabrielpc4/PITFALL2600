@@ -20,7 +20,7 @@ public:
 	void buildClimbingSprite();
 	void push_back(Rect rect);
 	void push_back(Polygon pol);
-	float x();
 	void animate(int& animationFrame, int min, int max);
+	void mirrorX();
 };
 #endif

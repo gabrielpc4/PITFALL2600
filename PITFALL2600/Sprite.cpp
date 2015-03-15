@@ -121,6 +121,37 @@ void Sprite::update()
 	_height = (biggerY - smallerY);
 }
 
+void Sprite::updateWH()
+{
+	int smallerX = WORLD_WINDOW_WIDTH;
+	int smallerY = WORLD_WINDOW_HEIGHT;
+
+	int biggerX = 0;
+	int biggerY = 0;
+
+	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	{
+		if (currentPolygon->x() < smallerX)
+		{
+			smallerX = currentPolygon->x();
+		}
+		if (currentPolygon->y() < smallerY)
+		{
+			smallerY = currentPolygon->y();
+		}
+		if (currentPolygon->rightX() > biggerX)
+		{
+			biggerX = currentPolygon->rightX();
+		}
+		if (currentPolygon->topY() > biggerY)
+		{
+			biggerY = currentPolygon->topY();
+		}
+	}
+	_width = (biggerX - smallerX);
+	_height = (biggerY - smallerY);
+}
+
 
 void Sprite::push_back(Rect rect)
 {

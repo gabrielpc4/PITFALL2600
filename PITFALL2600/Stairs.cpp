@@ -36,7 +36,7 @@ Stairs::Stairs(GLint startX, GLint startY) :
 	hole->push_back(Rect(Point(0, 0), Point(this->width(), 6)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
 	hole->push_back(Rect(Point(0, 6), Point(this->width(), 12)), Color(67.0, 0.0, 0.0));   // DarkRed rectangle: width:stairs.width() height: 12 - 6 = 6	
 
-	cover.push_back(Rect(Point(hole->x(), hole->y() - 10), Point(hole->rightX(), hole->y()), Color(287, 147, 0)));
+	cover.push_back(Rect(Point(hole->x(), hole->y() - 10), Point(hole->rightX(), hole->y()), Color(187, 147, 0)));
 }
 
 

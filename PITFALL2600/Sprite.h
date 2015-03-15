@@ -33,6 +33,7 @@ public:
 	void mirrorX();
 	void draw();
 	void clear();
+	void updateWH();
 };
 #endif
 

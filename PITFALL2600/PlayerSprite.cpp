@@ -6,15 +6,31 @@ PlayerSprite::PlayerSprite()
 
 }
 
+void PlayerSprite::mirrorX()
+{
+	for (unsigned i = 0; i < this->vector<Polygon>::size(); i++)
+	{
+		Polygon& currentPolygon = this->vector<Polygon>::at(i);
+		currentPolygon.mirrorX(this->x());
+		if (_climbing == false)
+		{
+			currentPolygon += Point(6, 0);
+		}
+		else
+		{
+			currentPolygon += Point(18, 0);
+		}
+	}
+}
+
 PlayerSprite::PlayerSprite(float startX, float startY)
 	: Sprite(startX,startY)
 {
+
 	_climbing = false;
 	_walking = false;
 	lookingDirection = RIGHT;
 	_climbingDirection = NONE;
-	_width = 11;
-	_height = 42;
 	frames = 0;
 
 	buildSprite(0);
@@ -238,7 +254,8 @@ void PlayerSprite::buildSprite(int animationFrame)
 			this->mirrorX();
 		}break;
 		}
-	}		
+	}
+	updateWH();
 }
 
 void PlayerSprite::buildBasicShape()
@@ -312,18 +329,6 @@ void PlayerSprite::push_back(Polygon pol)
 	Polygon p(this->_x, this->_y);
 	p.push_back(pol);
 	vector<Polygon>::push_back(p);
-}
-
-float PlayerSprite::x()
-{
-	if (lookingDirection == LEFT)
-	{
-		return (this->_x + 4);
-	}
-	else
-	{
-		return (this->_x);
-	}
 }
 
 

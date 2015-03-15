@@ -66,6 +66,7 @@ void Player::draw()
 	}
 	PlayerSprite::Sprite::clear();
 	PlayerSprite::buildSprite(animationFrame);	
+	//cout << "x:" << this->x() << " y:" << this->y() << " w:" << this->width() << " h:" << this->height() << " rX:" << this->rightX() << " topY:" << this->topY() << endl;
 
 	int difference_x = this->x() - (this->x() + this->x());;
 	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->height();;
@@ -256,7 +257,7 @@ bool Player::willFall(Sprite* hole)
 
 bool Player::isAbleToClimbOut(Sprite* hole)
 {
-	return (((this->y() + this->height() / 2.0) + CLIMBING_SPEED) > hole->y());
+	return ((this->y() + (this->height() / 2.0)) > hole->y());
 }
 
 void Player::climbOut(int direction)

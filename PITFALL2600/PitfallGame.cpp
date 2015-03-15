@@ -3,7 +3,7 @@
 PitfallGame::PitfallGame()
 {
 	log.clear();
-	scenarioNumber = 1;
+	scenarioNumber = 0;
 	score = 2000;
 	world = new World(scenarioNumber);
 	player = new Player(39, 140);
@@ -205,6 +205,11 @@ void PitfallGame::moveAll()
 		{
 			log.at(i).roll();
 		}
+	}
+
+	if (player->isClimbing() && player->isAbleToClimbOut(world->stairs->hole))
+	{
+		player->stopClimbing();
 	}
 }
 
