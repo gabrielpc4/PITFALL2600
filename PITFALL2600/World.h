@@ -38,7 +38,7 @@ public:
 	// Other elements	
 	Stairs* stairs;
 	BrickWall* brickWall;
-	vector<GroundHole> groundHole;
+	vector<TunnelHole> tunnelHole;
 	World();
 	World(int scenarioNumber);						// Defines the Positions of the basic scenario
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario

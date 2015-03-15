@@ -1,4 +1,4 @@
 #include "Stairs.h"
 #include "BrickWall.h"
-#include "GroundHole.h"
+#include "TunnelHole.h"
 #include "Hole.h"

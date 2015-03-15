@@ -119,8 +119,8 @@ void World::buildScenario(int scenarioNumber)
 	{
 		stairs = new Stairs(245,32);	
 		brickWall = new BrickWall(461, 32);
-		groundHole.push_back(GroundHole(144, 96));
-		groundHole.push_back(GroundHole(331, 96));
+		tunnelHole.push_back(TunnelHole(144, 96));
+		tunnelHole.push_back(TunnelHole(331, 96));
 	}break;
 	default:
 	{
@@ -146,11 +146,11 @@ void World::draw(int scenarioNumber)
 		brickWall->draw();
 	}
 
-	if (groundHole.size() != 0)
+	if (tunnelHole.size() != 0)
 	{
 		for (int i = 0; i < 2; i++)
 		{
-			groundHole.at(i).draw();
+			tunnelHole.at(i).draw();
 		}
 	}	
 }

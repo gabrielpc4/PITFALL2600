@@ -1,12 +1,12 @@
-#include "GroundHole.h"
+#include "TunnelHole.h"
 
 
-GroundHole::GroundHole()
-	:GroundHole(0,0)
+TunnelHole::TunnelHole()
+	:TunnelHole(0, 0)
 {
 }
 
-GroundHole::GroundHole(float startX, float startY)
+TunnelHole::TunnelHole(float startX, float startY)
 	: Sprite(startX, startY)
 {
 	Sprite::push_back(Rect(Point(0, 40), Point(43, 46)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
@@ -16,7 +16,7 @@ GroundHole::GroundHole(float startX, float startY)
 	cover.push_back(Rect(Point(startX, startY + 30), Point(startX + this->width(), startY + 40)), Color(187, 147, 0));
 }
 
-void GroundHole::drawCover()
+void TunnelHole::drawCover()
 {
 	cover.draw();
 }

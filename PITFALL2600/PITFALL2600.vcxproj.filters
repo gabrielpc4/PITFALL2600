@@ -96,9 +96,6 @@
     <ClInclude Include="BrickWall.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GroundHole.h">
-      <Filter>Header Files\WorldObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Stairs.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
@@ -109,6 +106,9 @@
       <Filter>Header Files\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="Hole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TunnelHole.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,9 +149,6 @@
     <ClCompile Include="Stairs.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GroundHole.cpp">
-      <Filter>Source Files\WorldObjects</Filter>
-    </ClCompile>
     <ClCompile Include="BrickWall.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
@@ -164,13 +161,13 @@
     <ClCompile Include="Hole.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TunnelHole.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PITFALL2600.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

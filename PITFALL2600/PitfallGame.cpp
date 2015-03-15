@@ -173,9 +173,9 @@ void PitfallGame::drawAll()
 		world->stairs->drawCover();
 	}
 
-	for (unsigned i = 0; i < world->groundHole.size(); i++)
+	for (unsigned i = 0; i < world->tunnelHole.size(); i++)
 	{
-		world->groundHole.at(i).drawCover();
+		world->tunnelHole.at(i).drawCover();
 	}
 
 
@@ -283,11 +283,11 @@ void PitfallGame::physics()
 	}
 
 	// Makes the player fall if is in contact with a ground  hole		
-	for (unsigned i = 0; i < world->groundHole.size(); i++)
+	for (unsigned i = 0; i < world->tunnelHole.size(); i++)
 	{
 		if (player->y() >= world->ground.y())
 		{
-			if (player->willFall(&(world->groundHole.at(i))))
+			if (player->willFall(&(world->tunnelHole.at(i))))
 			{
 				if (player->isJumping() == false)
 				{
@@ -435,7 +435,7 @@ void PitfallGame::deleteWorld()
 	world->brickWall = NULL;
 
 	
-	world->groundHole.clear();
+	world->tunnelHole.clear();
 	
 	delete world;
 }
