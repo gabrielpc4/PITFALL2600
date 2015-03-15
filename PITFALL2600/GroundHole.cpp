@@ -20,10 +20,10 @@ GroundHole::GroundHole(GLint startX, GLint startY)
 
 void GroundHole::draw()
 {
-	sprite->drawSprite(this->x(), this->y());	
+	sprite->draw();
 }
 
 void GroundHole::drawCover()
 {
-	cover.drawSprite(cover.x(), cover.y());
+	cover.draw();
 }

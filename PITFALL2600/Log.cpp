@@ -18,7 +18,7 @@ void Log::draw()
 {
 	if (isRolling())
 	{
-		LogSprite::animate();		
+		//LogSprite::animate();		
 	}
 
 	LogSprite::draw();
@@ -28,7 +28,7 @@ void Log::roll()
 {
 	if (this->rightX() > 0)
 	{
-		*(this) += Point(-PLAYER_SPEED, 0);
+		//*(this) += Point(-PLAYER_SPEED, 0);
 	}		
 }
 

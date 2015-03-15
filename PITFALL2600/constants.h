@@ -7,7 +7,7 @@
 // Window Size
 #define WORLD_WINDOW_WIDTH 550
 #define WORLD_WINDOW_HEIGHT 380
-#define MAGNIFICATION 2
+#define MAGNIFICATION 1
 
 #define DOWN 0
 #define UP 1
@@ -35,7 +35,7 @@ static float JUMP_SPEED = (float)(3 / (float)GAME_SPEED);
 #define GROUND_Y 140
 #define TUNNEL_FLOOR_Y 32
 
-static int WAIT_TIME = (FAST_PC ? 15 : 25);
+static int WAIT_TIME = 20000/*(FAST_PC ? 15 : 25)*/;
 
 #define SPACE_BAR 32
 

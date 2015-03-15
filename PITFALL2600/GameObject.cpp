@@ -10,7 +10,7 @@ GameObject::GameObject(int startX, int startY)
 
 void GameObject::drawSprite(int x, int y)
 {
-	sprite->drawSprite(x, y);
+	sprite->draw();
 }
 
 GameObject::~GameObject()

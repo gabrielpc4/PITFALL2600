@@ -80,7 +80,7 @@ void Player::draw()
 		difference_y = 0;
 	}
 
-	sprite->drawSprite(this->x() - difference_x, this->y() + difference_y);
+	sprite->draw();
 }
 
 void Player::jumping(bool state)

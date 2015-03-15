@@ -166,7 +166,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
-	player->draw();
+	//player->draw();
 
 	if (world->stairs != NULL)
 	{		
@@ -175,13 +175,13 @@ void PitfallGame::drawAll()
 
 	for (unsigned i = 0; i < world->groundHole.size(); i++)
 	{
-		world->groundHole.at(i).drawCover();
+	//	world->groundHole.at(i).drawCover();
 	}
 
 
 	for (unsigned i = 0; i < log.size(); i++)
 	{
-		log.at(i).draw();
+		//log.at(i).draw();
 	}
 
 
