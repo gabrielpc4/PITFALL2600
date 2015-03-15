@@ -32,6 +32,7 @@ public:
 	void push_back(Sprite sprite);
 	void mirrorX();
 	void draw();
+	void clear();
 };
 #endif
 

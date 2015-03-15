@@ -7,11 +7,9 @@ Player::Player() :
 }
 
 Player::Player(GLint startX, GLint startY) 
-	: GameObject(startX,startY),
+	: PlayerSprite(startX,startY),
 	playerSpeed(0,0)
 {		
-	this->sprite = new PlayerSprite(startX, startY, 0, RIGHT, false);
-
 	_down = false;
 	_jumping = false;		
 	_takingHit = false;
@@ -69,18 +67,18 @@ void Player::draw()
 	}
 	
 
-	delete sprite;
-	sprite = new PlayerSprite(this->x(), this->y(), animationFrame, lookingDirection, isClimbing());
+	Point::PRINT(startX, startY);
+	PlayerSprite::buildSprite(animationFrame, lookingDirection, isClimbing());
 
-	int difference_x = this->x() - (this->x() + this->sprite->x());;
-	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->sprite->height();;
+	int difference_x = this->x() - (this->x() + this->x());;
+	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->height();;
 
 	if (isTakingHit() && isJumping() == false && isClimbing() == false)
 	{
 		difference_y = 0;
 	}
 
-	sprite->draw();
+	PlayerSprite::draw();
 }
 
 void Player::jumping(bool state)
@@ -100,7 +98,7 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	int currentJumpHeight = (this->sprite->topY() - (floor + 42));
+	int currentJumpHeight = (this->topY() - (floor + 42));
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
 	{
@@ -167,7 +165,7 @@ void Player::animate(int minFrameNum, int maxFramenum)
 	{
 		if (isWalking() || (isClimbing() && climbingDirection() != NONE))
 		{
-			animationFrame++;
+			//animationFrame++;
 		}
 		if (animationFrame > maxFramenum)
 		{
@@ -260,7 +258,7 @@ void Player::climb()
 }
 
 
-bool Player::willFall(GameObject* hole)
+bool Player::willFall(Sprite* hole)
 {		
 	if (this->isUndeground() == false)  // Can only fall if it's on the top floor
 	{
@@ -284,7 +282,7 @@ bool Player::willFall(GameObject* hole)
 	return false;
 }
 
-bool Player::isAbleToClimbOut(GameObject* hole)
+bool Player::isAbleToClimbOut(Sprite* hole)
 {
 	return (((this->y() + this->height() / 2.0) + CLIMBING_SPEED) > hole->y());
 }
@@ -388,7 +386,7 @@ bool Player::isJumping()
 	return _jumping;
 }
 
-void Player::centerOnStair(GameObject* stairs)
+void Player::centerOnStair(Sprite* stairs)
 {
 	setX(stairs->x() + 5);
 }

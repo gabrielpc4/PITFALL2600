@@ -81,7 +81,6 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GroundHole.h" />
     <ClInclude Include="Hole.h" />
     <ClInclude Include="HoleSprite.h" />
@@ -104,7 +103,6 @@
   <ItemGroup>
     <ClCompile Include="BrickWall.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GroundHole.cpp" />
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="HoleSprite.cpp" />

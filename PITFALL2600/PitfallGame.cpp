@@ -166,7 +166,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
-	//player->draw();
+	player->draw();
 
 	if (world->stairs != NULL)
 	{		
@@ -327,7 +327,7 @@ void PitfallGame::checkBoundaries()
 
 
 
-int PitfallGame::relativePosition(Player* player, GameObject* object)
+int PitfallGame::relativePosition(Player* player, Sprite* object)
 {
 	int object_center_x = (object->x() + (object->width() / 2.0));
 	if (player->x() < object_center_x)
@@ -357,7 +357,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 
 
 
-bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
+bool PitfallGame::checkCollisionX(Player* player, Sprite* object)
 {
 	if (player->isLooking(RIGHT))
 	{
@@ -376,16 +376,16 @@ bool PitfallGame::checkCollisionX(Player* player, GameObject* object)
 	return false;
 }
 
-bool PitfallGame::checkCollisionY(Player* player, GameObject* object)
+bool PitfallGame::checkCollisionY(Player* player, Sprite* object)
 {
-	if (player->sprite->y() <= object->sprite->topY() && player->sprite->topY() >= object->sprite->y())
+	if (player->y() <= object->topY() && player->topY() >= object->y())
 	{
 		return true;
 	}
 	return false;
 }
 
-bool PitfallGame::isOutOfBoundaries(GameObject* object)
+bool PitfallGame::isOutOfBoundaries(Sprite* object)
 {
 	if (object->x() < 0 || object->rightX() >= WORLD_WINDOW_WIDTH)
 	{

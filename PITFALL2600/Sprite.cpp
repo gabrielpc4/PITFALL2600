@@ -31,6 +31,8 @@ Sprite& Sprite::operator += (const Point& point)
 	{
 		*currentPolygon += point;
 	}
+	_x += point.x();
+	_y += point.y();
 	return *this;
 }
 
@@ -40,6 +42,8 @@ Sprite& Sprite::operator -= (const Point& point)
 	{
 		*currentPolygon -= point;
 	}
+	_x -= point.x();
+	_y -= point.y();
 	return *this;
 }
 
@@ -154,4 +158,10 @@ void Sprite::mirrorX()
 	{
 		currentPolygon->mirrorX();
 	}
+}
+
+void Sprite::clear()
+{
+
+	this->vector<Polygon>::clear();
 }

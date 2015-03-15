@@ -14,16 +14,16 @@ private:
 	vector<Log> log;
 	int scenarioNumber;
 	int score;
-	bool checkCollisionX(Player* player, GameObject* object);
-	bool checkCollisionY(Player* player, GameObject* object);
+	bool checkCollisionX(Player* player, Sprite* object);
+	bool checkCollisionY(Player* player, Sprite* object);
 	void checkBoundaries();
-	bool isOutOfBoundaries(GameObject* object);
+	bool isOutOfBoundaries(Sprite* object);
 	void spawnEnemies();
 	void deleteWorld();
 	void checkCollisionsWithEnemies();
 	void moveAll();
 	void physics();
-	int relativePosition(Player* player, GameObject* object);
+	int relativePosition(Player* player, Sprite* object);
 	void static printText(string text, Point p);
 public:
 	PitfallGame();

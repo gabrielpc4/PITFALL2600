@@ -2,7 +2,7 @@
 #ifndef STAIRS_H
 #define STAIRS_H
 
-#include "GameObject.h"
+#include "Sprite.h"
 
 class Stairs :
 	public Sprite

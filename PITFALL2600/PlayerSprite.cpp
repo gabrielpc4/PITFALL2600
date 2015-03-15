@@ -1,13 +1,18 @@
 #include "PlayerSprite.h"
 
-PlayerSprite::PlayerSprite() : PlayerSprite(39, 140, 0, RIGHT, false)
+PlayerSprite::PlayerSprite() 
+	: PlayerSprite(39, 140)
 {
 
 }
 
+PlayerSprite::PlayerSprite(float startX, float startY)
+	: Sprite(startX,startY)
+{
+	buildSprite(0, RIGHT, false);
+}
 
-
-PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direction, bool climbing)
+void PlayerSprite::buildSprite(int animationFrame, int direction, bool climbing)
 {
 	Color legColor = Color(16, 80, 0);
 	Color armColor = Color(48, 192, 48);
@@ -15,10 +20,8 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 	if (climbing == false)
 	{
 		buildBasicShape();
-	
-	
-	
-		switch (animationFrame)
+
+		/*switch (animationFrame)
 		{
 		case(0) :
 		{
@@ -179,10 +182,10 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 		}break;
 		default:;
 		}
-
+		*/
 		if (direction != RIGHT)
 		{
-			this->mirrorX();
+			//this->mirrorX();
 		}
 	}
 	else
@@ -199,12 +202,13 @@ PlayerSprite::PlayerSprite(int startX, int startY, int animationFrame, int direc
 			this->mirrorX();
 		}break;
 		}
-	
+
 	}
 }
 
 void PlayerSprite::buildBasicShape()
 {
+	Sprite::clear();
 	Rect hips(Point(0, 14), Point(7, 20), Color(16, 80, 0));
 	Sprite::push_back(hips);
 

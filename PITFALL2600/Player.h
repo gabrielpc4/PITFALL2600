@@ -1,11 +1,10 @@
 #pragma once
 #ifndef PLAYER_H_
 #define PLAYER_H_
-#include "GameObject.h"
-#include <typeinfo.h>
+#include "PlayerSprite.h"
 
 class Player 
-	: public GameObject
+	: public PlayerSprite
 {
 private: 
 	int lives;
@@ -49,10 +48,10 @@ public:
 	void climb();
 	int climbingDirection();
 	void stopClimbing();
-	bool willFall(GameObject* hole);
-	bool isAbleToClimbOut(GameObject* hole);
+	bool willFall(Sprite* hole);
+	bool isAbleToClimbOut(Sprite* hole);
 	void climbOut(int direction);
-	void centerOnStair(GameObject* stairs);
+	void centerOnStair(Sprite* stairs);
 	bool isUndeground();
 	int livesLeft();
 	void takeHit(bool state);

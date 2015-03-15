@@ -84,9 +84,6 @@
     <ClInclude Include="constants.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="echo.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
@@ -145,9 +142,6 @@
     </ClCompile>
     <ClCompile Include="PlayerSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LogSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
