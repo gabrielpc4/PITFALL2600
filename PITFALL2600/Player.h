@@ -8,25 +8,23 @@ class Player
 {
 private: 
 	int lives;
-	long framesWalking;
-	int lookingDirection;
+	
 
 	Point playerSpeed;
 	int animationFrame;
 
 	bool _jumping;
 	bool _falling;
-	bool _walking;
-	bool _climbing;
+
+	
 	bool _down;
-	int _climbingDirection;
+	
 	bool _takingHit;
 public:
 	Player();
 	Player(GLint startX, GLint startY);
 	void draw();
 	void drawBasicShape();
-	void animate(int minFrameNum, int maxFramenum);
 	bool isJumping();
 	void move();
 	void jumping(bool state);

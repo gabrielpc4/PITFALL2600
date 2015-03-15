@@ -64,11 +64,11 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		}
 		else // If the player is climbing
 		{
-			/*if (player->isAbleToClimbOut(world->stairs->hole))
+			if (player->isAbleToClimbOut(world->stairs->hole))
 			{
 				player->look(RIGHT);
 				player->climbOut(RIGHT);
-			}*/			
+			}		
 		}
 	}
 	if (key == GLUT_KEY_LEFT)
@@ -91,11 +91,11 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		}
 		else // If the player is climbing
 		{
-			/*if (player->isAbleToClimbOut(world->stairs->hole))
+			if (player->isAbleToClimbOut(world->stairs->hole))
 			{
 				player->look(LEFT);
 				player->climbOut(LEFT);
-			}*/
+			}
 		}
 	}
 	if (player->isFalling() == false)
@@ -107,13 +107,13 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 				if (world->stairs != NULL)
 				{	
 					// If the player is in contact with the stairs and not about to climb out
-					/*if (checkCollisionX(player, world->stairs) && (player->isAbleToClimbOut(world->stairs->hole) == false))
+					if (checkCollisionX(player, *world->stairs) && (player->isAbleToClimbOut(world->stairs->hole) == false))
 					{
 						player->centerOnStair(world->stairs);
 						player->walking(false);
 						player->climbing(true);
 						player->climb(UP);
-					}*/
+					}
 				}
 
 				// Prevents the user from jumping while climbing or falling
@@ -155,10 +155,10 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			player->jumping(true);
 		}
 		// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
-/*		if (player->isClimbing() && player->isAbleToClimbOut(world->stairs->hole))
+		if (player->isClimbing() && player->isAbleToClimbOut(world->stairs->hole))
 		{
 			player->climbOut(RIGHT);
-		}*/
+		}
 	}
 
 }
@@ -213,14 +213,14 @@ void PitfallGame::physics()
 	if (world->stairs != NULL)
 	{
 		// Makes the player fall
-		/*if (player->willFall(world->stairs->hole) && (player->isClimbing() == false))
+		if (player->willFall(world->stairs->hole) && (player->isClimbing() == false))
 		{
 			if (player->isJumping() == false)
 			{
 				player->floor = world->tunnelFloor.topY();
 				player->falling(true);
 			}
-		}*/
+		}
 		// Makes the player be able to climb
 		if (player->isClimbing())
 		{
@@ -252,7 +252,7 @@ void PitfallGame::physics()
 			if (world->brickWall->x() != 0) // Prevents the collision check bug when the brickwall's sprite is being 		
 			{										// created and still is at the origin and was not moved to the right position yet
 				// If the player is colliding with the brick wall
-				/*if (checkCollisionX(player, world->brickWall))
+				if (checkCollisionX(player, *world->brickWall))
 				{
 					// if the player is at the left side of the brick wall
 					if (relativePosition(player, world->brickWall) == RIGHT)
@@ -272,7 +272,7 @@ void PitfallGame::physics()
 							player->setX(world->brickWall->rightX());
 						}						
 					}
-				}*/
+				}
 			}
 		}
 	}
@@ -282,14 +282,14 @@ void PitfallGame::physics()
 	{
 		if (player->y() >= world->ground.y())
 		{
-/*			if (player->willFall(&(world->groundHole.at(i))))
+			if (player->willFall(&(world->groundHole.at(i))))
 			{
 				if (player->isJumping() == false)
 				{
 					player->floor = world->tunnelFloor.topY();
 					player->falling(true);
 				}
-			}*/
+			}
 		}
 	}
 				
@@ -347,28 +347,28 @@ void PitfallGame::checkCollisionsWithEnemies()
 	player->takeHit(false);
 	for (unsigned i = 0; i < log.size(); i++)
 	{
-		/*if (checkCollisionX(player, log.at(i)) && checkCollisionY(player, log.at(i)))
+		if (checkCollisionX(player, log.at(i)) && checkCollisionY(player, (Sprite)log.at(i)))
 		{
 			player->takeHit(true);
-		}*/
+		}
 	}
 }
 
 
 
 
-bool PitfallGame::checkCollisionX(Player* player, Sprite* object)
+bool PitfallGame::checkCollisionX(Player* player, Sprite& object)
 {
 	if (player->isLooking(RIGHT))
 	{
-		if (player->x() + PLAYER_ANIMATION_0_WIDTH > object->x() && player->x() < object->rightX())
+		if (player->x() + PLAYER_ANIMATION_0_WIDTH > object.x() && player->x() < object.rightX())
 		{
 			return true;
 		}
 	}
 	else
 	{
-		if (player->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION < object->rightX() && player->x() + PLAYER_ANIMATION_0_WIDTH > object->x())
+		if (player->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION < object.rightX() && player->x() + PLAYER_ANIMATION_0_WIDTH > object.x())
 		{
 			return true;
 		}
@@ -376,9 +376,9 @@ bool PitfallGame::checkCollisionX(Player* player, Sprite* object)
 	return false;
 }
 
-bool PitfallGame::checkCollisionY(Player* player, Sprite* object)
+bool PitfallGame::checkCollisionY(Player* player, Sprite& object)
 {
-	if (player->y() <= object->topY() && player->topY() >= object->y())
+	if (player->y() <= object.topY() && player->topY() >= object.y())
 	{
 		return true;
 	}

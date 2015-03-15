@@ -14,8 +14,8 @@ private:
 	vector<Log> log;
 	int scenarioNumber;
 	int score;
-	bool checkCollisionX(Player* player, Sprite* object);
-	bool checkCollisionY(Player* player, Sprite* object);
+	bool checkCollisionX(Player* player, Sprite& object);
+	bool checkCollisionY(Player* player, Sprite& object);
 	void checkBoundaries();
 	bool isOutOfBoundaries(Sprite* object);
 	void spawnEnemies();

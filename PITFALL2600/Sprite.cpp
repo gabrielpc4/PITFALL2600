@@ -162,6 +162,5 @@ void Sprite::mirrorX()
 
 void Sprite::clear()
 {
-
 	this->vector<Polygon>::clear();
 }

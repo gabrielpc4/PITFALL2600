@@ -16,11 +16,10 @@ Player::Player(GLint startX, GLint startY)
 	_falling = false;
 	_walking = false;
 	_climbing = false;
-	_climbingDirection = UP;
+	_climbingDirection = NONE;
 
 	lives = 3;
 	animationFrame = 0;
-	framesWalking = 0;
 	floor = startY;
 	lookingDirection = RIGHT;
 }
@@ -40,7 +39,7 @@ void Player::draw()
 	{
 		if (isWalking())
 		{
-			animate(1, 5);
+			animate(animationFrame, 1, 5);
 		}
 		else
 		{
@@ -63,12 +62,10 @@ void Player::draw()
 
 	if (isClimbing())
 	{
-		animate(0, 1);
+		animate(animationFrame, 0, 1);
 	}
-	
-
-	Point::PRINT(startX, startY);
-	PlayerSprite::buildSprite(animationFrame, lookingDirection, isClimbing());
+	PlayerSprite::Sprite::clear();
+	PlayerSprite::buildSprite(animationFrame);	
 
 	int difference_x = this->x() - (this->x() + this->x());;
 	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->height();;
@@ -152,32 +149,7 @@ void Player::fall()
 	}
 }
 
-void Player::animate(int minFrameNum, int maxFramenum)
-{
-	framesWalking++;
-	int refreshInterval = ANIMATION_REFRESH_INTERVAL;
 
-	if (isClimbing())
-	{
-		refreshInterval = CLIMBING_ANIMATION_REFRESH_INTERVAL;
-	}
-	if (framesWalking % refreshInterval == 0)
-	{
-		if (isWalking() || (isClimbing() && climbingDirection() != NONE))
-		{
-			//animationFrame++;
-		}
-		if (animationFrame > maxFramenum)
-		{
-			animationFrame = minFrameNum;
-		}
-
-		if (framesWalking >= INT_MAX)
-		{
-			framesWalking = 0;
-		}
-	}	
-}
 
 
 void Player::move()
