@@ -18,10 +18,9 @@ Log::Log(GLint startX, GLint startY, bool rolling)
 void Log::draw()
 {
 
-
 	if (isRolling())
 	{
-		//LogSprite::animate();		
+		LogSprite::animate();		
 	}
 
 	LogSprite::draw();

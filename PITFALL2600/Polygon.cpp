@@ -161,8 +161,8 @@ void Polygon::push_back(Rect rect)
 void Polygon::push_back(Polygon pol)
 {
 	for (vector<Rect>::iterator currentRect = pol.begin(); currentRect != pol.end(); ++currentRect)
-	{
-		vector<Rect>::push_back(*currentRect);
+	{				
+		this->push_back(*currentRect);
 	}
 }
 
@@ -178,10 +178,12 @@ void Polygon::mirrorX()
 
 void Polygon::mirrorX(int currentX)
 {
+
 	for (vector<Rect>::iterator it = vector<Rect>::begin(); it != vector<Rect>::end(); ++it)
-	{
+	{		
 		*it -= Point((2 * (it->x() - currentX) + it->width()), 0);
 	}
+
 }
 
 void Polygon::draw() 

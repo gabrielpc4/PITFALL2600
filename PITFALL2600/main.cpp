@@ -20,15 +20,17 @@ void keyboard_func(unsigned char c, int x, int y)
 {
 	pit->handleKeyboardInput(c);
 }
+
+Rect r(Point(0, 0), Point(100, 100));
+Rect r2(Point(100, 100), Point(200, 200));
 Polygon p(Color(RED));
-Rect r(Point(50, 50), Point(100, 100));
-
-
-Sprite s(50, 50);
+Sprite s(299, 50);
 
 void timer_func(int data)
 {
 	pit->run();
+
+	//s += Point(-1, 0);
 	glutTimerFunc(WAIT_TIME, timer_func, data);
 	glutPostRedisplay();
 
@@ -39,6 +41,9 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear buffers to preset values (applies the color to the background)
 	glLoadIdentity();									// Replace the current matrix with the identity matrix (Resets the matrix)		
 	pit->drawAll();
+	//s.mirrorX();
+	//s.draw();
+
 	glutSwapBuffers();
 }
 
@@ -75,7 +80,10 @@ int main(int argc, char* argv[])
 {
 	pit = new PitfallGame();
 	p.push_back(r);
-	s.push_back(p);
+	p.push_back(r2);
+	s.push_back(p);	
+
+	
 	glutInit(&argc, argv);							// Initializes the GLUT library.
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);	// Sets the initial display mode with a single buffered window and color scheme to RGB
 	glutInitWindowSize(WORLD_WINDOW_WIDTH * MAGNIFICATION, WORLD_WINDOW_HEIGHT * MAGNIFICATION);// Sets the Display Window size

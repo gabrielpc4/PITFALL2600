@@ -74,11 +74,11 @@ void Sprite::updateX()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
 
-	for (vector<Rect>::iterator currentRect = vector<Rect>::begin(); currentRect != vector<Rect>::end(); ++currentRect)
+	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
 	{
-		if (currentRect->x() < smallerX)
+		if (currentPolygon->x() < smallerX)
 		{
-			smallerX = currentRect->x();
+			smallerX = currentPolygon->x();
 		}
 	}
 	Point::_x = smallerX;
@@ -92,29 +92,29 @@ void Sprite::update()
 	int biggerX = 0;
 	int biggerY = 0;
 
-	for (vector<Polygon>::iterator currentRect = vector<Polygon>::begin(); currentRect != vector<Polygon>::end(); ++currentRect)
+	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
 	{
-		if (currentRect->x() < smallerX)
+		if (currentPolygon->x() < smallerX)
 		{
-			smallerX = currentRect->x();
+			smallerX = currentPolygon->x();
 		}
-		if (currentRect->y() < smallerY)
+		if (currentPolygon->y() < smallerY)
 		{
-			smallerY = currentRect->y();
+			smallerY = currentPolygon->y();
 		}
-		if (currentRect->x() + currentRect->width() > biggerX)
+		if (currentPolygon->rightX() > biggerX)
 		{
-			biggerX = currentRect->x() + currentRect->width();
+			biggerX = currentPolygon->rightX();
 		}
-		if (currentRect->y() + currentRect->height() > biggerY)
+		if (currentPolygon->topY() > biggerY)
 		{
-			biggerY = currentRect->y() + currentRect->height();
+			biggerY = currentPolygon->topY();
 		}
 	}
-	this->_x = smallerX;
-	this->_y = smallerY;
-	this->_width = (biggerX - smallerX);
-	this->_height = (biggerY - smallerY);
+	_x = smallerX;
+	_y = smallerY;
+	_width = (biggerX - smallerX);
+	_height = (biggerY - smallerY);
 }
 
 
@@ -134,8 +134,10 @@ void Sprite::push_back(Rect rect, Color color)
 
 void Sprite::push_back(Polygon pol)
 {
-	pol += Point(startX, startY);
-	vector<Polygon>::push_back(pol);
+	Polygon p(startX, startY);
+	p.push_back(pol);
+	vector<Polygon>::push_back(p);
+	this->update();
 }
 
 void Sprite::push_back(Sprite sprite)
@@ -147,12 +149,9 @@ void Sprite::push_back(Sprite sprite)
 }
 
 void Sprite::mirrorX()
-{
-	updateX();
-	int spriteX = Point::x();
-	for (vector<Polygon>::iterator it = vector<Polygon>::begin(); it != vector<Polygon>::end(); ++it)
+{		
+	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
 	{
-		it->mirrorX(spriteX);
+		currentPolygon->mirrorX();
 	}
-	*this += Point((Rect::width()), 0);
 }
