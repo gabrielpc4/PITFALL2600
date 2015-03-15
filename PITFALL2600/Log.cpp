@@ -11,11 +11,14 @@ Log::Log(GLint startX, GLint startY, bool rolling)
 	: LogSprite(startX, startY)
 {
 	this->rolling = rolling;
+
 }
 
 
 void Log::draw()
 {
+
+
 	if (isRolling())
 	{
 		//LogSprite::animate();		
@@ -28,7 +31,7 @@ void Log::roll()
 {
 	if (this->rightX() > 0)
 	{
-		//*(this) += Point(-PLAYER_SPEED, 0);
+		*(this) += Point(-PLAYER_SPEED, 0);
 	}		
 }
 

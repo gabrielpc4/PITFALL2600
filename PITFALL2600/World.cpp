@@ -143,14 +143,14 @@ void World::draw(int scenarioNumber)
 
 	if (brickWall != NULL)
 	{
-		//brickWall->draw();
+		brickWall->draw();
 	}
 
 	if (groundHole.size() != 0)
 	{
 		for (int i = 0; i < 2; i++)
 		{
-			//groundHole.at(i).draw();
+			groundHole.at(i).draw();
 		}
 	}	
 }

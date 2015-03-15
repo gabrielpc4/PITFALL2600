@@ -20,6 +20,11 @@ void keyboard_func(unsigned char c, int x, int y)
 {
 	pit->handleKeyboardInput(c);
 }
+Polygon p(Color(RED));
+Rect r(Point(50, 50), Point(100, 100));
+
+
+Sprite s(50, 50);
 
 void timer_func(int data)
 {
@@ -69,6 +74,8 @@ void init()
 int main(int argc, char* argv[])
 {
 	pit = new PitfallGame();
+	p.push_back(r);
+	s.push_back(p);
 	glutInit(&argc, argv);							// Initializes the GLUT library.
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);	// Sets the initial display mode with a single buffered window and color scheme to RGB
 	glutInitWindowSize(WORLD_WINDOW_WIDTH * MAGNIFICATION, WORLD_WINDOW_HEIGHT * MAGNIFICATION);// Sets the Display Window size

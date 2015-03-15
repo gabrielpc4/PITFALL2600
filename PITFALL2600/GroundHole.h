@@ -1,17 +1,16 @@
 #pragma once
 #ifndef GROUNDHOLE_H
 #define GROUNDHOLE_H
-#include "GameObject.h"
+#include "Sprite.h"
 class GroundHole :
-	public GameObject
+	public Sprite
 {
 private:
 	Rect tunnelHole;
 	Sprite cover;
 public:
 	GroundHole();
-	GroundHole(GLint startX, GLint startY);	
-	void draw();
+	GroundHole(float startX, float startY);	
 	void drawCover();
 };
 #endif

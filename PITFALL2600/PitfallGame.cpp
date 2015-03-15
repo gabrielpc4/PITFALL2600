@@ -8,15 +8,15 @@ PitfallGame::PitfallGame()
 	world = new World(scenarioNumber);
 	player = new Player(39, 140);
 
-	//spawnEnemies();
+	spawnEnemies();
 }
 
 void PitfallGame::run()
 {
-	//moveAll();
-	//checkBoundaries();
-	//physics();
-	//checkCollisionsWithEnemies();
+	moveAll();
+	checkBoundaries();
+	physics();
+	checkCollisionsWithEnemies();
 
 	if (player->isTakingHit() && score > 0)
 	{
@@ -175,13 +175,13 @@ void PitfallGame::drawAll()
 
 	for (unsigned i = 0; i < world->groundHole.size(); i++)
 	{
-	//	world->groundHole.at(i).drawCover();
+		world->groundHole.at(i).drawCover();
 	}
 
 
 	for (unsigned i = 0; i < log.size(); i++)
 	{
-		//log.at(i).draw();
+		log.at(i).draw();
 	}
 
 
@@ -282,14 +282,14 @@ void PitfallGame::physics()
 	{
 		if (player->y() >= world->ground.y())
 		{
-			if (player->willFall(&(world->groundHole.at(i))))
+/*			if (player->willFall(&(world->groundHole.at(i))))
 			{
 				if (player->isJumping() == false)
 				{
 					player->floor = world->tunnelFloor.topY();
 					player->falling(true);
 				}
-			}
+			}*/
 		}
 	}
 				

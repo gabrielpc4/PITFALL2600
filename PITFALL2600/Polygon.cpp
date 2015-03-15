@@ -32,6 +32,7 @@ Polygon::Polygon(Rect rect)
 }
 
 Polygon::Polygon(Color color)
+	: Polygon(0,0)
 {
 	this->_color = color;
 }
