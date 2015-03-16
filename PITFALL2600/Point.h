@@ -20,10 +20,7 @@ public:
 	float y() const;
 	void setX(float x);
 	void setY(float y);
-
-	void static PRINT(float x, float y)
-	{
-		cout << x << " " << y << endl;
-	}
+	void clear();
+	void static print(float x, float y);
 };
 #endif

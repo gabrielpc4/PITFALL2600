@@ -32,15 +32,18 @@ public:
 	Rect tunnelFloor;
 	Rect tunnelTop;
 	Rect ground;
-
 		
 	// Other elements	
 	Stairs* stairs;
 	BrickWall* brickWall;
 	vector<TunnelHole> tunnelHole;
+	Pit* blackHole;
+	Pit* water;
 	World();				
 	void buildScenario(int scenarioNumber);
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
+	void drawOverlayers();
+	void deleteWorld();
 	
 };
 #endif

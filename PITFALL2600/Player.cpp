@@ -10,35 +10,30 @@ Player::Player(GLint startX, GLint startY)
 	: PlayerSprite(startX,startY),
 	playerSpeed(0,0)
 {		
-	_down = false;
-	_jumping = false;		
-	_takingHit = false;
-	_falling = false;
-	_walking = false;
-	_climbing = false;
-	_climbingDirection = NONE;
-
-	lives = 3;
-	animationFrame = 0;
-	floor = startY;
-	lookingDirection = RIGHT;
+	animationFrame			= 0;
+	_lives					= 3;
+	_framesDead				= 0;
+	_floor					= startY;
+	_down					= false;
+	_jumping				= false;
+	_takingHit				= false;
+	_falling				= false;
+	_walking				= false;
+	_climbing				= false;
+	_dead					= false;
+	_climbingDirection		= NONE;
+	_lookingDirection		= RIGHT;
+	
 }
 
 void Player::draw()
 {
-	if (this->rightX() > WORLD_WINDOW_WIDTH)
-	{
-		this->setX(1);
-	}
-	if (this->x() < 0)
-	{
-		this->setX(WORLD_WINDOW_WIDTH - this->width());
-	}	
-	
+	// Waking sprite
 	if (isClimbing() == false)
 	{
 		if (isWalking())
 		{
+			// Animate the walking
 			animate(animationFrame, 1, 5);
 		}
 		else
@@ -46,13 +41,14 @@ void Player::draw()
 			animationFrame = 0;
 		}		
 	}
-
 	
+	// Falling sprite
 	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
 	{
 		animationFrame = 0;
 	}
 
+	// Jumping, and taking hit sprite
 	if ((isJumping()) 
 		|| (isTakingHit() && isFalling() == false) && (isClimbing() == false) 
 		|| (isFalling()) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
@@ -60,21 +56,20 @@ void Player::draw()
 		animationFrame = 5;
 	}
 
+	// Climbing sprite
 	if (isClimbing())
 	{
+		// Switches between the climbing animations
 		animate(animationFrame, 0, 1);
 	}
-	PlayerSprite::Sprite::clear();
-	PlayerSprite::buildSprite(animationFrame);	
-	//cout << "x:" << this->x() << " y:" << this->y() << " w:" << this->width() << " h:" << this->height() << " rX:" << this->rightX() << " topY:" << this->topY() << endl;
 
-	int difference_x = this->x() - (this->x() + this->x());;
-	int difference_y = PLAYER_ANIMATION_0_HEIGHT - this->height();;
-
-	if (isTakingHit() && isJumping() == false && isClimbing() == false)
-	{
-		difference_y = 0;
-	}
+	// UPDATES THE SPRITE (ANIMATION)
+	if (this->isDead() == false || isFalling()) // Prevents the animation to change when the player is dead, 												
+	{											// but allows to change to the falling sprite, for the case the player falls into the pit
+		// Rebuilds the sprite, with the new animation sprite
+		PlayerSprite::Sprite::clear();
+		PlayerSprite::buildSprite(animationFrame);
+	}	
 
 	PlayerSprite::draw();
 }
@@ -96,35 +91,38 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-	int currentJumpHeight = (this->topY() - (floor + 42));
+	int currentJumpHeight = (this->topY() - (_floor + PLAYER_ANIMATION_0_HEIGHT));
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
 	{
-		_down = false;
 		setSpeedY(JUMP_SPEED);
 	}
 	else
 	{
 		_down = true;
 	}
-
-
+	// Makes the player go back to the ground (gravity)
 	if (_down)
 	{
-		if (this->y() - 10 > floor)
+		// If the player has not reached the floor
+		if (this->y() - 10 > _floor)
 		{
+			// Makes the player go down
 			setSpeedY(-JUMP_SPEED);
 		}
 		else
 		{
-			setY(floor);
-			setSpeedY(0);
+			setY(_floor);	// Forces the sprite to be in the right height
+			setSpeedY(0);	// Stops the vertical movement
+
+			// Set flags back to false
 			_falling = false;
 			_jumping = false;
 			_down = false;
+			
+			if (isWalking() == false)	// Prevents the player from stoping after landing of a jump,				
+			{							// and has not released the arrow key
 
-			if (isWalking() == false)
-			{
 				setSpeedX(0);
 			}
 		}				
@@ -135,15 +133,15 @@ void Player::fall()
 {	
 	animationFrame = 0;
 	setSpeedX(0);
-	if (this->y() > floor)
+	if (this->y() > _floor)
 	{
-		if ((this->y() - floor) > FALLING_SPEED)
+		if ((this->y() - _floor) > FALLING_SPEED)
 		{
 			setSpeedY(-FALLING_SPEED);
 		}
 		else
 		{
-			setY(floor);
+			setY(_floor);
 			setSpeedY(0);
 			_falling = false;
 		}
@@ -166,7 +164,7 @@ void Player::move()
 		else
 		{			
 			// Changes the player X speed
-			if (this->isLooking(RIGHT))
+			if (_lookingDirection == RIGHT)
 			{
 				setSpeedX(+PLAYER_SPEED);
 			}
@@ -204,11 +202,17 @@ void Player::move()
 	}
 
 	/*********** MOVES THE PLAYER ***********/
-	*this += playerSpeed;
+	if (this->isDead() == false || isFalling())	// Prevents the animation to change when the player is dead, 			
+	{											// but allows him to fall, in the case the player falls into the pit
+		*this += playerSpeed;
+	}
+
+	if (this->isDead())
+	{
+		_framesDead++;
+	}	
 }
 	
-
-
 void Player::climb()
 {
 	// Doesn't allow the player from moving horizontally when climbing
@@ -227,19 +231,15 @@ void Player::climb()
 	{
 		setSpeedY(-CLIMBING_SPEED);
 	}
-
 }
-
-
 
 void Player::climbOut(int direction)
 {
 	// Moves the floor to the top floor again
-	this->floor = GROUND_Y;
+	this->_floor = GROUND_Y;
 
 	// Teleports the player to a position above the ground ( prevents player stucking)
-	setY(GROUND_Y + 5);
-	
+	setY(GROUND_Y + 5);	
 
 	if (direction == RIGHT)
 	{
@@ -249,7 +249,6 @@ void Player::climbOut(int direction)
 	{
 		setSpeedX(-PLAYER_SPEED);
 	}
-
 	// Makes the player jump in the next loop, with the x direction specified by he's speed
 	this->jumping(true);
 
@@ -276,12 +275,12 @@ void Player::stopClimbing()
 
 void Player::look(int DIRECTION)
 {
-	lookingDirection = DIRECTION;
+	_lookingDirection = DIRECTION;
 }
 
-bool Player::isLooking(int DIRECTION)
+int Player::isLooking()
 {
-	return (DIRECTION == lookingDirection);
+	return _lookingDirection;
 }
 
 void Player::setSpeedX(float speed)
@@ -339,7 +338,7 @@ bool Player::isUndeground()
 
 int Player::livesLeft()
 {
-	return lives;
+	return _lives;
 }
 
 void Player::takeHit(bool state)
@@ -350,4 +349,48 @@ void Player::takeHit(bool state)
 bool Player::isTakingHit()
 {
 	return _takingHit;
+}
+
+void Player::die()
+{
+	_dead = true;	
+	_walking = false;
+	if (_framesDead == 0)
+	{
+		_lives--;
+	}	
+}
+void Player::respawn()
+{
+	_dead = false;
+	_lookingDirection = RIGHT;
+	_floor = 140;
+	_framesDead = 0;	
+	setX(39);
+	setY(_floor);
+}
+
+bool Player::isDead()
+{
+	return _dead;
+}
+
+void Player::decreaseOneLife()
+{
+	_lives--;
+}
+
+void Player::resetLives()
+{
+	this->_lives = 3;
+}
+
+void Player::setFloor(float y)
+{
+	this->_floor = y;
+}
+
+long Player::framesDead()
+{
+	return _framesDead;
 }

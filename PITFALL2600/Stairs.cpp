@@ -9,8 +9,7 @@ Stairs::Stairs() :
 Stairs::Stairs(GLint startX, GLint startY) : 
 	Sprite(startX, startY)
 {
-
-	hole = NULL;
+	exit = NULL;
 
 	// Defines the stair border
 	stairsBorder = Rect(Point(0, 0), Point(28, 94), Color(67.0, 0.0, 0.0));
@@ -31,23 +30,32 @@ Stairs::Stairs(GLint startX, GLint startY) :
 	}
 
 	// Creates and draws the stair hole	
-	hole = new Sprite(this->x(), this->topY() + 10);	// Defines the start position of the sprite stairHole in relation to the stair
+	exit = new Sprite(this->x(), this->topY() + 10);	// Defines the start position of the sprite stairHole in relation to the stair
 	
-	hole->push_back(Rect(Point(0, 0), Point(this->width(), 6)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
-	hole->push_back(Rect(Point(0, 6), Point(this->width(), 12)), Color(67.0, 0.0, 0.0));   // DarkRed rectangle: width:stairs.width() height: 12 - 6 = 6	
+	exit->push_back(Rect(Point(0, 0), Point(this->width(), 6)), Color(BLACK));	// Black rectangle  : width:stairs.width() height: 6
+	exit->push_back(Rect(Point(0, 6), Point(this->width(), 12)), Color(67.0, 0.0, 0.0));   // DarkRed rectangle: width:stairs.width() height: 12 - 6 = 6	
 
-	cover.push_back(Rect(Point(hole->x(), hole->y() - 10), Point(hole->rightX(), hole->y()), Color(187, 147, 0)));
+	overlayer.push_back(Rect(Point(exit->x(), exit->y() - 10), Point(exit->rightX(), exit->y()), Color(187, 147, 0)));
 }
 
 
 void Stairs::draw()
 {	
 	Sprite::draw();	// Draws the stair
-	hole->draw();	// Draws the stairHole
+	exit->draw();	// Draws the stairHole
 }
 
 
-void Stairs::drawCover()
+void Stairs::drawOverlayer()
 {
-	cover.draw();
+	overlayer.draw();
+}
+
+
+Stairs::~Stairs()
+{
+	delete exit;
+	exit = NULL;
+
+	overlayer.clear();
 }

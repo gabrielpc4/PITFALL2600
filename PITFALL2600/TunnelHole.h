@@ -7,10 +7,11 @@ class TunnelHole :
 {
 private:
 	Rect tunnelHole;
-	Sprite cover;
+	Sprite overlayer;
 public:
 	TunnelHole();
 	TunnelHole(float startX, float startY);	
-	void drawCover();
+	void drawOverlayer();
+	~TunnelHole();
 };
 #endif

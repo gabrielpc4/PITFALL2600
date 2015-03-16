@@ -157,6 +157,10 @@ void Sprite::updateWH()
 
 void Sprite::push_back(Rect rect)
 {
+	if (rect.color().notInformed())
+	{
+		rect.setColor(this->_color);
+	}
 	Polygon p(startX, startY);
 	p.push_back(rect);
 	vector<Polygon>::push_back(p);
@@ -171,6 +175,10 @@ void Sprite::push_back(Rect rect, Color color)
 
 void Sprite::push_back(Polygon pol)
 {
+	if (pol.color().notInformed())
+	{
+		pol.setColor(this->_color);
+	}
 	Polygon p(startX, startY);
 	p.push_back(pol);
 	vector<Polygon>::push_back(p);
@@ -198,4 +206,9 @@ void Sprite::mirrorX()
 void Sprite::clear()
 {
 	this->vector<Polygon>::clear();
+}
+
+void Sprite::setColor(Color color)
+{
+	this->_color = color;
 }

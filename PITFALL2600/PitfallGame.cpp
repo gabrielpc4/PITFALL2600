@@ -2,7 +2,6 @@
 
 PitfallGame::PitfallGame()
 {
-	log.clear();
 	scenarioNumber = 0;
 	score = 2000;
 	world = new World();
@@ -21,6 +20,11 @@ void PitfallGame::run()
 	if (player->isTakingHit() && score > 0)
 	{
 		score--;
+	}	
+
+	if (player->isDead() && player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
+	{
+		player->respawn();
 	}
 }
 
@@ -37,155 +41,31 @@ void PitfallGame::spawnEnemies()
 		log.push_back(Log(417, 128, true));
 		log.push_back(Log(475, 128, true));
 	}break;
+	case (2) :
+	{
+		log.push_back(Log(417, 128, true));
+		log.push_back(Log(533, 128, true));
+	}break;
 	default:
 		break;
 	}
-}
-
-void PitfallGame::handleKeyboardInput(int key, int keyState)
-{
-	if (key == GLUT_KEY_RIGHT)
-	{
-		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the right key is pressed
-		{
-			if (keyState == DOWN)
-			{
-				if (player->isJumping() == false 
-					&& player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
-				{
-					player->look(RIGHT);
-					player->walking(true);
-				}				
-			}			
-			else // If the user releases the key
-			{
-				player->walking(false);
-			}
-		}
-		else // If the player is climbing
-		{
-			if (isAbleToClimbOut(player))
-			{
-				player->look(RIGHT);
-				player->climbOut(RIGHT);
-			}		
-		}
-	}
-	if (key == GLUT_KEY_LEFT)
-	{
-		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the left key is pressed
-		{
-			if (keyState == DOWN)
-			{
-				if (player->isJumping() == false && player->isFalling() == false) // Prevents the player sprite from changing direction while jumping
-				{
-					player->look(LEFT);
-					player->walking(true);
-				}
-			}
-			
-			else // If the user releases the key
-			{
-				player->walking(false);
-			}
-		}
-		else // If the player is climbing
-		{
-			if (isAbleToClimbOut(player))
-			{
-				player->look(LEFT);
-				player->climbOut(LEFT);
-			}
-		}
-	}
-	if (player->isFalling() == false)
-	{
-		if (key == GLUT_KEY_UP)
-		{				
-			if (keyState == DOWN)
-			{
-				if (world->stairs != NULL)
-				{	
-					// If the player is in contact with the stairs and not about to climb out
-					if (checkCollisionX(player, *world->stairs) && (isAbleToClimbOut(player) == false))
-					{
-						centerOnStair(player);
-						player->walking(false);
-						player->climbing(true);
-						player->climb(UP);
-					}
-				}
-
-				// Prevents the user from jumping while climbing or falling
-				if ((player->isClimbing() == false) && (player->isFalling() == false))
-				{
-					player->jumping(true);
-				}
-			}
-			else // If the user releases the key
-			{
-				player->stopClimbing();
-			}
-		}
-		if (key == GLUT_KEY_DOWN)
-		{
-			if (keyState == DOWN)
-			{
-				if (player->isClimbing())
-				{
-					player->climb(DOWN);
-				}
-			}
-			else // If the user releases the key
-			{
-				player->stopClimbing();
-			}
-		}
-
-	}
-}
-
-void PitfallGame::handleKeyboardInput(unsigned char c)
-{
-	if (c == SPACE_BAR)
-	{	
-		// Prevents the user from jumping while climbing or falling
-		if ((player->isClimbing() == false) && (player->isFalling() == false))
-		{
-			player->jumping(true);
-		}
-		// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
-		if (player->isClimbing() && isAbleToClimbOut(player))
-		{
-			player->look(RIGHT);
-			player->climbOut(RIGHT);
-		}
-	}
-
 }
 
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
 	player->draw();
-
-	if (world->stairs != NULL)
-	{		
-		world->stairs->drawCover();
-	}
-
-	for (unsigned i = 0; i < world->tunnelHole.size(); i++)
-	{
-		world->tunnelHole.at(i).drawCover();
-	}
-
+	world->drawOverlayers();
 
 	for (unsigned i = 0; i < log.size(); i++)
 	{
 		log.at(i).draw();
 	}
+	showHUD();
+}
 
-
+void PitfallGame::showHUD()
+{
 	string label = "Score: ";
 	printText(label + std::to_string(score), Point(10, 360));
 
@@ -195,6 +75,11 @@ void PitfallGame::drawAll()
 		label += "l";
 	}
 	printText(label, Point(10, 340));
+
+	if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
+	{
+		printText("Press Space to Restart the Game", Point(10, 5));
+	}
 }
 
 void PitfallGame::moveAll()
@@ -214,11 +99,11 @@ void PitfallGame::physics()
 	if (world->stairs != NULL)
 	{
 		// Makes the player fall
-		if (willFall(player, world->stairs->hole) && (player->isClimbing() == false))
+		if (willFall(player, world->stairs->exit) && (player->isClimbing() == false))
 		{
 			if (player->isJumping() == false)
 			{
-				player->floor = world->tunnelFloor.topY();
+				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
 			}
 		}
@@ -248,15 +133,13 @@ void PitfallGame::physics()
 	// Collision with the brick wall
 	if (world->brickWall != NULL)
 	{	
-
 		if (player->isUndeground())
 		{
 			if (world->brickWall->x() != 0) // Prevents the collision check bug when the brickwall's sprite is being 		
-			{										// created and still is at the origin and was not moved to the right position yet
+			{								// created and still is at the origin and was not moved to the right position yet
 				// If the player is colliding with the brick wall
 				if (checkCollisionX(player, *world->brickWall))
-				{
-					
+				{					
 					// if the player is at the left side of the brick wall
 					if (relativePosition(player, world->brickWall) == RIGHT)
 					{
@@ -266,7 +149,7 @@ void PitfallGame::physics()
 					else // if the player is at the right side of the brick wall
 					{
 					
-						if (player->isLooking(LEFT)) // Prevents the player getting stuck when changing the look direction
+						if (player->isLooking() == LEFT) // Prevents the player getting stuck when changing the look direction
 						{
 							// Move the player away from the brick wall
 							player->setX(world->brickWall->rightX() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION);
@@ -288,16 +171,28 @@ void PitfallGame::physics()
 		{
 			if (player->isJumping() == false)
 			{
-				player->floor = world->tunnelFloor.topY();
+				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
 			}
 		}
-	}	
+	}
+
+	// Falling in the Black Hole or in the Water
+	if (willFall(player, world->blackHole) || willFall(player, world->water))
+	{
+		if (player->isJumping() == false)
+		{
+			player->setFloor(world->tunnelTop.y());
+			player->falling(true);
+			player->die();
+		}
+	}
+
 }
 
 bool PitfallGame::isAbleToClimbOut(Player* player)
 {
-	return (player->topY() > (world->stairs->hole->y() + 10));
+	return (player->topY() > (world->stairs->exit->y() + 10));
 }
 
 void PitfallGame::centerOnStair(Player* player)
@@ -305,32 +200,32 @@ void PitfallGame::centerOnStair(Player* player)
 	player->setX(world->stairs->x() + 5);
 }
 
-
 bool  PitfallGame::willFall(Player* player, Sprite* hole)
 {
-	if (player->isUndeground() == false)  // Can only fall if it's on the top floor
+	if (hole != NULL)
 	{
-		if (player->isLooking(RIGHT))
+		if (player->isUndeground() == false)  // Can only fall if it's on the top floor
 		{
-			if (player->x() >= hole->x() && player->x() + PLAYER_ANIMATION_0_WIDTH <= hole->rightX())
+			if (player->isLooking() == RIGHT)
 			{
-				return true;
+				if (player->x() >= hole->x() && player->x() + PLAYER_ANIMATION_0_WIDTH <= hole->rightX())
+				{
+					return true;
+				}
 			}
-		}
-		else
-		{
-			if (player->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION + 1 < hole->rightX()
-				&& player->x() >= hole->x())
+			else
 			{
-				return true;
+				if (player->x() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION + 1 < hole->rightX()
+					&& player->x() >= hole->x())
+				{
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
-	}
+	}	
 	return false;
 }
-
-
 
 void PitfallGame::checkBoundaries()
 {	
@@ -344,7 +239,8 @@ void PitfallGame::checkBoundaries()
 
 	if (isOutOfBoundaries(player))
 	{
-		deleteWorld();
+		world->deleteWorld();
+		deleteEnemies();
 
 		if (player->rightX() >= WORLD_WINDOW_WIDTH)
 		{
@@ -395,7 +291,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 
 bool PitfallGame::checkCollisionX(Player* player, Sprite& object)
 {
-	if (player->isLooking(RIGHT))
+	if (player->isLooking() == RIGHT)
 	{
 		if (player->x() + PLAYER_ANIMATION_0_WIDTH > object.x() && player->x() < object.rightX())
 		{
@@ -449,22 +345,152 @@ void  PitfallGame::printText(string text, Point p)
 }
 
 
-void PitfallGame::deleteWorld()
+void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
-	log.clear();
-
-	if (world->stairs != NULL)
+	if (key == GLUT_KEY_RIGHT)
 	{
-		delete world->stairs->hole;
-		world->stairs->hole = NULL;
+		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the right key is pressed
+		{
+			if (keyState == DOWN)
+			{
+				if (player->isJumping() == false
+					&& player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
+				{
+					player->look(RIGHT);
+					player->walking(true);
+				}
+			}
+			else // If the user releases the key
+			{
+				player->walking(false);
+			}
+		}
+		else // If the player is climbing
+		{
+			if (isAbleToClimbOut(player))
+			{
+				player->look(RIGHT);
+				player->climbOut(RIGHT);
+			}
+		}
+	}
+	if (key == GLUT_KEY_LEFT)
+	{
+		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the left key is pressed
+		{
+			if (keyState == DOWN)
+			{
+				if (player->isJumping() == false && player->isFalling() == false) // Prevents the player sprite from changing direction while jumping
+				{
+					player->look(LEFT);
+					player->walking(true);
+				}
+			}
+
+			else // If the user releases the key
+			{
+				player->walking(false);
+			}
+		}
+		else // If the player is climbing
+		{
+			if (isAbleToClimbOut(player))
+			{
+				player->look(LEFT);
+				player->climbOut(LEFT);
+			}
+		}
+	}
+	if (player->isFalling() == false)
+	{
+		if (key == GLUT_KEY_UP)
+		{
+			if (keyState == DOWN)
+			{
+				if (world->stairs != NULL)
+				{
+					// If the player is in contact with the stairs and not about to climb out
+					if (checkCollisionX(player, *world->stairs) && (isAbleToClimbOut(player) == false))
+					{
+						centerOnStair(player);
+						player->walking(false);
+						player->climbing(true);
+						player->climb(UP);
+					}
+				}
+
+				// Prevents the user from jumping while climbing or falling
+				if ((player->isClimbing() == false) && (player->isFalling() == false))
+				{
+					player->jumping(true);
+				}
+			}
+			else // If the user releases the key
+			{
+				player->stopClimbing();
+			}
+		}
+		if (key == GLUT_KEY_DOWN)
+		{
+			if (keyState == DOWN)
+			{
+				if (player->isClimbing())
+				{
+					player->climb(DOWN);
+				}
+			}
+			else // If the user releases the key
+			{
+				player->stopClimbing();
+			}
+		}
+
+	}
+}
+
+void PitfallGame::handleKeyboardInput(unsigned char c)
+{
+	if (c == SPACE_BAR)
+	{
+		if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
+		{
+			PitfallGame::reset();
+		}
+		else
+		{
+			// Prevents the user from jumping while climbing or falling
+			if ((player->isClimbing() == false) && (player->isFalling() == false))
+			{
+				player->jumping(true);
+			}
+			// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
+			if (player->isClimbing() && isAbleToClimbOut(player))
+			{
+				player->look(RIGHT);
+				player->climbOut(RIGHT);
+			}
+		}		
 	}
 
-	delete world->stairs;
-	world->stairs = NULL;
+}
 
-	delete world->brickWall;
-	world->brickWall = NULL;
 
+void PitfallGame::deleteEnemies()
+{
+	log.clear();
+}
+
+void PitfallGame::reset()
+{
+	world->deleteWorld();
+	this->deleteEnemies();
+	scenarioNumber = 0;
+	score = 2000;
+
+	this->spawnEnemies();
+	world->buildScenario(0);
+
+	player->resetLives();
+	player->respawn();
 	
-	world->tunnelHole.clear();
 }

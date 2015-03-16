@@ -9,7 +9,7 @@ private:
 	long frames;
 	float _realY;
 protected:
-	int lookingDirection;
+	int _lookingDirection;
 	bool _climbing;
 	bool _walking;
 	int _climbingDirection;

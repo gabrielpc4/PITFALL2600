@@ -34,6 +34,7 @@ public:
 	void draw();
 	void clear();
 	void updateWH();
+	void setColor(Color color);
 };
 #endif
 

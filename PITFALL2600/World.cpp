@@ -5,8 +5,37 @@ World::World()
 {	
 	stairs = NULL;
 	brickWall = NULL;
-	buildBasicScenario();
-	buildScenario(0);		
+	blackHole = NULL;
+	water = NULL;
+	buildBasicScenario();	
+}
+
+void World::buildScenario(int scenarioNumber)
+{
+	switch (scenarioNumber)
+	{
+	case(-1) :
+	{
+		water = new Pit(144, 132, Color(BLUE));
+	}break;
+	case(0) :
+	{
+		stairs = new Stairs(245, 32);
+		brickWall = new BrickWall(461, 32);
+	}break;
+	case(1) :
+	{
+		stairs = new Stairs(245, 32);
+		brickWall = new BrickWall(461, 32);
+		tunnelHole.push_back(TunnelHole(144, 96));
+		tunnelHole.push_back(TunnelHole(331, 96));
+	}break;
+	case(2) :
+	{
+		blackHole = new Pit(144, 132, Color(BLACK));
+	}break;
+	default:{}break;
+	}
 }
 
 void World::buildBasicScenario()
@@ -101,28 +130,6 @@ void World::buildTreeLeafs()
 }
 
 
-void World::buildScenario(int scenarioNumber)
-{
-	switch (scenarioNumber)
-	{
-	case(0) :
-	{
-		stairs = new Stairs(245,32);
-		brickWall = new BrickWall(461,32);
-	}break;
-	case(1) :
-	{
-		stairs = new Stairs(245,32);	
-		brickWall = new BrickWall(461, 32);
-		tunnelHole.push_back(TunnelHole(144, 96));
-		tunnelHole.push_back(TunnelHole(331, 96));
-	}break;
-	default:
-	{
-	}break;
-	}
-}
-
 /*****************************************************************************************
 * Method: draw
 * Description: Calls the function drawBasicScenario and loads the first Scenario
@@ -147,7 +154,17 @@ void World::draw(int scenarioNumber)
 		{
 			tunnelHole.at(i).draw();
 		}
-	}	
+	}
+
+	if (blackHole != NULL)
+	{
+		blackHole->draw();
+	}
+
+	if (water != NULL)
+	{
+		water->draw();
+	}
 }
 
 /*****************************************************************************************
@@ -240,4 +257,67 @@ void World::buildTreeBranch(Polygon& branch, int treeNum)
 	branch -= Point((int)(branch.width() / 4.0) - 1, 0);	
 }
 
+
+void World::drawOverlayers()
+{
+	if (stairs != NULL)
+	{
+		stairs->drawOverlayer();
+	}
+
+	for (unsigned i = 0; i < tunnelHole.size(); i++)
+	{
+		tunnelHole.at(i).drawOverlayer();
+	}
+
+	if (blackHole != NULL)
+	{
+		blackHole->drawOverlayer();
+	}
+
+	if (water != NULL)
+	{
+		water->drawOverlayer();
+	}
+}
+
+void World::deleteWorld()
+{
+	if (stairs != NULL)
+	{
+		stairs->~Stairs();
+		delete stairs;
+		stairs = NULL;
+	}
+
+	if (brickWall != NULL)
+	{
+		delete brickWall;
+		brickWall = NULL;
+	}
+	
+	if (tunnelHole.empty() == false)
+	{
+		for (unsigned i = 0; i < tunnelHole.size(); i++)
+		{
+			tunnelHole.at(i).~TunnelHole();
+			tunnelHole.at(i).clear();
+		}
+		tunnelHole.clear();
+	}
+	
+	if (blackHole != NULL)
+	{
+		blackHole->~Pit();
+		delete blackHole;
+		blackHole = NULL;
+	}	
+
+	if (water != NULL)
+	{
+		water->~Pit();
+		delete water;
+		water = NULL;
+	}
+}
 

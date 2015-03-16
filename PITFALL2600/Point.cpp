@@ -66,3 +66,14 @@ void Point::setY(float y)
 {
 	_y = y;
 }
+
+void Point::print(float x, float y)
+{
+	cout << x << " " << y << endl;
+}
+
+void Point::clear()
+{
+	this->_x = 0;
+	this->_y = 0;
+}

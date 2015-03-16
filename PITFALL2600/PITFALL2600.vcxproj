@@ -82,10 +82,9 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
-    <ClInclude Include="Hole.h" />
-    <ClInclude Include="HoleSprite.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
+    <ClInclude Include="Pit.h" />
     <ClInclude Include="ScenarioObjects.h" />
     <ClInclude Include="glut.h" />
     <ClInclude Include="PitfallGame.h" />
@@ -104,11 +103,10 @@
   <ItemGroup>
     <ClCompile Include="BrickWall.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Hole.cpp" />
-    <ClCompile Include="HoleSprite.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pit.cpp" />
     <ClCompile Include="PitfallGame.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSprite.cpp" />

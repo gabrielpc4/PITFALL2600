@@ -140,17 +140,6 @@ void Polygon::push_back(Rect rect)
 	{
 		rect.setColor(this->_color);
 	}
-	else
-	{
-		if (this->_color.notInformed())
-		{
-			this->_color = rect.color();
-		}
-		else
-		{
-			rect.setColor(this->_color);
-		}
-	}	
 	rect += Point(startX, startY);
 	vector<Rect>::push_back(rect);
 	update();

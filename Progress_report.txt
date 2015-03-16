@@ -113,3 +113,13 @@ threesBranches
 . Second scenario completely finished
 . Added score
 . Fixed player jump height again
+
+03-14-2015
+. Reimplemented all the shapes logic and Inheritance
+. Readjusted all the code to make it work with the new shapes system.
+. Almost 1000 lines less to do the same thing (Performance boost + Increased code re-use)
+
+03-15-2014
+. Created the static Black Hole
+. Implemented player fall in the Black Hole
+. Implemented player death when falling in the Black Hole

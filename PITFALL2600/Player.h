@@ -7,42 +7,35 @@ class Player
 	: public PlayerSprite
 {
 private: 
-	int lives;
-	
-
+	int _lives;
 	Point playerSpeed;
-	int animationFrame;
-
-
-
-	
+	int animationFrame;	
+	int _floor;
 	bool _down;
-	
-
+	bool _dead;
+	long _framesDead;
+	void climb();
+	void jump();
+	void fall();
 public:
 	Player();
 	Player(GLint startX, GLint startY);
 	void draw();
-	void drawBasicShape();
-	bool isJumping();
 	void move();
+	bool isJumping();
 	void jumping(bool state);
-	void jump();
 	void look(int DIRECTION);
-	bool isLooking(int DIRECTION);
+	int isLooking();
 	void setSpeedX(float speed);
 	void setSpeedY(float speed);
 	Point speed();
 	void walking(bool state);
 	bool isWalking();
-	int floor;
 	void falling(bool state);
 	bool isFalling();
-	void fall();	
 	void climbing(bool state);
 	bool isClimbing();
 	void climb(int direction);
-	void climb();
 	int climbingDirection();
 	void stopClimbing();
 	void climbOut(int direction);
@@ -50,5 +43,12 @@ public:
 	int livesLeft();
 	void takeHit(bool state);
 	bool isTakingHit();
+	void die();
+	void respawn();
+	bool isDead();
+	void decreaseOneLife();
+	long framesDead();
+	void resetLives();
+	void setFloor(float y);
 };
 #endif

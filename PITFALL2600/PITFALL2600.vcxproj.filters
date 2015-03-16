@@ -102,14 +102,11 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="HoleSprite.h">
-      <Filter>Header Files\Sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="Hole.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TunnelHole.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pit.h">
+      <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,13 +152,10 @@
     <ClCompile Include="Log.cpp">
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="HoleSprite.cpp">
-      <Filter>Source Files\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="Hole.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TunnelHole.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Pit.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
   </ItemGroup>

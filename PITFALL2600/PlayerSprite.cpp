@@ -229,7 +229,7 @@ void PlayerSprite::buildSprite(int animationFrame)
 		default:;
 		}
 		
-		if (lookingDirection != RIGHT)
+		if (_lookingDirection != RIGHT)
 		{
 			this->mirrorX();
 		}

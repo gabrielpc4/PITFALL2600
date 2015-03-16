@@ -19,7 +19,7 @@ private:
 	void checkBoundaries();
 	bool isOutOfBoundaries(Sprite* object);
 	void spawnEnemies();
-	void deleteWorld();
+	void deleteEnemies();
 	void checkCollisionsWithEnemies();
 	void moveAll();
 	void physics();
@@ -28,6 +28,8 @@ private:
 	bool isAbleToClimbOut(Player* player);
 	void centerOnStair(Player* player);
 	bool willFall(Player* player, Sprite* hole);
+	void showHUD();
+	void reset();
 public:
 	PitfallGame();
 	void run();
