@@ -2,7 +2,7 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber = 2;
+	scenarioNumber = 0;
 	score = 2000;
 	world = new World();
 	player = new Player(39, 140);
@@ -100,6 +100,10 @@ void PitfallGame::moveAll()
 			log.at(i).roll();
 		}
 	}
+	if (world->vine != NULL)
+	{
+		world->vine->swing();
+	}	
 }
 
 void PitfallGame::physics()

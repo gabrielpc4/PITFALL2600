@@ -208,7 +208,7 @@ void World::drawBasicScenario()
 
 /*****************************************************************************************
 * Method Name: drawTreeBranch
-* Description: Draws the branches corresponding to the tree number
+* Description: Draws the branches corresponding to the tree nuwber
 ******************************************************************************************/
 void World::buildTreeBranch(Polygon& branch, int treeNum)
 {

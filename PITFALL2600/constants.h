@@ -7,13 +7,15 @@
 // Window Size
 #define WORLD_WINDOW_WIDTH 550
 #define WORLD_WINDOW_HEIGHT 380
-#define MAGNIFICATION (1.4F)
+#define MAGNIFICATION (2.5F)
 
 #define DOWN 0
 #define UP 1
 #define NONE -1
 #define LEFT 2
 #define RIGHT 3
+
+#define G 10
 
 static bool FAST_PC = false;
 static int GAME_SPEED = (FAST_PC ? 2 : 1);
