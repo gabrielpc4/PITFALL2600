@@ -229,6 +229,7 @@ void PlayerSprite::buildSprite(int animationFrame)
 		default:;
 		}
 		
+		// Makes the player change looking direction
 		if (_lookingDirection != RIGHT)
 		{
 			this->mirrorX();
@@ -245,6 +246,8 @@ void PlayerSprite::buildSprite(int animationFrame)
 		case(1) :
 		{
 			buildClimbingSprite();
+
+			// Reverses the climbing sprite			
 			this->mirrorX();
 		}break;
 		}
@@ -317,6 +320,7 @@ void PlayerSprite::push_back(Rect rect)
 {
 	Polygon p(Sprite::_x, Sprite::_y);
 
+	// Makes the player sprite appear lower, when taking hit from a log
 	if (_takingHit && _falling == false && _jumping == false)
 	{
 		rect += Point(0, -10);
@@ -328,6 +332,8 @@ void PlayerSprite::push_back(Rect rect)
 void PlayerSprite::push_back(Polygon pol)
 {
 	Polygon p(Sprite::_x, Sprite::_y);
+
+	// Makes the player sprite appear lower, when taking hit from a log
 	if (_takingHit && _falling == false && _jumping == false)
 	{
 		pol += Point(0, -10);

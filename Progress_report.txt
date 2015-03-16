@@ -123,3 +123,6 @@ threesBranches
 . Created the static Black Hole
 . Implemented player fall in the Black Hole
 . Implemented player death when falling in the Black Hole
+. Created the option to restart the game after the player run out of lives
+. Added the enemies in the scenario 3
+. Created the water in scenario -1

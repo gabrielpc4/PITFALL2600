@@ -30,6 +30,8 @@ private:
 	bool willFall(Player* player, Sprite* hole);
 	void showHUD();
 	void reset();
+	bool canGrabVine(Player* player);
+	bool isInside(Point& p, Rect& rect);
 public:
 	PitfallGame();
 	void run();

@@ -3,6 +3,7 @@
 // Defines the Positions of the basic scenario
 World::World()
 {	
+	vine = NULL;
 	stairs = NULL;
 	brickWall = NULL;
 	blackHole = NULL;
@@ -17,6 +18,7 @@ void World::buildScenario(int scenarioNumber)
 	case(-1) :
 	{
 		water = new Pit(144, 132, Color(BLUE));
+		vine = new Vine();
 	}break;
 	case(0) :
 	{
@@ -33,6 +35,7 @@ void World::buildScenario(int scenarioNumber)
 	case(2) :
 	{
 		blackHole = new Pit(144, 132, Color(BLACK));
+		vine = new Vine();
 	}break;
 	default:{}break;
 	}
@@ -165,6 +168,17 @@ void World::draw(int scenarioNumber)
 	{
 		water->draw();
 	}
+
+	if (vine != NULL)
+	{
+		vine->draw();	
+	}
+	treeLeafs.draw();
+
+	if (vine != NULL)
+	{		
+		//vine->drawCircleTrack();
+	}
 }
 
 /*****************************************************************************************
@@ -190,8 +204,6 @@ void World::drawBasicScenario()
 		treeTrunk[i].draw();
 		branches[i].draw();
 	}
-
-	treeLeafs.draw();
 }
 
 /*****************************************************************************************
@@ -318,6 +330,13 @@ void World::deleteWorld()
 		water->~Pit();
 		delete water;
 		water = NULL;
+	}
+
+	if (vine != NULL)
+	{
+		vine->~Vine();
+		delete vine;
+		vine = NULL;
 	}
 }
 

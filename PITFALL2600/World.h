@@ -9,7 +9,6 @@
 #include "glut.h" // Custom glut.h fixed for using namespace std
 #include <gl/gl.h>
 
-
 using namespace std;
 
 class World
@@ -34,6 +33,7 @@ public:
 	Rect ground;
 		
 	// Other elements	
+	Vine* vine;
 	Stairs* stairs;
 	BrickWall* brickWall;
 	vector<TunnelHole> tunnelHole;

@@ -76,17 +76,7 @@ void Player::draw()
 
 void Player::jumping(bool state)
 {
-	if (state == true)
-	{
-		if (isJumping() == false)
-		{
-			_jumping = true;
-		}
-	}
-	else
-	{
-		_jumping = false;
-	}	
+	_jumping = state;
 }
 
 void Player::jump()
@@ -256,6 +246,12 @@ void Player::climbOut(int direction)
 	
 }
 
+void Player::swing(Vine* vine)
+{
+	setX(vine->end.x());
+	setY(vine->end.y());
+}
+
 void Player::climb(int direction)
 {
 	_climbingDirection = direction;
@@ -365,19 +361,16 @@ void Player::respawn()
 	_dead = false;
 	_lookingDirection = RIGHT;
 	_floor = 140;
-	_framesDead = 0;	
+	_framesDead = 0;
+	_jumping = true;
+	_down = true;
 	setX(39);
-	setY(_floor);
+	setY(206);
 }
 
 bool Player::isDead()
 {
 	return _dead;
-}
-
-void Player::decreaseOneLife()
-{
-	_lives--;
 }
 
 void Player::resetLives()

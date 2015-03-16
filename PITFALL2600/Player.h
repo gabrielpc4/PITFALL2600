@@ -2,6 +2,7 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 #include "PlayerSprite.h"
+#include "Vine.h"
 
 class Player 
 	: public PlayerSprite
@@ -46,9 +47,9 @@ public:
 	void die();
 	void respawn();
 	bool isDead();
-	void decreaseOneLife();
 	long framesDead();
 	void resetLives();
 	void setFloor(float y);
+	void swing(Vine* vine);
 };
 #endif

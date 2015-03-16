@@ -2,3 +2,4 @@
 #include "BrickWall.h"
 #include "TunnelHole.h"
 #include "Pit.h"
+#include "Vine.h"

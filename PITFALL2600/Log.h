@@ -7,7 +7,6 @@ class Log :
 {
 private:
 	bool rolling;
-	long framesRolling;
 public:
 	Log();
 	Log(GLint startX, GLint start, bool rolling);

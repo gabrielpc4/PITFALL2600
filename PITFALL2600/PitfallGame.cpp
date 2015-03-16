@@ -2,7 +2,7 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber = 0;
+	scenarioNumber = 2;
 	score = 2000;
 	world = new World();
 	player = new Player(39, 140);
@@ -17,7 +17,15 @@ void PitfallGame::run()
 	physics();
 	checkCollisionsWithEnemies();
 
-	if (player->isTakingHit() && score > 0)
+	if (world->vine != NULL)
+	{
+		if (canGrabVine(player))
+		{
+			player->swing(world->vine);
+		}
+	}
+
+	if (player->isTakingHit() && player->isDead() == false && score > 0)
 	{
 		score--;
 	}	
@@ -257,8 +265,6 @@ void PitfallGame::checkBoundaries()
 	}
 }
 
-
-
 int PitfallGame::relativePosition(Player* player, Sprite* object)
 {
 	int object_center_x = (object->x() + (object->width() / 2.0));
@@ -273,6 +279,12 @@ int PitfallGame::relativePosition(Player* player, Sprite* object)
 	return NONE;
 }
 
+bool PitfallGame::canGrabVine(Player* player)
+{
+	return isInside(world->vine->end, Rect(player->x(), player->y(), player->width(), player->height()));
+}
+
+
 void PitfallGame::checkCollisionsWithEnemies()
 {
 	// Collision with the Enemy log
@@ -285,9 +297,6 @@ void PitfallGame::checkCollisionsWithEnemies()
 		}
 	}
 }
-
-
-
 
 bool PitfallGame::checkCollisionX(Player* player, Sprite& object)
 {
@@ -326,7 +335,6 @@ bool PitfallGame::isOutOfBoundaries(Sprite* object)
 	return false;
 }
 
-
 void  PitfallGame::printText(string text, Point p)
 {
 	glColor3f(1.0, 1.0, 1.0);
@@ -343,7 +351,6 @@ void  PitfallGame::printText(string text, Point p)
 	}
 	glPopMatrix();
 }
-
 
 void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
@@ -444,7 +451,6 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 				player->stopClimbing();
 			}
 		}
-
 	}
 }
 
@@ -471,9 +477,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			}
 		}		
 	}
-
 }
-
 
 void PitfallGame::deleteEnemies()
 {
@@ -492,5 +496,14 @@ void PitfallGame::reset()
 
 	player->resetLives();
 	player->respawn();
-	
+	player->setY(140);	
+}
+
+bool  PitfallGame::isInside(Point& p, Rect& rect)
+{
+	if (p.x() < rect.rightX() && p.x() > rect.x() && p.y() > rect.y() && p.y() < rect.topY())
+	{
+		return true;
+	}
+	return false;
 }

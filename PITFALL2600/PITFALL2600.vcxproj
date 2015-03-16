@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BrickWall.h" />
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="echo.h" />
@@ -98,10 +99,12 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Stairs.h" />
     <ClInclude Include="TunnelHole.h" />
+    <ClInclude Include="Vine.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BrickWall.cpp" />
+    <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
@@ -116,10 +119,14 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Stairs.cpp" />
     <ClCompile Include="TunnelHole.cpp" />
+    <ClCompile Include="Vine.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PITFALL2600.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

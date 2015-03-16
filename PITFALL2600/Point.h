@@ -21,6 +21,6 @@ public:
 	void setX(float x);
 	void setY(float y);
 	void clear();
-	void static print(float x, float y);
+	void static print(float x, float y);	
 };
 #endif

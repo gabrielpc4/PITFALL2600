@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	glutCreateWindow("Pitfall 2600");				// Creates a top-level window. The name will be provided to the window system as the window's name.
 	init();											// Custom function created to define the background color and configures the scale interpretation			
 	glutDisplayFunc(display);						// Sets the display callback for the current window.		
-	glutReshapeFunc(reshape_func);
+	//glutReshapeFunc(reshape_func);
 	glutSpecialFunc(arrows_keys_func_down);;
 	glutSpecialUpFunc(arrows_keys_func_up);
 	glutKeyboardFunc(keyboard_func);
