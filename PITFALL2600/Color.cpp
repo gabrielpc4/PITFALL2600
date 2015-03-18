@@ -14,7 +14,6 @@ Color::Color()
 	informed = false;
 }
 
-
 /**********************************************************************
 * Method: Constant Constructor
 * Description: Initializes a Color with black or white

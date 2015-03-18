@@ -14,10 +14,12 @@ private:
 	int _floor;
 	bool _down;
 	bool _dead;
+	bool _swinging;
 	long _framesDead;
 	void climb();
 	void jump();
 	void fall();
+	void swing(Vine* vine);
 public:
 	Player();
 	Player(GLint startX, GLint startY);
@@ -50,6 +52,6 @@ public:
 	long framesDead();
 	void resetLives();
 	void setFloor(float y);
-	void swing(Vine* vine);
+	void swinging(bool state);
 };
 #endif

@@ -77,10 +77,19 @@ void Player::draw()
 void Player::jumping(bool state)
 {
 	_jumping = state;
+
+	// Resets the _down jumping variable
+	// (Prevents the bug when you grab the stairs while falling down on a jump, 
+	//  and when you want to clim out, the player falls back again into the tunnel)
+	if (state == false)
+	{
+		_down = false;
+	}
 }
 
 void Player::jump()
 {
+
 	int currentJumpHeight = (this->topY() - (_floor + PLAYER_ANIMATION_0_HEIGHT));
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
@@ -204,7 +213,8 @@ void Player::move()
 }
 	
 void Player::climb()
-{
+{	
+
 	// Doesn't allow the player from moving horizontally when climbing
 	setSpeedX(0);
 
@@ -387,3 +397,9 @@ long Player::framesDead()
 {
 	return _framesDead;
 }
+
+void Player::swinging(bool state)
+{
+	_swinging = state;
+}
+

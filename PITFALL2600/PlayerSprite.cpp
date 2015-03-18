@@ -321,7 +321,7 @@ void PlayerSprite::push_back(Rect rect)
 	Polygon p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
-	if (_takingHit && _falling == false && _jumping == false)
+	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
 	{
 		rect += Point(0, -10);
 	}
@@ -334,7 +334,7 @@ void PlayerSprite::push_back(Polygon pol)
 	Polygon p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
-	if (_takingHit && _falling == false && _jumping == false)
+	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
 	{
 		pol += Point(0, -10);
 	}

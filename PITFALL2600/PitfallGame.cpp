@@ -2,7 +2,7 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber = 0;
+	scenarioNumber = 2;
 	score = 2000;
 	world = new World();
 	player = new Player(39, 140);
@@ -21,7 +21,7 @@ void PitfallGame::run()
 	{
 		if (canGrabVine(player))
 		{
-			player->swing(world->vine);
+			//player->swing(world->vine);
 		}
 	}
 
@@ -78,11 +78,7 @@ void PitfallGame::showHUD()
 	printText(label + std::to_string(score), Point(10, 360));
 
 	label = "Lives: ";
-	for (int i = 0; i < player->livesLeft(); i++)
-	{
-		label += "l";
-	}
-	printText(label, Point(10, 340));
+	printText(label + std::to_string(player->livesLeft()), Point(10, 340));
 
 	if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
 	{
@@ -107,14 +103,14 @@ void PitfallGame::moveAll()
 }
 
 void PitfallGame::physics()
-{
+{	
 	if (world->stairs != NULL)
 	{
 		// Makes the player fall
 		if (willFall(player, world->stairs->exit) && (player->isClimbing() == false))
 		{
 			if (player->isJumping() == false)
-			{
+			{				
 				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
 			}
@@ -423,7 +419,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					// If the player is in contact with the stairs and not about to climb out
 					if (checkCollisionX(player, *world->stairs) && (isAbleToClimbOut(player) == false))
 					{
-						centerOnStair(player);
+						centerOnStair(player);						
 						player->walking(false);
 						player->climbing(true);
 						player->climb(UP);

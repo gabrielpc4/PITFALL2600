@@ -12,7 +12,7 @@ World::World()
 }
 
 void World::buildScenario(int scenarioNumber)
-{
+{	
 	switch (scenarioNumber)
 	{
 	case(-1) :
@@ -177,7 +177,7 @@ void World::draw(int scenarioNumber)
 
 	if (vine != NULL)
 	{		
-		//vine->drawCircleTrack();
+		vine->drawCircleTrack();
 	}
 }
 
