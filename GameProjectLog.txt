@@ -126,3 +126,8 @@ threesBranches
 . Created the option to restart the game after the player run out of lives
 . Added the enemies in the scenario 3
 . Created the water in scenario -1
+
+03-18-2015
+. Fixed the bug when the player falls back into the tunnel, when climbing out
+. Fixed the sprite flickering when the logs hit the player while climbing
+. Fixed sprite flickering when begining climbing the stairs

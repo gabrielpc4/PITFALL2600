@@ -2,10 +2,10 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber = 2;
-	score = 2000;
-	world = new World();
-	player = new Player(39, 140);
+	scenarioNumber	= 0;
+	score			= 2000;
+	world			= new World();
+	player			= new Player(39, 140);
 	world->buildScenario(scenarioNumber);
 	spawnEnemies();
 }
@@ -19,9 +19,13 @@ void PitfallGame::run()
 
 	if (world->vine != NULL)
 	{
-		if (canGrabVine(player))
+		if ((player->isSwinging() == false) && canGrabVine(player))
 		{
-			//player->swing(world->vine);
+			player->holdVine(true);
+		}		
+		if (player->isHoldingVine())
+		{
+			player->swing(world->vine);
 		}
 	}
 
@@ -422,6 +426,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 						centerOnStair(player);						
 						player->walking(false);
 						player->climbing(true);
+						player->animationFrame = 6;
 						player->climb(UP);
 					}
 				}
@@ -458,7 +463,12 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 {
 	if (c == SPACE_BAR)
 	{
-		if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
+		// Makes the player release the vine when the spacebar is pressed
+		if (player->isSwinging())
+		{
+			player->holdVine(false);						
+		}
+		else if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
 		{
 			PitfallGame::reset();
 		}

@@ -5,9 +5,7 @@
 class PlayerSprite :
 	public Sprite
 {
-private:
-	long frames;
-	float _realY;
+// Variables
 protected:
 	int _lookingDirection;
 	bool _climbing;
@@ -16,18 +14,29 @@ protected:
 	bool _takingHit;
 	bool _jumping;
 	bool _falling;
-public:
-	PlayerSprite();
-	PlayerSprite(float startX, float startY);
+
+private:
+	long frames;
+	float _realY;
+	Color pantsColor;
+	Color shirtColor;
+	Color skinColor;
+	Color hatColor;
+
+	//Methods
+	void buildSwingingSprite();
 	void buildBasicShape();
-	void buildSprite(int animationFrame);
 	void buildClimbingSprite();
 	void push_back(Rect rect);
 	void push_back(Polygon pol);
-	void animate(int& animationFrame, int min, int max);
 	void mirrorX();
+	void update();
+public:
+	PlayerSprite();
+	PlayerSprite(float startX, float startY);	
+	void animate(int& animationFrame, int min, int max);	
+	void buildSprite(int animationFrame);
 	float y();
 	float topY();
-	void update();
 };
 #endif

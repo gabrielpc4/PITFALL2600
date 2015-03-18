@@ -21,47 +21,57 @@ Player::Player(GLint startX, GLint startY)
 	_walking				= false;
 	_climbing				= false;
 	_dead					= false;
+	_swinging				= false;
+	_holdingVine			= false;
 	_climbingDirection		= NONE;
 	_lookingDirection		= RIGHT;
 	
 }
 
 void Player::draw()
-{
-	// Waking sprite
-	if (isClimbing() == false)
+{	
+	if (isHoldingVine())
 	{
-		if (isWalking())
+		animationFrame = 8;
+	}
+	else
+	{
+		// Falling sprite
+		if (isFalling() && (isJumping() == false))
 		{
-			// Animate the walking
-			animate(animationFrame, 1, 5);
+			animationFrame = 0;
 		}
 		else
 		{
-			animationFrame = 0;
-		}		
+			// Climbing sprite
+			if (isClimbing())
+			{
+				// Switches between the climbing animations
+				animate(animationFrame, 6, 7);
+			}
+			else
+			{
+				if (isWalking())
+				{
+					// Animate the walking
+					animate(animationFrame, 1, 5);
+				}
+				else
+				{
+					animationFrame = 0;
+				}
+			}
+		}
+	
+		// Jumping, and taking hit sprite
+		if ((isJumping())
+			|| (isTakingHit() && isFalling() == false) && (isClimbing() == false)
+			|| (isFalling()) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
+		{
+			animationFrame = 5;
+		}
 	}
 	
-	// Falling sprite
-	if (isFalling() && (isJumping() == false) && (isClimbing() == false))
-	{
-		animationFrame = 0;
-	}
-
-	// Jumping, and taking hit sprite
-	if ((isJumping()) 
-		|| (isTakingHit() && isFalling() == false) && (isClimbing() == false) 
-		|| (isFalling()) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
-	{
-		animationFrame = 5;
-	}
-
-	// Climbing sprite
-	if (isClimbing())
-	{
-		// Switches between the climbing animations
-		animate(animationFrame, 0, 1);
-	}
 
 	// UPDATES THE SPRITE (ANIMATION)
 	if (this->isDead() == false || isFalling()) // Prevents the animation to change when the player is dead, 												
@@ -70,6 +80,7 @@ void Player::draw()
 		PlayerSprite::Sprite::clear();
 		PlayerSprite::buildSprite(animationFrame);
 	}	
+	
 
 	PlayerSprite::draw();
 }
@@ -89,7 +100,6 @@ void Player::jumping(bool state)
 
 void Player::jump()
 {
-
 	int currentJumpHeight = (this->topY() - (_floor + PLAYER_ANIMATION_0_HEIGHT));
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
@@ -118,7 +128,8 @@ void Player::jump()
 			_falling = false;
 			_jumping = false;
 			_down = false;
-			
+			_swinging = false;
+
 			if (isWalking() == false)	// Prevents the player from stoping after landing of a jump,				
 			{							// and has not released the arrow key
 
@@ -152,69 +163,84 @@ void Player::fall()
 
 void Player::move()
 {
-	// If the player is walking or jumping but not climbing
-	if ((isWalking() || isJumping()) 
-		&& (isClimbing() == false))
+	if (isHoldingVine() == false)
 	{
-		if (isJumping())
+		// Not swinging but climbing
+		if (isClimbing())
 		{
-			jump();
+			// Prevents the player from false jumping, when getting off the stairs, when he initially got on the stairs while jumping
+			if (isJumping())
+			{
+				jumping(false);
+			}
+			climb();
 		}
 		else
-		{			
-			// Changes the player X speed
-			if (_lookingDirection == RIGHT)
+		{
+			// Not swinging, not climbing but falling
+			if (isFalling())
 			{
-				setSpeedX(+PLAYER_SPEED);
+				if (isJumping())
+				{
+					jumping(false);
+				}
+				fall();
 			}
-			else
+
+			// Not swinging, not climbing but walking or jumping			
+			if (isWalking() || isJumping())
 			{
-				setSpeedX(-PLAYER_SPEED);
-			}		
+				if (isJumping())
+				{
+					jump();
+				}
+				// Not swinging, not climbing and not jumping
+				else
+				{
+					// Not swinging, not climbing, not jumping and not falling
+					if (isFalling() == false)
+					{
+						// Changes the walking speed of the player
+						if (_lookingDirection == RIGHT)
+						{
+							setSpeedX(+PLAYER_SPEED);
+						}
+						else
+						{
+							setSpeedX(-PLAYER_SPEED);
+						}
+					}
+					// Not swinging, not climbing, not jumping but falling
+					else
+					{
+						// Makes the player not be able to move, if it's falling
+						setSpeedX(0);
+					}
+				}
+			}
+			// Not swinging, not climbing, not walking and not jumping
+			else 
+			{
+				// Makes the player stop moving, if the user releases the arrow key
+				setSpeedX(0);
+			}
 		}
-	}
 
-	// If the player is just falling
-	if (isFalling() && (isClimbing() == false))
-	{
-		if (isJumping())
-		{
-			jumping(false);
-		}
-		fall();
-	}
-	
-	if (isClimbing())
-	{
-		// Prevents the player from false jumping, when getting off the stairs, when he initially got on the stairs while jumping
-		if (isJumping())
-		{
-			jumping(false);
-		}
-		climb();
-	}
-
-	// The (isJumping() == false) condition prevents the player from stopping the x position in the middle of a jump
-	if ((isWalking() == false) && (isJumping() == false))
-	{	
-		setSpeedX(0);
-	}
-
-	/*********** MOVES THE PLAYER ***********/
-	if (this->isDead() == false || isFalling())	// Prevents the animation to change when the player is dead, 			
-	{											// but allows him to fall, in the case the player falls into the pit
-		*this += playerSpeed;
-	}
+		/*********** MOVES THE PLAYER ***********/
+		if (this->isDead() == false || isFalling())	// Prevents the animation to change when the player is dead, 			
+		{											// but allows him to fall, in the case the player falls into the pit
+			*this += playerSpeed;
+		}		
+	}	
 
 	if (this->isDead())
 	{
 		_framesDead++;
-	}	
+	}
 }
 	
 void Player::climb()
 {	
-
 	// Doesn't allow the player from moving horizontally when climbing
 	setSpeedX(0);
 
@@ -252,14 +278,20 @@ void Player::climbOut(int direction)
 	// Makes the player jump in the next loop, with the x direction specified by he's speed
 	this->jumping(true);
 
-	this->climbing(false);
-	
+	this->climbing(false);	
 }
 
 void Player::swing(Vine* vine)
 {
-	/*setX(vine->end().x());
-	setY(vine->end().y());*/
+	if (isLooking() == LEFT)
+	{
+		setX(vine->end().x() + 8);
+	}
+	else
+	{
+		setX(vine->end().x() - 12);
+	}	
+	setY(vine->end().y() - this->height() - 8);
 }
 
 void Player::climb(int direction)
@@ -398,8 +430,40 @@ long Player::framesDead()
 	return _framesDead;
 }
 
-void Player::swinging(bool state)
+void Player::holdVine(bool state)
 {
-	_swinging = state;
+	_holdingVine = state;
+
+	if (state == true)
+	{
+		_swinging = true;
+	}
+
+	// Makes the player, when he releases the vine, be able to jump forwards
+	else
+	{
+		if (this->x() > (WORLD_WINDOW_WIDTH / 2.0))
+		{			
+			look(RIGHT);
+			setSpeedX(+PLAYER_SPEED);
+		}
+		else
+		{
+			look(LEFT);
+			setSpeedX(-PLAYER_SPEED);
+		}
+
+		// Makes the player jump, when releasing the vine
+		jumping(true);
+	}	
 }
 
+bool Player::isSwinging()
+{
+	return _swinging;
+}
+
+bool Player::isHoldingVine()
+{
+	return _holdingVine;
+}

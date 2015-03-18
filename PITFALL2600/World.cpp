@@ -177,7 +177,7 @@ void World::draw(int scenarioNumber)
 
 	if (vine != NULL)
 	{		
-		vine->drawCircleTrack();
+		//vine->drawCircleTrack();
 	}
 }
 

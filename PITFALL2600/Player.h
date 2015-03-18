@@ -10,17 +10,19 @@ class Player
 private: 
 	int _lives;
 	Point playerSpeed;
-	int animationFrame;	
+	
 	int _floor;
 	bool _down;
 	bool _dead;
+	bool _holdingVine;
 	bool _swinging;
 	long _framesDead;
 	void climb();
 	void jump();
-	void fall();
-	void swing(Vine* vine);
+	void fall();	
+	
 public:
+	int animationFrame;
 	Player();
 	Player(GLint startX, GLint startY);
 	void draw();
@@ -52,6 +54,9 @@ public:
 	long framesDead();
 	void resetLives();
 	void setFloor(float y);
-	void swinging(bool state);
+	void holdVine(bool state);
+	void swing(Vine* vine);
+	bool isSwinging();
+	bool isHoldingVine();
 };
 #endif
