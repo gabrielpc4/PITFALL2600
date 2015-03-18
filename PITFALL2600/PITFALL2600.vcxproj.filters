@@ -99,9 +99,6 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="TunnelHole.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Pit.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
@@ -112,7 +109,10 @@
       <Filter>Header Files\includes</Filter>
     </ClInclude>
     <ClInclude Include="Vine.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="TunnelHole.h">
+      <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +168,7 @@
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Vine.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

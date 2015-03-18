@@ -3,28 +3,23 @@
 #define VINHE_H_
 #include "constants.h"
 #include "Circle.h"
-#include "Rect.h"
 
 class Vine
-	: public Rect
 {
 private:
-	float m = 0.5;
 	unsigned i;
-	Circle circle;	
 	int swingDirection;
+	Circle circle;
 	Point origin;
-	int minX;
 	Point max;
-	float differenceToCenter;
-	float maxDifferenceToCenter;
+	Point _end;
 	
-public:
-	Point end;
+public:	
 	Vine();
 	void drawCircleTrack();
 	void draw();
 	void swing();
+	Point& end();
 	~Vine();
 };
 #endif

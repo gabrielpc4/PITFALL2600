@@ -248,8 +248,8 @@ void Player::climbOut(int direction)
 
 void Player::swing(Vine* vine)
 {
-	setX(vine->end.x());
-	setY(vine->end.y());
+	/*setX(vine->end().x());
+	setY(vine->end().y());*/
 }
 
 void Player::climb(int direction)

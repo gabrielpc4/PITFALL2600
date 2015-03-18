@@ -285,7 +285,7 @@ int PitfallGame::relativePosition(Player* player, Sprite* object)
 
 bool PitfallGame::canGrabVine(Player* player)
 {
-	return isInside(world->vine->end, Rect(player->x(), player->y(), player->width(), player->height()));
+	return isInside(world->vine->end(), Rect(player->x(), player->y(), player->width(), player->height()));
 }
 
 

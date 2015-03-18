@@ -13,7 +13,6 @@ Vine::Vine()
 		}
 		else
 		{			
-			minX = circle.points[i].x();
 			break;
 		}
 	}
@@ -30,13 +29,11 @@ Vine::Vine()
 			break;
 		}
 	}
-	i++;
 	swingDirection = RIGHT;
 }
 
 void Vine::swing()
 {
-
 	float L = 2;
 	int g = 10;
 
@@ -74,7 +71,7 @@ void Vine::swing()
 			swingDirection = RIGHT;
 		}
 	}
-	end = circle.points[i];
+	_end = circle.points[i];
 }
 
 void Vine::draw()
@@ -91,6 +88,11 @@ void Vine::draw()
 void Vine::drawCircleTrack()
 {
 	circle.draw();
+}
+
+Point& Vine::end()
+{
+	return _end;
 }
 
 Vine::~Vine()
