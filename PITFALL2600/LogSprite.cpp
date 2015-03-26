@@ -7,9 +7,8 @@ LogSprite::LogSprite()
 }
 
 LogSprite::LogSprite(GLint startX, GLint startY)	
-	: Sprite(startX, startY)
-{
-	frames = 0;
+	: AnimatedObject(startX, startY)
+{	
 	Polygon log(Color(80, 32, 0));
 
 	log.push_back(Rect(Point(7, 0), Point(14, 2)));
@@ -31,12 +30,22 @@ LogSprite::LogSprite(GLint startX, GLint startY)
 	Sprite::push_back(log);
 }
 
+void LogSprite::draw()
+{
+	if (rolling)
+	{
+		animate();
+	}
+	
+	Sprite::draw();
+}
+
 void LogSprite::animate()
 {
 	frames++;
 
-	if (frames % ANIMATION_REFRESH_INTERVAL  == 0)
-	{
+	if (frames % DEFAULT_ANIMATION_REFRESH_INTERVAL == 0)
+	{		
 		Sprite::mirrorX();
 
 		if (frames >= INT_MAX)

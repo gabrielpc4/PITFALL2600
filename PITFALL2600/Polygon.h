@@ -5,7 +5,7 @@
 #include "Point.h"
 #include "Rect.h"
 #include "Color.h"
-#include "constants.h"
+#include "global_constants.h"
 #include <vector>
 #include "glut.h" 
 

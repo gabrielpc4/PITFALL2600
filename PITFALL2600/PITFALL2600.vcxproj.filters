@@ -78,9 +78,6 @@
     <ClInclude Include="glut.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>Header Files\includes</Filter>
-    </ClInclude>
     <ClInclude Include="echo.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
@@ -113,6 +110,18 @@
     </ClInclude>
     <ClInclude Include="TunnelHole.h">
       <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scorpion.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="ScorpionSprite.h">
+      <Filter>Header Files\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="global_constants.h">
+      <Filter>Header Files\includes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +179,15 @@
     <ClCompile Include="Vine.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Scorpion.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="ScorpionSprite.cpp">
+      <Filter>Source Files\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PITFALL2600.rc">
@@ -177,6 +195,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

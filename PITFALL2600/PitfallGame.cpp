@@ -2,10 +2,11 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber	= 0;
+	scenarioNumber	= -1;
 	score			= 2000;
 	world			= new World();
 	player			= new Player(39, 140);
+	scorpion		= NULL;
 	world->buildScenario(scenarioNumber);
 	spawnEnemies();
 }
@@ -44,6 +45,10 @@ void PitfallGame::spawnEnemies()
 {
 	switch (scenarioNumber)
 	{
+	case (-1) :
+	{
+		scorpion = new Scorpion(247, 32);
+	}break;
 	case(0) :
 	{
 		log.push_back(Log(422, 128, false));
@@ -57,6 +62,7 @@ void PitfallGame::spawnEnemies()
 	{
 		log.push_back(Log(417, 128, true));
 		log.push_back(Log(533, 128, true));
+		scorpion = new Scorpion(247,32);
 	}break;
 	default:
 		break;
@@ -72,6 +78,11 @@ void PitfallGame::drawAll()
 	for (unsigned i = 0; i < log.size(); i++)
 	{
 		log.at(i).draw();
+	}
+
+	if (scorpion != NULL)
+	{
+		scorpion->draw();
 	}
 	showHUD();
 }
@@ -104,6 +115,11 @@ void PitfallGame::moveAll()
 	{
 		world->vine->swing();
 	}	
+
+	if (scorpion != NULL)
+	{
+		scorpion->move(player->x());
+	}
 }
 
 void PitfallGame::physics()
@@ -147,7 +163,7 @@ void PitfallGame::physics()
 	{	
 		if (player->isUndeground())
 		{
-			if (world->brickWall->x() != 0) // Prevents the collision check bug when the brickwall's sprite is being 		
+			if (world->brickWall->x() != 0) // Prevents the collision check bug when the brick wall's sprite is being 		
 			{								// created and still is at the origin and was not moved to the right position yet
 				// If the player is colliding with the brick wall
 				if (checkCollisionX(player, *world->brickWall))
@@ -346,9 +362,9 @@ void  PitfallGame::printText(string text, Point p)
 	float scale = 0.1;
 	float orientation = 0;
 	glPushMatrix();
-	glTranslatef(p.x(), p.y(), 0); // glTranslatef (dx, dy, dz)
-	glScalef(scale, scale, scale);	// glScalef (sx, sy, sz)
-	glRotatef(orientation, 0, 0, 1);	// glRotatef (angle, x, y, z)
+	glTranslatef(p.x(), p.y(), 0); 
+	glScalef(scale, scale, scale);
+	glRotatef(orientation, 0, 0, 1);	
 	for (c = (char*)text.c_str(); *c; c++)
 	{
 		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *c);
@@ -418,42 +434,62 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		{
 			if (keyState == DOWN)
 			{
-				if (world->stairs != NULL)
+				if (player->isSwinging())
 				{
-					// If the player is in contact with the stairs and not about to climb out
-					if (checkCollisionX(player, *world->stairs) && (isAbleToClimbOut(player) == false))
+					player->holdVine(false);
+				}
+				else // If the player is not swinging
+				{
+					if (world->stairs != NULL)
 					{
-						centerOnStair(player);						
-						player->walking(false);
-						player->climbing(true);
-						player->animationFrame = 6;
-						player->climb(UP);
+						// If the player is in contact with the stairs and not about to climb out
+						if (checkCollisionX(player, *world->stairs) && (isAbleToClimbOut(player) == false))
+						{
+							centerOnStair(player);
+							player->walking(false);
+							player->climbing(true);
+							player->setAnimationFrame(6);
+							player->climb(UP);
+						}
 					}
-				}
 
-				// Prevents the user from jumping while climbing or falling
-				if ((player->isClimbing() == false) && (player->isFalling() == false))
-				{
-					player->jumping(true);
-				}
+					// Prevents the user from jumping while climbing or falling
+					if ((player->isClimbing() == false) && (player->isFalling() == false))
+					{
+						player->jumping(true);
+					}
+				}				
 			}
-			else // If the user releases the key
+			else // If the user releases the UP arrow key
 			{
-				player->stopClimbing();
+				if (player->isClimbing())
+				{
+					player->stopClimbing();
+				}				
 			}
 		}
 		if (key == GLUT_KEY_DOWN)
 		{
 			if (keyState == DOWN)
 			{
+				if (player->isSwinging())
+				{
+					player->holdVine(false);
+				}
+				else // If the player is not swinging
+				{
+					if (player->isClimbing())
+					{
+						player->climb(DOWN);
+					}
+				}				
+			}
+			else // If the user releases the DOWN arrow key
+			{
 				if (player->isClimbing())
 				{
-					player->climb(DOWN);
+					player->stopClimbing();
 				}
-			}
-			else // If the user releases the key
-			{
-				player->stopClimbing();
 			}
 		}
 	}
@@ -463,7 +499,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 {
 	if (c == SPACE_BAR)
 	{
-		// Makes the player release the vine when the spacebar is pressed
+		// Makes the player release the vine when the space-bar is pressed
 		if (player->isSwinging())
 		{
 			player->holdVine(false);						
@@ -492,6 +528,8 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 void PitfallGame::deleteEnemies()
 {
 	log.clear();
+	delete scorpion;
+	scorpion = NULL;
 }
 
 void PitfallGame::reset()

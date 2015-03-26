@@ -1,7 +1,10 @@
 #include "PitfallGame.h"
-#include "constants.h"
+#include "global_constants.h"
 #include "glut.h"  //Custom glut.h fixed to work with stdlib.h
 #include <gl/gl.h>
+
+#define MAGNIFICATION (2.5F)
+#define TIMER_FUNC_WAIT_TIME 25
 
 PitfallGame *pit;
 
@@ -23,7 +26,7 @@ void keyboard_func(unsigned char c, int x, int y)
 void timer_func(int data)
 {
 	pit->run();
-	glutTimerFunc(WAIT_TIME, timer_func, data);
+	glutTimerFunc(TIMER_FUNC_WAIT_TIME, timer_func, data);
 	glutPostRedisplay();
 
 }
@@ -78,7 +81,7 @@ int main(int argc, char* argv[])
 	glutSpecialFunc(arrows_keys_func_down);;
 	glutSpecialUpFunc(arrows_keys_func_up);
 	glutKeyboardFunc(keyboard_func);
-	glutTimerFunc(WAIT_TIME, timer_func, 1);
+	glutTimerFunc(TIMER_FUNC_WAIT_TIME, timer_func, 1);
 
 	glutMainLoop();									//  Enters the GLUT event processing loop.
 	return 0;

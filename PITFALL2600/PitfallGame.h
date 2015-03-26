@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Enemies.h"
 #include "World.h"
+#define SPACE_BAR 32
+#define RESPAWN_FRAMES 70
 
 class PitfallGame
 {
@@ -12,6 +14,7 @@ private:
 	Player* player;	
 	World* world;	
 	vector<Log> log;
+	Scorpion* scorpion;
 	int scenarioNumber;
 	int score;
 	bool checkCollisionX(Player* player, Sprite& object);

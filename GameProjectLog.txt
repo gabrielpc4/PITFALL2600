@@ -131,3 +131,18 @@ threesBranches
 . Fixed the bug when the player falls back into the tunnel, when climbing out
 . Fixed the sprite flickering when the logs hit the player while climbing
 . Fixed sprite flickering when begining climbing the stairs
+. Completed the player vine swing
+
+03-21-2015
+.Created the Scorption Sprite
+.Created the Scorpion class
+.Scorpion added in two scenarios
+
+03-24-2015
+. Finished Scroption sprite creation
+
+03-26-2015
+. Created the class AnimatedObject
+. The classes PlayerSprite, LogSprite and ScorpionSprite now inherents the AnimatedObject class
+. Finished Scorpion animation
+. Added Scorpion AI

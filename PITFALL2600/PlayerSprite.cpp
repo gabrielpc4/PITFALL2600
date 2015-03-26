@@ -7,9 +7,8 @@ PlayerSprite::PlayerSprite()
 }
 
 PlayerSprite::PlayerSprite(float startX, float startY)
-	: Sprite(startX,startY)
+	: AnimatedObject(startX,startY)
 {
-	frames		= 0;	
 	pantsColor	= Color(16, 80, 0);
 	shirtColor	= Color(48, 192, 48);
 	skinColor	= Color(240, 176, 144);
@@ -17,19 +16,78 @@ PlayerSprite::PlayerSprite(float startX, float startY)
 	buildSprite(0);	
 }
 
-void PlayerSprite::animate(int& animationFrame, int minFrameNum, int maxFramenum)
+void PlayerSprite::draw()
+{
+	if (_holdingVine)
+	{
+		animationFrame = 8;
+	}
+	else
+	{
+		// Falling sprite
+		if (_falling && _jumping == false)
+		{
+			animationFrame = 0;
+		}
+		else
+		{
+			// Climbing sprite
+			if (_climbing)
+			{
+				// Switches between the climbing animations
+				animate(6, 7);
+			}
+			else
+			{
+				if (_walking)
+				{
+					// Animate the walking
+					animate(1, 5);
+				}
+				else
+				{
+					animationFrame = 0;
+				}
+			}
+		}
+
+		// Jumping, and taking hit sprite
+		if ((_jumping)
+			|| (_takingHit && _falling == false) && (_climbing == false)
+			|| (_falling) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
+		{
+			animationFrame = 5;
+		}
+	}
+
+
+	// UPDATES THE SPRITE (ANIMATION)
+	if (_dead == false || _falling) // Prevents the animation to change when the player is dead, 												
+	{											// but allows to change to the falling sprite, for the case the player falls into the pit
+		// Rebuilds the sprite, with the new animation sprite
+		Sprite::clear();
+		buildSprite(animationFrame);
+	}
+
+	Sprite::draw();
+}
+
+void PlayerSprite::animate(int minFrameNum, int maxFramenum)
 {
 	frames++;
-	int refreshInterval = ANIMATION_REFRESH_INTERVAL;
 
 	if (_climbing)
 	{
-		refreshInterval = CLIMBING_ANIMATION_REFRESH_INTERVAL;
+		animationRefreshInterval = CLIMBING_ANIMATION_REFRESH_INTERVAL;
 	}
-	if (frames % refreshInterval == 0)
+	else
+	{
+		animationRefreshInterval = DEFAULT_ANIMATION_REFRESH_INTERVAL;
+	}
+	if (frames % animationRefreshInterval == 0)
 	{
 		if (_walking || (_climbing && _climbingDirection != NONE))
-		{
+		{			
 			animationFrame++;
 		}
 		if (animationFrame > maxFramenum)
@@ -60,7 +118,7 @@ void PlayerSprite::buildSprite(int animationFrame)
 
 	switch (animationFrame)
 	{
-		// 0 - Player Stoped / Begining to fall
+		// 0 - Player Stopped / Beginning to fall
 		case(0) :
 		{
 			Rect rightFeet(Point(0, 0), Point(7, 2), pantsColor);

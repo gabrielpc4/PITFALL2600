@@ -4,13 +4,10 @@
 #include "LogSprite.h"
 class Log :
 	public LogSprite
-{
-private:
-	bool rolling;
+{	
 public:
 	Log();
-	Log(GLint startX, GLint start, bool rolling);
-	void draw();
+	Log(GLint startX, GLint start, bool rolling);	
 	void roll();
 	bool isRolling();
 };

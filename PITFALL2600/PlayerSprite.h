@@ -2,10 +2,16 @@
 #ifndef PLAYERSPRITE_H_
 #define PLAYERSPRITE_H_
 #include "Sprite.h"
+#include "AnimatedObject.h"
+
+#define CLIMBING_ANIMATION_REFRESH_INTERVAL 4
+#define PLAYER_ANIMATION_0_WIDTH 11
+#define PLAYER_ANIMATION_0_HEIGHT 42
+#define PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION 4
+
 class PlayerSprite :
-	public Sprite
+	public AnimatedObject
 {
-// Variables
 protected:
 	int _lookingDirection;
 	bool _climbing;
@@ -14,9 +20,11 @@ protected:
 	bool _takingHit;
 	bool _jumping;
 	bool _falling;
+	bool _dead;
+	bool _holdingVine;
 
+// Variables
 private:
-	long frames;
 	float _realY;
 	Color pantsColor;
 	Color shirtColor;
@@ -34,7 +42,8 @@ private:
 public:
 	PlayerSprite();
 	PlayerSprite(float startX, float startY);	
-	void animate(int& animationFrame, int min, int max);	
+	void draw();
+	void animate(int minFrameNum, int maxFramenum);
 	void buildSprite(int animationFrame);
 	float y();
 	float topY();

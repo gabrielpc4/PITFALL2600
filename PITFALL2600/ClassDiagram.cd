@@ -3,14 +3,14 @@
   <Class Name="PitfallGame">
     <Position X="15.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IBAAEgAEEAQAIgEAQAAICIoQAIAAAAAFAAAAQAAkAAA=</HashCode>
+      <HashCode>IBAAEgAEEAQIIgEAQAAICIoQAIAAAAAFAAAAQAAkAAA=</HashCode>
       <FileName>PitfallGame.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Player">
     <Position X="9.5" Y="18.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAACgkBQECACYAKAAAICCQAAAJAYAQQBBAEhoRAAwAA=</HashCode>
+      <HashCode>gAGCgkAUECASYAKAAAICCQAAAJAIAAQBBAEhoRAAwgA=</HashCode>
       <FileName>Player.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -80,14 +80,14 @@
   <Class Name="LogSprite">
     <Position X="3.75" Y="18.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAgAAAAQAAAAA=</HashCode>
+      <HashCode>AABAAAAAAAAAAAAAAAIAAAAAAAAEAAAAgAAAAAAAAAA=</HashCode>
       <FileName>LogSprite.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PlayerSprite">
     <Position X="7.25" Y="18.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAAAAUAAAAAAAAEIIEAEACgAAAEQAQABAAgAQQEAIA=</HashCode>
+      <HashCode>AMAAAAUAAAAAAABEIIMAEACgAAAEQARABAAgAQQEAKA=</HashCode>
       <FileName>PlayerSprite.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -117,6 +117,27 @@
     <TypeIdentifier>
       <HashCode>AEAAAAAAAAAAAAAAAAIAAAAgIAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Log.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AnimatedObject" Collapsed="true">
+    <Position X="4.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAACCAAAIACAAgAAAUAQAABAAAAQAAAAA=</HashCode>
+      <FileName>AnimatedObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScorpionSprite" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQABAAAAAAAQAIAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ScorpionSprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scorpion" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEACACAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scorpion.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

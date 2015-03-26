@@ -163,10 +163,13 @@ void Sprite::push_back(Sprite sprite)
 
 void Sprite::mirrorX()
 {		
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (unsigned i = 0; i < this->vector<Polygon>::size(); i++)
 	{
-		currentPolygon->mirrorX();
+		Polygon& currentPolygon = this->vector<Polygon>::at(i);
+		currentPolygon.mirrorX(this->x());
 	}
+
+	*this += Point(this->width(), 0);
 }
 
 void Sprite::clear()

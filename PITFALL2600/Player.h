@@ -2,38 +2,37 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 #include "PlayerSprite.h"
+#include "AnimatedObject.h"
 #include "Vine.h"
 
+#define FALLING_SPEED 4
+#define CLIMBING_SPEED 3
+#define JUMP_SPEED 3
+#define JUMP_MAX_HEIGHT 22
+
+
 class Player 
-	: public PlayerSprite
+	: public PlayerSprite	  
 {
 private: 
-	int _lives;
-	Point playerSpeed;
 	
+	int _lives;		
 	int _floor;
-	bool _down;
-	bool _dead;
-	bool _holdingVine;
+	bool _down;	
 	bool _swinging;
 	long _framesDead;
 	void climb();
 	void jump();
 	void fall();	
 	
-public:
-	int animationFrame;
+public:	
 	Player();
 	Player(GLint startX, GLint startY);
-	void draw();
 	void move();
 	bool isJumping();
 	void jumping(bool state);
 	void look(int DIRECTION);
-	int isLooking();
-	void setSpeedX(float speed);
-	void setSpeedY(float speed);
-	Point speed();
+	int isLooking();	
 	void walking(bool state);
 	bool isWalking();
 	void falling(bool state);

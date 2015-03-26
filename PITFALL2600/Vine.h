@@ -1,7 +1,7 @@
 #pragma once
 #ifndef VINE_H_
 #define VINHE_H_
-#include "constants.h"
+#include "global_constants.h"
 #include "Circle.h"
 
 class Vine

@@ -4,7 +4,7 @@
 
 #include "ScenarioObjects.h"
 #include "Shapes.h"
-#include "constants.h"
+#include "global_constants.h"
 #include <vector>
 #include "glut.h" // Custom glut.h fixed for using namespace std
 #include <gl/gl.h>

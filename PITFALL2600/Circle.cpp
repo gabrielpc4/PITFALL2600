@@ -27,7 +27,7 @@ void Circle::buildCircle()
 		j--;
 	}
 
-	// Do the symetry for the next 1/8th
+	// Do the symmetry for the next 1/8th
 	for (int i = 0; i < size; i++)
 	{
 		points.push_back(Point(-temp[i].x(), temp[i].y()));		
@@ -53,18 +53,18 @@ void Circle::draw()
 		glVertex2i(points[i].x(), points[i].y());
 	}
 
-	// Finishes defining the points to be lit in this iteraction
+	// Finishes defining the points to be lit in this iteration
 	glEnd();
 }
 void Circle::light(Point p)
 {
 	// Assigns the point coordinates to temporary variables 
-	// to save some processament of the the method x() and y() call all the time;
+	// to save some process of the method x() and y() call all the time;
 	float x = p.x();
 	float y = p.y();
 
-	// Vector of points, it contais the current x,y values, as well all the other 
-	// points of the 8-was simetry of this iteration of the algorithim
+	// Vector of points, it contains the current x,y values, as well all the other 
+	// points of the 8-was symmetry of this iteration of the algorithm
 
 	// For this program we only need this one for now
 	temp.push_back(Point(-x, -y));

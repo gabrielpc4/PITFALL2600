@@ -2,15 +2,13 @@
 
 
 Player::Player() :
-	Player(0, 0)
+	Player(0, 0)	
 {
 }
 
 Player::Player(GLint startX, GLint startY) 
-	: PlayerSprite(startX,startY),
-	playerSpeed(0,0)
+	: PlayerSprite(startX,startY)	  
 {		
-	animationFrame			= 0;
 	_lives					= 3;
 	_framesDead				= 0;
 	_floor					= startY;
@@ -28,62 +26,6 @@ Player::Player(GLint startX, GLint startY)
 	
 }
 
-void Player::draw()
-{	
-	if (isHoldingVine())
-	{
-		animationFrame = 8;
-	}
-	else
-	{
-		// Falling sprite
-		if (isFalling() && (isJumping() == false))
-		{
-			animationFrame = 0;
-		}
-		else
-		{
-			// Climbing sprite
-			if (isClimbing())
-			{
-				// Switches between the climbing animations
-				animate(animationFrame, 6, 7);
-			}
-			else
-			{
-				if (isWalking())
-				{
-					// Animate the walking
-					animate(animationFrame, 1, 5);
-				}
-				else
-				{
-					animationFrame = 0;
-				}
-			}
-		}
-	
-		// Jumping, and taking hit sprite
-		if ((isJumping())
-			|| (isTakingHit() && isFalling() == false) && (isClimbing() == false)
-			|| (isFalling()) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
-		{
-			animationFrame = 5;
-		}
-	}
-	
-
-	// UPDATES THE SPRITE (ANIMATION)
-	if (this->isDead() == false || isFalling()) // Prevents the animation to change when the player is dead, 												
-	{											// but allows to change to the falling sprite, for the case the player falls into the pit
-		// Rebuilds the sprite, with the new animation sprite
-		PlayerSprite::Sprite::clear();
-		PlayerSprite::buildSprite(animationFrame);
-	}	
-	
-
-	PlayerSprite::draw();
-}
 
 void Player::jumping(bool state)
 {
@@ -91,7 +33,7 @@ void Player::jumping(bool state)
 
 	// Resets the _down jumping variable
 	// (Prevents the bug when you grab the stairs while falling down on a jump, 
-	//  and when you want to clim out, the player falls back again into the tunnel)
+	//  and when you want to climb out, the player falls back again into the tunnel)
 	if (state == false)
 	{
 		_down = false;
@@ -103,7 +45,7 @@ void Player::jump()
 	int currentJumpHeight = (this->topY() - (_floor + PLAYER_ANIMATION_0_HEIGHT));
 
 	if (currentJumpHeight < JUMP_MAX_HEIGHT && _down == false)
-	{
+	{		
 		setSpeedY(JUMP_SPEED);
 	}
 	else
@@ -130,9 +72,8 @@ void Player::jump()
 			_down = false;
 			_swinging = false;
 
-			if (isWalking() == false)	// Prevents the player from stoping after landing of a jump,				
+			if (isWalking() == false)	// Prevents the player from stopping after landing of a jump,				
 			{							// and has not released the arrow key
-
 				setSpeedX(0);
 			}
 		}				
@@ -157,9 +98,6 @@ void Player::fall()
 		}
 	}
 }
-
-
-
 
 void Player::move()
 {
@@ -229,7 +167,7 @@ void Player::move()
 		/*********** MOVES THE PLAYER ***********/
 		if (this->isDead() == false || isFalling())	// Prevents the animation to change when the player is dead, 			
 		{											// but allows him to fall, in the case the player falls into the pit
-			*this += playerSpeed;
+			*this += speed();
 		}		
 	}	
 
@@ -264,12 +202,12 @@ void Player::climbOut(int direction)
 	// Moves the floor to the top floor again
 	this->_floor = GROUND_Y;
 
-	// Teleports the player to a position above the ground ( prevents player stucking)
+	// Teleports the player to a position above the ground ( prevents player stuck)
 	setY(GROUND_Y + 5);	
 
 	if (direction == RIGHT)
 	{
-		setSpeedX(+PLAYER_SPEED);		
+		setSpeedX(+PLAYER_SPEED);
 	}	
 	else
 	{
@@ -319,21 +257,6 @@ void Player::look(int DIRECTION)
 int Player::isLooking()
 {
 	return _lookingDirection;
-}
-
-void Player::setSpeedX(float speed)
-{
-	playerSpeed.setX(speed);
-}
-
-void Player::setSpeedY(float speed)
-{
-	playerSpeed.setY(speed);
-}
-
-Point Player::speed()
-{
-	return playerSpeed;
 }
 
 void Player::walking(bool state)
