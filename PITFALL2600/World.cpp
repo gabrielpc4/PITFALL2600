@@ -3,12 +3,14 @@
 // Defines the Positions of the basic scenario
 World::World()
 {	
-	vine = NULL;
-	stairs = NULL;
-	brickWall = NULL;
-	blackHole = NULL;
-	water = NULL;
-	buildBasicScenario();	
+	vine				= NULL;
+	stairs				= NULL;
+	brickWall			= NULL;
+	blackHole			= NULL;
+	water				= NULL;
+	allowVines			= false;
+	vine				= new Vine();
+	buildBasicScenario();		
 }
 
 void World::buildScenario(int scenarioNumber)
@@ -17,8 +19,9 @@ void World::buildScenario(int scenarioNumber)
 	{
 	case(-1) :
 	{
-		water = new Pit(144, 132, Color(BLUE));
-		vine = new Vine();
+		allowVines = true;
+		water = new Hole(144, 132, Color(BLUE));
+		
 	}break;
 	case(0) :
 	{
@@ -34,8 +37,8 @@ void World::buildScenario(int scenarioNumber)
 	}break;
 	case(2) :
 	{
-		blackHole = new Pit(144, 132, Color(BLACK));
-		vine = new Vine();
+		allowVines = true;
+		blackHole = new Hole(144, 132, Color(BLACK));
 	}break;
 	default:{}break;
 	}
@@ -169,21 +172,18 @@ void World::draw(int scenarioNumber)
 		water->draw();
 	}
 
-	if (vine != NULL)
+	
+	if (this->allowVines)
 	{
-		vine->draw();	
+		vine->draw();
 	}
+	
 	treeLeafs.draw();
-
-	if (vine != NULL)
-	{		
-		//vine->drawCircleTrack();
-	}
 }
 
 /*****************************************************************************************
 * Method Name: drawBasicScenario
-* Description: Draws a basic scenario, with the undeground, the ground, trees and leafs
+* Description: Draws a basic scenario, with the underground, the ground, trees and leafs
 ******************************************************************************************/
 void World::drawBasicScenario()
 {	
@@ -208,13 +208,13 @@ void World::drawBasicScenario()
 
 /*****************************************************************************************
 * Method Name: drawTreeBranch
-* Description: Draws the branches corresponding to the tree nuwber
+* Description: Draws the branches corresponding to the tree number
 ******************************************************************************************/
 void World::buildTreeBranch(Polygon& branch, int treeNum)
 {
 	branch = Polygon(treeTrunk[treeNum].x(), treeTrunk[treeNum].topY(), Color(83, 43, 0));
 
-	// Defines the branches rectangles, acording with the tree that is being drawn
+	// Defines the branches rectangles, according with the tree that is being drawn
 	switch (treeNum)
 	{
 	case(0) :
@@ -319,23 +319,24 @@ void World::deleteWorld()
 	
 	if (blackHole != NULL)
 	{
-		blackHole->~Pit();
+		blackHole->~Hole();
 		delete blackHole;
 		blackHole = NULL;
 	}	
 
 	if (water != NULL)
 	{
-		water->~Pit();
+		water->~Hole();
 		delete water;
 		water = NULL;
 	}
-
-	if (vine != NULL)
-	{
-		vine->~Vine();
-		delete vine;
-		vine = NULL;
-	}
+	
+	allowVines		= false;
 }
+
+bool World::hasAVine()
+{
+	return allowVines;
+}
+
 

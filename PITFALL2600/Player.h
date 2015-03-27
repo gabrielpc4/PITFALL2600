@@ -20,12 +20,12 @@ private:
 	int _floor;
 	bool _down;	
 	bool _swinging;
+	bool _standingOnCrocodile;
 	long _framesDead;
 	void climb();
 	void jump();
-	void fall();	
-	
-public:	
+	void fall();		
+public:		
 	Player();
 	Player(GLint startX, GLint startY);
 	void move();
@@ -50,6 +50,7 @@ public:
 	void die();
 	void respawn();
 	bool isDead();
+	void incrementFramesDead();
 	long framesDead();
 	void resetLives();
 	void setFloor(float y);
@@ -57,5 +58,7 @@ public:
 	void swing(Vine* vine);
 	bool isSwinging();
 	bool isHoldingVine();	
+	bool isStandingOnCrocodile();
+	void standOnCrocodile(bool state);
 };
 #endif

@@ -24,6 +24,7 @@ private:
 	Polygon treeLeafs;
 	Rect tunnelWall;
 	Polygon branches[4];
+	bool allowVines;
 	
 
 public:
@@ -37,14 +38,14 @@ public:
 	Stairs* stairs;
 	BrickWall* brickWall;
 	vector<TunnelHole> tunnelHole;
-	Pit* blackHole;
-	Pit* water;
+	Hole* blackHole;
+	Hole* water;
 	World();				
 	void buildScenario(int scenarioNumber);
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
 	void drawOverlayers();
 	void deleteWorld();
-	
+	bool hasAVine();	
 };
 #endif
 

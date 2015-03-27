@@ -27,7 +27,7 @@ Color::Color(const int COLOR_CONSTANT)
 		case(WHITE)  : { *this =  Color(255, 255, 255); }break;
 		case(RED)    : { *this = Color(255, 0, 0); }break;
 		case(GREEN)  : { *this = Color(0, 255, 0); }break;
-		case(BLUE)   : { *this = Color(0, 0, 200); }break;
+		case(BLUE)   : { *this = Color(45, 109, 152); }break;
 		case(YELLOW) : { *this = Color(255, 255, 0); }break;
 		default:{*this = Color(); };
 	}

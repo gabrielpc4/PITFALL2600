@@ -96,9 +96,6 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Pit.h">
-      <Filter>Header Files\WorldObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Circle.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -127,7 +124,10 @@
       <Filter>Header Files\Sprites</Filter>
     </ClInclude>
     <ClInclude Include="Crocodile.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Hole.h">
+      <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +176,6 @@
     <ClCompile Include="TunnelHole.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Pit.cpp">
-      <Filter>Source Files\WorldObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Circle.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -198,7 +195,10 @@
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="Crocodile.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Hole.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

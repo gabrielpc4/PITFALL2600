@@ -492,6 +492,11 @@ float PlayerSprite::rightX()
 	return PlayerSprite::x() + PLAYER_ANIMATION_0_WIDTH;
 }
 
+float PlayerSprite::width()
+{
+	return PLAYER_ANIMATION_0_WIDTH;
+}
+
 
 float PlayerSprite::topY()
 {

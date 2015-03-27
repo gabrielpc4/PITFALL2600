@@ -147,3 +147,12 @@ threesBranches
 . Finished Scorpion animation
 . Added Scorpion AI
 . Fixed Brick Wall Height
+. Fixed the player box colition
+. Added a pixel by pixel collision system
+. Sprite inherits now Rect, instead of Polygon
+
+03-27-2015
+. Created the Crocodile Sprite
+. Finished Crocodile animation
+. Implemented crocodile vs player colision
+. Crocodiles fully working

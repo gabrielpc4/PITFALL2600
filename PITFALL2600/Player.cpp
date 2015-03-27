@@ -9,7 +9,7 @@ Player::Player() :
 Player::Player(GLint startX, GLint startY) 
 	: PlayerSprite(startX,startY)	  
 {		
-	_lives					= 3;
+	_lives					= 99;
 	_framesDead				= 0;
 	_floor					= startY;
 	_down					= false;
@@ -21,6 +21,7 @@ Player::Player(GLint startX, GLint startY)
 	_dead					= false;
 	_swinging				= false;
 	_holdingVine			= false;
+	_standingOnCrocodile	= false;
 	_climbingDirection		= NONE;
 	_lookingDirection		= RIGHT;
 	
@@ -170,11 +171,6 @@ void Player::move()
 			AnimatedObject::move();
 		}		
 	}	
-
-	if (this->isDead())
-	{
-		_framesDead++;
-	}
 }
 	
 void Player::climb()
@@ -319,7 +315,7 @@ void Player::respawn()
 {
 	setSpeedX(0);
 	setSpeedY(0);	
-	setX(39);
+	setX(WORLD_WINDOW_WIDTH -12);
 	setY(206);
 	_lookingDirection = RIGHT;
 	_floor			  = 140;
@@ -385,4 +381,18 @@ bool Player::isSwinging()
 bool Player::isHoldingVine()
 {
 	return _holdingVine;
+}
+
+void Player::incrementFramesDead()
+{
+	_framesDead++;
+}
+
+bool Player::isStandingOnCrocodile()
+{
+	return _standingOnCrocodile;
+}
+void Player::standOnCrocodile(bool state)
+{
+	_standingOnCrocodile = state;
 }

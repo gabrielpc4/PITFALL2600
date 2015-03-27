@@ -88,7 +88,7 @@
     <ClInclude Include="Enemies.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
-    <ClInclude Include="Pit.h" />
+    <ClInclude Include="Hole.h" />
     <ClInclude Include="ScenarioObjects.h" />
     <ClInclude Include="glut.h" />
     <ClInclude Include="PitfallGame.h" />
@@ -117,7 +117,7 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pit.cpp" />
+    <ClCompile Include="Hole.cpp" />
     <ClCompile Include="PitfallGame.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSprite.cpp" />

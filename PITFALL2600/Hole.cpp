@@ -1,11 +1,11 @@
-#include "Pit.h"
+#include "Hole.h"
 
-Pit::Pit()
-	: Pit(144,132, Color(BLACK))
+Hole::Hole()
+	: Hole(144,132, Color(BLACK))
 {
 }
 
-Pit::Pit(float startX, float startY, Color color)
+Hole::Hole(float startX, float startY, Color color)
 	: Sprite(startX, startY),
 	topOverlayer(startX, startY),
 	bottomOverlayer(startX, startY)
@@ -14,10 +14,10 @@ Pit::Pit(float startX, float startY, Color color)
 	topOverlayer.setColor(this->color());
 	animationFrame = 0;
 	frames = 0;
-	buildPit();
+	buildHole();
 }
 
-void Pit::buildPit()
+void Hole::buildHole()
 {	
 	Sprite::clear();
 	topOverlayer.clear();
@@ -46,13 +46,13 @@ void Pit::buildPit()
 	bottomOverlayer.push_back(Rect(Point(0, -6), Point(this->width(), 10), Color(187, 147, 0)));
 }
 
-void Pit::drawOverlayer()
+void Hole::drawOverlayer()
 {
 	bottomOverlayer.draw();
 	topOverlayer.draw();
 }
 
-Pit::~Pit()
+Hole::~Hole()
 {
 	bottomOverlayer.clear();
 	topOverlayer.clear();

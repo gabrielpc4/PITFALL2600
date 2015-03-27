@@ -1,8 +1,8 @@
 #pragma once
-#ifndef PIT_H
-#define PIT_H
+#ifndef HOLE_H_
+#define HOLE_H_
 #include "Sprite.h"
-class Pit :
+class Hole :
 	public Sprite
 {
 private:
@@ -11,10 +11,10 @@ private:
 	Sprite topOverlayer;
 	Sprite bottomOverlayer;
 public:
-	Pit();
-	Pit(float startX, float startY, Color color);
-	void buildPit();
+	Hole();
+	Hole(float startX, float startY, Color color);
+	void buildHole();
 	void drawOverlayer();
-	~Pit();
+	~Hole();
 };
 #endif

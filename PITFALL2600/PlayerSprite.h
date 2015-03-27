@@ -48,6 +48,7 @@ public:
 	void buildSprite();
 	float x();
 	float rightX();
+	float width();
 	float y();
 	float topY();
 };

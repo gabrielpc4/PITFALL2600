@@ -25,9 +25,15 @@ private:
 	vector<Crocodile> crocodiles;
 	int scenarioNumber;
 	int score;
+	bool paused;
+	bool allowCrocodiles;
+	bool DEBUG_MODE;
+
+
+	bool areCollidingX(Player* player, Crocodile* crocodile);
 	bool areColliding(Player* player, Sprite& object, int detectionType);	
 	void checkBoundaries();
-	bool isOutOfBoundaries(Sprite* object);
+	bool isOutOfBoundaries(Player* player);
 	void spawnEnemies();
 	void deleteEnemies();
 	void checkCollisionsWithEnemies();
@@ -42,7 +48,11 @@ private:
 	void reset();
 	bool canGrabVine(Player* player);
 	bool isInside(Point& p, Rect& rect);
-	bool isInside(Polygon& rect1, Polygon& rect2);
+	bool isInside(Rect& rect1, Rect& rect2);
+	bool isPaused();
+	void drawOutline(Sprite& object);
+	void drawOutline(float x, float y, float width, float height);
+	void drawCollisionRectangles();
 public:
 	PitfallGame();
 	void run();

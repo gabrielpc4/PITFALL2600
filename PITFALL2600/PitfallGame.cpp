@@ -2,43 +2,19 @@
 
 PitfallGame::PitfallGame()
 {
-	scenarioNumber	= 0;
-	score			= 2000;
-	world			= new World();
-	player			= new Player(39, 140);
-	scorpion		= NULL;
+	DEBUG_MODE			= true;
+	scenarioNumber		= 0;	
+	score				= 2000;
+	world				= new World();
+	player				= new Player(39, 140);
+	scorpion			= NULL;
+	paused				= false;
+	allowCrocodiles		= false;
 	world->buildScenario(scenarioNumber);
 	spawnEnemies();
-}
-
-void PitfallGame::run()
-{
-	moveAll();
-	checkBoundaries();
-	physics();
-	checkCollisionsWithEnemies();
-
-	if (world->vine != NULL)
-	{
-		if ((player->isSwinging() == false) && canGrabVine(player))
-		{
-			player->holdVine(true);
-		}		
-		if (player->isHoldingVine())
-		{
-			player->swing(world->vine);
-		}
-	}
-
-	if (player->isTakingHit() && player->isDead() == false && score > 0)
-	{
-		score--;
-	}	
-
-	if (player->isDead() && player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
-	{
-		player->respawn();
-	}
+	crocodiles.push_back(Crocodile(187, 136));
+	crocodiles.push_back(Crocodile(245, 136));
+	crocodiles.push_back(Crocodile(303, 136));
 }
 
 void PitfallGame::spawnEnemies()
@@ -47,6 +23,7 @@ void PitfallGame::spawnEnemies()
 	{
 	case (-1) :
 	{
+		allowCrocodiles = true;
 		scorpion = new Scorpion(247, 32);
 	}break;
 	case(0) :
@@ -62,12 +39,63 @@ void PitfallGame::spawnEnemies()
 	{
 		logs.push_back(Log(417, 128, true));
 		logs.push_back(Log(533, 128, true));
-		scorpion = new Scorpion(247,32);
+		scorpion = new Scorpion(247, 32);
+	}break;
+	case (3) :
+	{
+		allowCrocodiles = true;
+		scorpion = new Scorpion(247, 32);
 	}break;
 	default:
 		break;
 	}
 }
+
+void PitfallGame::run()
+{
+	if (player->isDead() && player->isFalling() == false)
+	{
+		paused = true;
+	}
+
+	if (isPaused() == false)
+	{	
+		moveAll();
+		checkBoundaries();
+		physics();
+		checkCollisionsWithEnemies();
+
+		if (world->hasAVine())
+		{
+			if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
+			{
+				player->holdVine(true);
+			}
+			if (player->isHoldingVine())
+			{
+				player->swing(world->vine);
+			}
+		}
+
+		if (player->isTakingHit() && player->isDead() == false && score > 0)
+		{
+			score--;
+		}
+	}
+
+	if (player->isDead() || player->isDead() && player->isFalling() == false)
+	{
+		player->incrementFramesDead();
+
+		if (player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
+		{
+			player->respawn();
+			paused = false;			
+		}
+	}
+}
+
+
 
 void PitfallGame::drawAll()
 {
@@ -80,9 +108,19 @@ void PitfallGame::drawAll()
 		logs.at(i).draw();
 	}
 
-	for (unsigned i = 0; i < crocodiles.size(); i++)
+	if (allowCrocodiles)
 	{
-		crocodiles.at(i).draw();
+		for (unsigned i = 0; i < crocodiles.size(); i++)
+		{
+			crocodiles.at(i).draw();
+		}
+	}
+	else
+	{
+		for (unsigned i = 0; i < crocodiles.size(); i++)
+		{
+			crocodiles.at(i).animate(1);
+		}
 	}
 
 	if (scorpion != NULL)
@@ -91,24 +129,16 @@ void PitfallGame::drawAll()
 	}
 	showHUD();
 
-	/*glColor3ub(255, 0, 0);
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(player->x(), player->y());
-	glVertex2f(player->rightX(), player->y());
-	glVertex2f(player->rightX(), player->topY());
-	glVertex2f(player->x(), player->topY());
-	glEnd();
+	
 
-	if (scorpion != NULL)
+	if (DEBUG_MODE)
 	{
-		glColor3ub(255, 0, 0);
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(scorpion->x(), scorpion->y());
-		glVertex2f(scorpion->rightX(), scorpion->y());
-		glVertex2f(scorpion->rightX(), scorpion->topY());
-		glVertex2f(scorpion->x(), scorpion->topY());
-		glEnd();
-	}*/	
+		drawCollisionRectangles();
+		if (world->hasAVine())
+		{
+			world->vine->drawCircleTrack();
+		}
+	}
 	
 	if ((player->isDead() == false) || (player->isDead()) && player->isFalling()) // Makes the game freeze, when the player dies
 	{
@@ -123,10 +153,11 @@ void PitfallGame::showHUD()
 
 	label = "Lives: ";
 	printText(label + std::to_string(player->livesLeft()), Point(10, 340));
-
-	if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
-	{
+	
+	if (player->isDead() && player->livesLeft() == 0 && player->framesDead() == RESPAWN_FRAMES)
+	{		
 		printText("Press Space to Restart the Game", Point(10, 5));
+		glutSwapBuffers();
 	}
 }
 
@@ -140,10 +171,8 @@ void PitfallGame::moveAll()
 			logs.at(i).roll();
 		}
 	}
-	if (world->vine != NULL)
-	{
-		world->vine->swing();
-	}	
+
+	world->vine->swing();
 
 	if (scorpion != NULL)
 	{
@@ -209,7 +238,7 @@ void PitfallGame::physics()
 						if (player->isLooking() == LEFT) // Prevents the player getting stuck when changing the look direction
 						{
 							// Move the player away from the brick wall
-							player->setX(world->brickWall->rightX() + PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION);
+							player->setX(world->brickWall->rightX());
 						}
 						else
 						{
@@ -232,18 +261,16 @@ void PitfallGame::physics()
 				player->falling(true);
 			}
 		}
-	}
-
+	}	
 	// Falling in the Black Hole or in the Water
-	if (willFall(player, world->blackHole) || willFall(player, world->water))
-	{
-		
-		
+	if (willFall(player, world->blackHole) || (willFall(player, world->water) && player->isStandingOnCrocodile() == false))
+	{				
+
 		if (player->isJumping() == false)
 		{
 			player->setFloor(world->tunnelTop.y());
 			player->falling(true);
-			player->die();
+			player->die();			
 		}
 	}
 
@@ -304,13 +331,17 @@ void PitfallGame::checkBoundaries()
 		if (player->rightX() >= WORLD_WINDOW_WIDTH)
 		{
 			scenarioNumber++;
-			player->setX(player->width());
+			player->setX(22);
 		}
-		if (player->x() < 0)
+		else
 		{
-			scenarioNumber--;
-			player->setX(WORLD_WINDOW_WIDTH - 32);
+			if (player->x() < 0)
+			{
+				scenarioNumber--;
+				player->setX(WORLD_WINDOW_WIDTH - 32);
+			}
 		}
+		
 		world->buildScenario(scenarioNumber);
 		spawnEnemies();
 	}
@@ -348,25 +379,43 @@ void PitfallGame::checkCollisionsWithEnemies()
 		}
 	}
 
-	for (unsigned i = 0; i < crocodiles.size(); i++)
-	{
-		if (areColliding(player, (Sprite)crocodiles[i], BOX_DETECTION))
-		{
+	player->standOnCrocodile(false);
 
+	if (allowCrocodiles)
+	{
+		for (unsigned i = 0; i < crocodiles.size(); i++)
+		{
+			if (areCollidingX(player, &crocodiles[i]))
+			{
+				player->standOnCrocodile(true);
+				player->setFloor(crocodiles[i].topY());
+			}
 		}
 	}
+	
 
 	if (scorpion != NULL)
 	{
-		if (areColliding(player, (Sprite)(*scorpion), BOX_DETECTION))
-		{
+		// If the player is close to the scorpion
+		if (player->rightX() > scorpion->x() - 11 && player->x() < scorpion->rightX() + 11) 
+		{			
+			// Only then to the pixel by pixel collision detection, because it costs a lot of processing
 			if (areColliding(player, (Sprite)(*scorpion), PIXEL_BY_PIXEL_DETECTION))
 			{
-				player->die();
-				scorpion->setSpeed(0, 0);
-			}			
-		}
+				player->die();				
+			}
+		}					
 	}
+}
+
+bool PitfallGame::areCollidingX(Player* player, Crocodile* crocodile)
+{
+	if (player->rightX() > crocodile->x() && player->x() < crocodile->rightX())
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 bool PitfallGame::areColliding(Player* player, Sprite& object, int detectionType)
@@ -375,49 +424,40 @@ bool PitfallGame::areColliding(Player* player, Sprite& object, int detectionType
 	{
 		if (player->y() <= object.topY() && player->topY() >= object.y())
 		{
-			if (player->isLooking() == RIGHT)
+			if (player->rightX() > object.x() && player->x() < object.rightX())
 			{
-				if (player->x() + PLAYER_ANIMATION_0_WIDTH > object.x() && player->x() < object.rightX())
-				{
-					return true;
-				}
+				return true;
 			}
-			else
-			{
-				if (player->x() - PLAYER_ANIMATION_0_LOOKING_LEFT_COMPENSATION < object.rightX() && player->x() + PLAYER_ANIMATION_0_WIDTH > object.x())
-				{
-					return true;
-				}
-			}
+			return false;				
 		}
 		return false;
 	}
 	else
 	{		
 		for (vector<Polygon>::iterator playerPolygon = player->begin(); playerPolygon != player->end(); playerPolygon++)
-		{
-			
+		{		
+			for (vector<Rect>::iterator playerRect = playerPolygon->begin(); playerRect != playerPolygon->end(); playerRect++)
+			{
 				for (vector<Polygon>::iterator objectPolygon = object.begin(); objectPolygon != object.end(); objectPolygon++)
 				{
-					
-					if (isInside(*playerPolygon, *objectPolygon))
+					for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
+					{
+						if (isInside(*playerRect, *objectRect))
 						{
 							return true;
 						}
-					
+					}
 				}
-			
+			}
 		}
 		return false;
-	}
-	
-	
+	}		
 	return false;
 }
 
-bool PitfallGame::isOutOfBoundaries(Sprite* object)
+bool PitfallGame::isOutOfBoundaries(Player* player)
 {
-	if (object->x() < 0 || object->rightX() >= WORLD_WINDOW_WIDTH)
+	if (player->x() <= 0 || player->rightX() >= WORLD_WINDOW_WIDTH)
 	{
 		return true;
 	}
@@ -598,14 +638,14 @@ void PitfallGame::deleteEnemies()
 {
 	logs.clear();
 	delete scorpion;
-	scorpion = NULL;
-	crocodiles.clear();
+	scorpion = NULL;	
+	allowCrocodiles = false;
 }
 
 void PitfallGame::reset()
 {
-	world->deleteWorld();
-	this->deleteEnemies();
+	world->deleteWorld();	
+	this->deleteEnemies();	
 	scenarioNumber = 0;
 	score = 2000;
 
@@ -615,6 +655,8 @@ void PitfallGame::reset()
 	player->resetLives();
 	player->respawn();
 	player->setY(140);	
+
+	paused = false;
 }
 
 bool  PitfallGame::isInside(Point& p, Rect& rect)
@@ -626,14 +668,58 @@ bool  PitfallGame::isInside(Point& p, Rect& rect)
 	return false;
 }
 
-bool PitfallGame::isInside(Polygon& rect1, Polygon& rect2)
+bool PitfallGame::isInside(Rect& rect1, Rect& rect2)
 {
-	if (rect1.rightX() > rect2.x() + 2			// If the right border of the ball is inside the pin
+	if (rect1.rightX() > rect2.x() + 2		// If the right border of the ball is inside the pin
 		&& rect1.x() < rect2.rightX() -2    // If the left border of the ball is inside the pin
-		&& rect1.topY() > rect1.y() + 2				// If the top border of the ball is inside the pin
-		&& rect1.y() < rect2.topY() - 2)
+		&& rect1.topY() > rect1.y() + 1				// If the top border of the ball is inside the pin
+		&& rect1.y() < rect2.topY() - 1)
 	{
 		return true;
 	}
 	return false;
+}
+
+bool PitfallGame::isPaused()
+{
+	return paused;
+}
+
+void PitfallGame::drawCollisionRectangles()
+{
+	drawOutline(player->x(), player->y(), player->width(), player->height());
+
+	if (scorpion != NULL)
+	{
+		drawOutline((Sprite)(*scorpion));
+	}	
+
+	if (allowCrocodiles)
+	{
+		for (unsigned i = 0; i < crocodiles.size(); i++)
+		{
+			drawOutline(crocodiles[i].x(), crocodiles[i].y(), crocodiles[i].width(), crocodiles[i].height());
+		}
+	}
+
+	for (unsigned i = 0; i < logs.size(); i++)
+	{
+		drawOutline((Sprite)(logs[i]));
+	}
+}
+
+void PitfallGame::drawOutline(Sprite& object)
+{
+	drawOutline(object.x(), object.y(), object.width(), object.height());
+}
+
+void PitfallGame::drawOutline(float x, float y, float width, float height)
+{
+	glColor3ub(255, 0, 0);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(x,y);
+	glVertex2f(x + width, y);
+	glVertex2f(x + width, y + height);	
+	glVertex2f(x , y + height);	
+	glEnd();
 }
