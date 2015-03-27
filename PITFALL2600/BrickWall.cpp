@@ -7,7 +7,7 @@ BrickWall::BrickWall() :
 }
 
 BrickWall::BrickWall(int startX, int startY) 
-	: Sprite(startX,startY)	// Defines the brickwall sprite initial position
+	: Sprite(startX,startY)	// Defines the brick wall sprite initial position
 {
 	// Sprite that will be added the rectangles
 	Sprite pattern(startX, startY);
@@ -32,7 +32,7 @@ BrickWall::BrickWall(int startX, int startY)
 	pattern.push_back(brickDivison[1]);
 
 	// Second level of the brick wall:
-	concreteDivision.setY(pattern.height());	// Moves the concreve division to the top of the current brick wall
+	concreteDivision.setY(pattern.height());	// Moves the concrete division to the top of the current brick wall
 	pattern.push_back(concreteDivision);		// Adds the concreteDivision to the top of the brick wall
 
 	bricks.setY(pattern.height());			// Moves the bricks to the top of the current brick wall
@@ -48,7 +48,7 @@ BrickWall::BrickWall(int startX, int startY)
 	{
 		Sprite::push_back(pattern);   // Adds the pattern to the final sprite	
 		pattern += Point(0, pattern.height()); // Moves the pattern to to top of the final sprite
-	}
-
+		this->_height += pattern.height();
+	}	
 }
 

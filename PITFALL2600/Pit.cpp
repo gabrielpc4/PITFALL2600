@@ -19,7 +19,7 @@ Pit::Pit(float startX, float startY, Color color)
 
 void Pit::buildPit()
 {	
-	this->Sprite::clear();
+	Sprite::clear();
 	topOverlayer.clear();
 	bottomOverlayer.clear();
 

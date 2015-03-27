@@ -28,15 +28,13 @@ void timer_func(int data)
 	pit->run();
 	glutTimerFunc(TIMER_FUNC_WAIT_TIME, timer_func, data);
 	glutPostRedisplay();
-
 }
 
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear buffers to preset values (applies the color to the background)
 	glLoadIdentity();									// Replace the current matrix with the identity matrix (Resets the matrix)		
-	pit->drawAll();
-	glutSwapBuffers();
+	pit->drawAll();	
 }
 
 

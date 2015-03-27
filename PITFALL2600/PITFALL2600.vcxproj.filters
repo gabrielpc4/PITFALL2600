@@ -123,6 +123,12 @@
     <ClInclude Include="global_constants.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
+    <ClInclude Include="CrocodileSprite.h">
+      <Filter>Header Files\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="Crocodile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -186,6 +192,12 @@
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CrocodileSprite.cpp">
+      <Filter>Source Files\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="Crocodile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

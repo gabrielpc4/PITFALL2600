@@ -17,17 +17,17 @@ Sprite::Sprite(GLint startX, GLint startY)
 Sprite::Sprite(Rect rect, Color color)
 {
 	rect.setColor(color);
-	vector<Polygon>::push_back(rect);
+	push_back(rect);
 }
 
 Sprite::Sprite(Polygon pol)
 {
-	vector<Polygon>::push_back(pol);
+	push_back(pol);
 }
 
 Sprite& Sprite::operator += (const Point& point)
 {
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
 	{
 		*currentPolygon += point;
 	}
@@ -38,7 +38,7 @@ Sprite& Sprite::operator += (const Point& point)
 
 Sprite& Sprite::operator -= (const Point& point)
 {
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
 	{
 		*currentPolygon -= point;
 	}
@@ -49,13 +49,13 @@ Sprite& Sprite::operator -= (const Point& point)
 
 void Sprite::setX(GLint x)
 {
-	*this -= Point(Point::x(), 0);
+	*this -= Point(_x, 0);
 	*this += Point(x, 0);
 }
 
 void Sprite::setY(GLint y)
 {
-	*this -= Point(0, Point::y());
+	*this -= Point(0, _y);
 	*this += Point(0, y);
 
 }
@@ -68,7 +68,7 @@ void Sprite::setPos(GLint x, GLint y)
 
 void Sprite::draw()
 {
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
 	{
 		currentPolygon->draw();
 	}
@@ -78,7 +78,7 @@ void Sprite::updateX()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
 
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
 	{
 		if (currentPolygon->x() < smallerX)
 		{
@@ -96,7 +96,7 @@ void Sprite::update()
 	int biggerX = 0;
 	int biggerY = 0;
 
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
 	{
 		if (currentPolygon->x() < smallerX)
 		{
@@ -153,7 +153,7 @@ void Sprite::push_back(Polygon pol)
 
 void Sprite::push_back(Sprite sprite)
 {
-	for (vector<Polygon>::iterator currentPolygon = sprite.vector<Polygon>::begin(); currentPolygon != sprite.vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygon>::iterator currentPolygon = sprite.begin(); currentPolygon != sprite.end(); ++currentPolygon)
 	{
 		vector<Polygon>::push_back(*currentPolygon);
 	}
@@ -163,19 +163,13 @@ void Sprite::push_back(Sprite sprite)
 
 void Sprite::mirrorX()
 {		
-	for (unsigned i = 0; i < this->vector<Polygon>::size(); i++)
+	for (unsigned i = 0; i < this->size(); i++)
 	{
-		Polygon& currentPolygon = this->vector<Polygon>::at(i);
-		currentPolygon.mirrorX(this->x());
+		Polygon& currentPolygon = this->at(i);
+		currentPolygon.mirrorX();
 	}
-
-	*this += Point(this->width(), 0);
 }
 
-void Sprite::clear()
-{
-	this->vector<Polygon>::clear();
-}
 
 void Sprite::setColor(Color color)
 {

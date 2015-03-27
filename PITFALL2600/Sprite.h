@@ -12,8 +12,11 @@ using namespace std;
 
 class Sprite :
 	public vector < Polygon >,
-	public Polygon
+	public Rect
 {
+protected:
+	float startX;
+	float startY;
 public:
 	Sprite();
 	Sprite(GLint startX, GLint startY);
@@ -32,7 +35,6 @@ public:
 	void push_back(Sprite sprite);
 	void mirrorX();
 	void draw();
-	void clear();
 	void setColor(Color color);
 };
 #endif

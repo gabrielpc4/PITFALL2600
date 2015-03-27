@@ -172,7 +172,6 @@ void Polygon::mirrorX(int currentX)
 	{		
 		*it -= Point((2 * (it->x() - currentX) + it->width()), 0);
 	}
-
 }
 
 void Polygon::draw() 

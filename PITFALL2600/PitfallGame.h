@@ -5,20 +5,27 @@
 #include "Player.h"
 #include "Enemies.h"
 #include "World.h"
+#include <vector>
+
+using namespace std;
+
 #define SPACE_BAR 32
 #define RESPAWN_FRAMES 70
+
+#define BOX_DETECTION 0
+#define PIXEL_BY_PIXEL_DETECTION 1
 
 class PitfallGame
 {
 private:
 	Player* player;	
 	World* world;	
-	vector<Log> log;
+	vector<Log> logs;
 	Scorpion* scorpion;
+	vector<Crocodile> crocodiles;
 	int scenarioNumber;
 	int score;
-	bool checkCollisionX(Player* player, Sprite& object);
-	bool checkCollisionY(Player* player, Sprite& object);
+	bool areColliding(Player* player, Sprite& object, int detectionType);	
 	void checkBoundaries();
 	bool isOutOfBoundaries(Sprite* object);
 	void spawnEnemies();
@@ -35,6 +42,7 @@ private:
 	void reset();
 	bool canGrabVine(Player* player);
 	bool isInside(Point& p, Rect& rect);
+	bool isInside(Polygon& rect1, Polygon& rect2);
 public:
 	PitfallGame();
 	void run();

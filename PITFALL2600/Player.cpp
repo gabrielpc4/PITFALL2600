@@ -167,7 +167,7 @@ void Player::move()
 		/*********** MOVES THE PLAYER ***********/
 		if (this->isDead() == false || isFalling())	// Prevents the animation to change when the player is dead, 			
 		{											// but allows him to fall, in the case the player falls into the pit
-			*this += speed();
+			AnimatedObject::move();
 		}		
 	}	
 
@@ -220,15 +220,8 @@ void Player::climbOut(int direction)
 }
 
 void Player::swing(Vine* vine)
-{
-	if (isLooking() == LEFT)
-	{
-		setX(vine->end().x() + 8);
-	}
-	else
-	{
-		setX(vine->end().x() - 12);
-	}	
+{		
+	setX(vine->end().x() - 12);	
 	setY(vine->end().y() - this->height() - 8);
 }
 
@@ -316,6 +309,7 @@ void Player::die()
 {
 	_dead = true;	
 	_walking = false;
+
 	if (_framesDead == 0)
 	{
 		_lives--;
@@ -323,14 +317,16 @@ void Player::die()
 }
 void Player::respawn()
 {
-	_dead = false;
-	_lookingDirection = RIGHT;
-	_floor = 140;
-	_framesDead = 0;
-	_jumping = true;
-	_down = true;
+	setSpeedX(0);
+	setSpeedY(0);	
 	setX(39);
 	setY(206);
+	_lookingDirection = RIGHT;
+	_floor			  = 140;
+	_framesDead		  = 0;
+	_jumping		  = true;	
+	_down			  = true;
+	_dead			  = false;	
 }
 
 bool Player::isDead()

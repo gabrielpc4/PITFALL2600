@@ -81,6 +81,8 @@
     <ClInclude Include="BrickWall.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Crocodile.h" />
+    <ClInclude Include="CrocodileSprite.h" />
     <ClInclude Include="global_constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
@@ -110,6 +112,8 @@
     <ClCompile Include="BrickWall.cpp" />
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Crocodile.cpp" />
+    <ClCompile Include="CrocodileSprite.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />

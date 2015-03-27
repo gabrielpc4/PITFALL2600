@@ -13,7 +13,7 @@ PlayerSprite::PlayerSprite(float startX, float startY)
 	shirtColor	= Color(48, 192, 48);
 	skinColor	= Color(240, 176, 144);
 	hatColor	= Color(80, 32, 0);
-	buildSprite(0);	
+	buildSprite();	
 }
 
 void PlayerSprite::draw()
@@ -58,15 +58,13 @@ void PlayerSprite::draw()
 		{
 			animationFrame = 5;
 		}
-	}
-
-
+	}	
 	// UPDATES THE SPRITE (ANIMATION)
 	if (_dead == false || _falling) // Prevents the animation to change when the player is dead, 												
 	{											// but allows to change to the falling sprite, for the case the player falls into the pit
 		// Rebuilds the sprite, with the new animation sprite
 		Sprite::clear();
-		buildSprite(animationFrame);
+		buildSprite();
 	}
 
 	Sprite::draw();
@@ -109,7 +107,7 @@ void PlayerSprite::animate(int minFrameNum, int maxFramenum)
 	8 - Swinging
 */
 			
-void PlayerSprite::buildSprite(int animationFrame)
+void PlayerSprite::buildSprite()
 {
 	if (_climbing == false)
 	{
@@ -301,7 +299,10 @@ void PlayerSprite::buildSprite(int animationFrame)
 		
 		}break;
 	}
-		
+
+
+	this->update();
+	
 	// Makes the player sprite change its looking direction or animates the climbing sprite
 	if ((_lookingDirection != RIGHT
 		&& _climbing == false)	// Prevents the clmbing sprite being mirrored twice
@@ -309,7 +310,7 @@ void PlayerSprite::buildSprite(int animationFrame)
 	{
 		this->mirrorX();
 	}
-	this->update();
+	
 }
 
 void PlayerSprite::buildBasicShape()
@@ -424,8 +425,8 @@ void PlayerSprite::update()
 	int smallerX = WORLD_WINDOW_WIDTH;
 	int smallerY = WORLD_WINDOW_HEIGHT;
 
-	int biggerX = 0;
-	int biggerY = 0;
+	int biggerX = INT_MIN;
+	int biggerY = INT_MIN;
 
 	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
 	{
@@ -445,27 +446,50 @@ void PlayerSprite::update()
 		{
 			biggerY = currentPolygon->topY();
 		}
-	}
+	}	
 	_width = (biggerX - smallerX);
 	_height = (biggerY - smallerY);
 	_realY = smallerY;
+	_realX = smallerX;
 }
 
 void PlayerSprite::mirrorX()
 {
 	for (unsigned i = 0; i < this->vector<Polygon>::size(); i++)
 	{
-		Polygon& currentPolygon = this->vector<Polygon>::at(i);
-		currentPolygon.mirrorX(this->x());
-		if (_climbing == false)
+		Polygon& currentPolygon = this->vector<Polygon>::at(i);		
+		currentPolygon.mirrorX(_x);				
+	}
+	if (_holdingVine)
+	{		
+		AnimatedObject::shiftSpriteOnly(27, 0);
+	}
+	else
+	{
+		if (_climbing)
 		{
-			currentPolygon += Point(6, 0);
+			AnimatedObject::shiftSpriteOnly(18, 0);
+			
 		}
 		else
 		{
-			currentPolygon += Point(18, 0);
+			AnimatedObject::shiftSpriteOnly(11, 0);
 		}
 	}
+}
+
+float PlayerSprite::x()
+{	
+	if (_lookingDirection == LEFT)
+	{
+		return _x;
+	}
+	return  _x;
+}
+
+float PlayerSprite::rightX()
+{
+	return PlayerSprite::x() + PLAYER_ANIMATION_0_WIDTH;
 }
 
 

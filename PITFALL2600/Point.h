@@ -19,8 +19,7 @@ public:
 	float x() const;
 	float y() const;
 	void setX(float x);
-	void setY(float y);
-	void clear();
+	void setY(float y);	
 	void static print(float x, float y);	
 };
 #endif

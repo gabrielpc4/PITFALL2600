@@ -14,6 +14,7 @@ Log::Log(GLint startX, GLint startY, bool rolling)
 
 }
 
+
 void Log::roll()
 {
 	if (this->rightX() > 0)

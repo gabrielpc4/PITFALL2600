@@ -146,3 +146,4 @@ threesBranches
 . The classes PlayerSprite, LogSprite and ScorpionSprite now inherents the AnimatedObject class
 . Finished Scorpion animation
 . Added Scorpion AI
+. Fixed Brick Wall Height

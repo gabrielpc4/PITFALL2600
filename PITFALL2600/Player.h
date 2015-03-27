@@ -56,6 +56,6 @@ public:
 	void holdVine(bool state);
 	void swing(Vine* vine);
 	bool isSwinging();
-	bool isHoldingVine();
+	bool isHoldingVine();	
 };
 #endif

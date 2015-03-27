@@ -26,6 +26,7 @@ protected:
 // Variables
 private:
 	float _realY;
+	float _realX;
 	Color pantsColor;
 	Color shirtColor;
 	Color skinColor;
@@ -44,7 +45,9 @@ public:
 	PlayerSprite(float startX, float startY);	
 	void draw();
 	void animate(int minFrameNum, int maxFramenum);
-	void buildSprite(int animationFrame);
+	void buildSprite();
+	float x();
+	float rightX();
 	float y();
 	float topY();
 };

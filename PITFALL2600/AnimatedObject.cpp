@@ -27,6 +27,14 @@ void AnimatedObject::draw()
 	Sprite::draw();
 }
 
+void AnimatedObject::shiftSpriteOnly(float x, float y)
+{
+	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	{
+		*currentPolygon += Point(x,y);
+	}
+}
+
 void AnimatedObject::animate(int maxAnimationFrame)
 {
 	frames++;
@@ -43,8 +51,8 @@ void AnimatedObject::animate(int maxAnimationFrame)
 			animationFrame++;
 		}			
 
-		Sprite::clear();
-		buildSprite(animationFrame);
+		clear();
+		buildSprite();
 
 		if (frames >= INT_MAX)
 		{
@@ -53,7 +61,7 @@ void AnimatedObject::animate(int maxAnimationFrame)
 	}
 }
 
-void AnimatedObject::buildSprite(int animationFrame)
+void AnimatedObject::buildSprite()
 {
 
 }
@@ -104,6 +112,11 @@ Point AnimatedObject::speed()
 void AnimatedObject::setAnimationFrame(int number)
 {
 	animationFrame = number;
+}
+
+unsigned AnimatedObject::totalPolygons()
+{
+	return Sprite::size();
 }
 
 AnimatedObject::~AnimatedObject()

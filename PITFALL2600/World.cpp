@@ -313,7 +313,6 @@ void World::deleteWorld()
 		for (unsigned i = 0; i < tunnelHole.size(); i++)
 		{
 			tunnelHole.at(i).~TunnelHole();
-			tunnelHole.at(i).clear();
 		}
 		tunnelHole.clear();
 	}
