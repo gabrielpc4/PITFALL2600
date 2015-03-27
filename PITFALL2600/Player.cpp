@@ -9,7 +9,7 @@ Player::Player() :
 Player::Player(GLint startX, GLint startY) 
 	: PlayerSprite(startX,startY)	  
 {		
-	_lives					= 99;
+	_lives					= 3;
 	_framesDead				= 0;
 	_floor					= startY;
 	_down					= false;
@@ -315,7 +315,7 @@ void Player::respawn()
 {
 	setSpeedX(0);
 	setSpeedY(0);	
-	setX(WORLD_WINDOW_WIDTH -12);
+	setX(39);
 	setY(206);
 	_lookingDirection = RIGHT;
 	_floor			  = 140;

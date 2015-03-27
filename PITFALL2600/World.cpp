@@ -40,6 +40,10 @@ void World::buildScenario(int scenarioNumber)
 		allowVines = true;
 		blackHole = new Hole(144, 132, Color(BLACK));
 	}break;
+	case(3) :
+	{		
+		water = new Hole(144, 132, Color(BLUE));
+	}break;
 	default:{}break;
 	}
 }
