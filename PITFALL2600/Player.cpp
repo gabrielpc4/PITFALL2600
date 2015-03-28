@@ -101,7 +101,7 @@ void Player::fall()
 }
 
 void Player::move()
-{
+{	
 	if (isHoldingVine() == false)
 	{
 		// Not swinging but climbing

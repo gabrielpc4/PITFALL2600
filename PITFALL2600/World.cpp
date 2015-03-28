@@ -7,9 +7,10 @@ World::World()
 	stairs				= NULL;
 	brickWall			= NULL;
 	blackHole			= NULL;
-	water				= NULL;
-	allowVines			= false;
+	water				= NULL;	
 	vine				= new Vine();
+	blackHole			= new Hole(Color(BLACK), true);
+	water				= new Hole(Color(BLUE), true);
 	buildBasicScenario();		
 }
 
@@ -17,35 +18,153 @@ void World::buildScenario(int scenarioNumber)
 {	
 	switch (scenarioNumber)
 	{
-	case(-1) :
-	{
-		allowVines = true;
-		water = new Hole(144, 132, Color(BLUE));
+		case(-3) :
+		{
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles	= false;
+			hasBlackHole	= false;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= false;
+		}break;
+		case(-2) :
+		{
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles	= false;
+			hasBlackHole	= true;
+			hasWater		= false;
+			movingHole		= true;
+			hasVine			= true;
+
+		}break;
+		case(-1) :
+		{
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles  = false;		
+			hasBlackHole	= false;
+			hasWater		= true;
+			movingHole		= false;
+			hasVine			= true;			
 		
-	}break;
-	case(0) :
-	{
-		stairs = new Stairs(245, 32);
-		brickWall = new BrickWall(461, 32);
-	}break;
-	case(1) :
-	{
-		stairs = new Stairs(245, 32);
-		brickWall = new BrickWall(461, 32);
-		tunnelHole.push_back(TunnelHole(144, 96));
-		tunnelHole.push_back(TunnelHole(331, 96));
-	}break;
-	case(2) :
-	{
-		allowVines = true;
-		blackHole = new Hole(144, 132, Color(BLACK));
-	}break;
-	case(3) :
-	{		
-		water = new Hole(144, 132, Color(BLUE));
-	}break;
-	default:{}break;
+		}break;
+		case(0) :
+		{
+			hasStairs		= true;
+			hasBrickWall	= true;
+			brickWallSide	= RIGHT;
+			hasTunnelHoles	= false;
+			hasBlackHole	= false;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= false;
+
+		}break;
+		case(1) :
+		{
+			hasStairs		= true;
+			hasBrickWall	= true;
+			brickWallSide	= RIGHT;
+			hasTunnelHoles	= true;
+			hasBlackHole	= false;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= false;
+
+		}break;
+		case(2) :
+		{
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles	= false;
+			hasBlackHole	= true;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= true;		
+
+		}break;
+		case(3) :
+		{		
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles	= false;
+			hasBlackHole	= false;
+			hasWater		= true;
+			movingHole		= false;
+			hasVine			= false;	
+
+		}break;
+		case(4) :
+		{
+			hasStairs		= true;
+			hasBrickWall	= true;
+			brickWallSide	= LEFT;
+			hasTunnelHoles	= true;
+			hasBlackHole	= false;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= false;
+
+		}break;
+		default:
+		{
+			hasStairs		= false;
+			hasBrickWall	= false;
+			brickWallSide	= NONE;
+			hasTunnelHoles	= false;
+			hasBlackHole	= false;
+			hasWater		= false;
+			movingHole		= false;
+			hasVine			= false;
+		}break;
 	}
+
+	if (hasStairs)
+	{
+		stairs = new Stairs();
+	}
+	if (hasBrickWall)
+	{
+		brickWall = new BrickWall(brickWallSide);
+	}
+	if (hasTunnelHoles)
+	{
+		tunnelHole.push_back(TunnelHole(LEFT_TUNNEL_HOLE));
+		tunnelHole.push_back(TunnelHole(RIGHT_TUNNEL_HOLE));
+	}
+	
+	if (hasBlackHole)
+	{
+		if (movingHole)
+		{
+			blackHole->setMoving(true);
+		}
+		else
+		{
+			blackHole->setMoving(false);
+		}
+	}
+
+	if (hasWater)
+	{
+		if (movingHole)
+		{
+			water->setMoving(true);
+		}
+		else
+		{
+			water->setMoving(false);
+		}
+	}
+		
+	
 }
 
 void World::buildBasicScenario()
@@ -145,7 +264,7 @@ void World::buildTreeLeafs()
 * Description: Calls the function drawBasicScenario and loads the first Scenario
 ******************************************************************************************/
 void World::draw(int scenarioNumber)
-{	
+{		
 	drawBasicScenario();
 
 	if (stairs != NULL)
@@ -166,18 +285,32 @@ void World::draw(int scenarioNumber)
 		}
 	}
 
-	if (blackHole != NULL)
+	if (hasBlackHole)
 	{
 		blackHole->draw();
 	}
+	else
+	{
+		if (blackHole->canMove())
+		{
+			blackHole->animate(9);
+		}
+	}
 
-	if (water != NULL)
+	if (hasWater)
 	{
 		water->draw();
 	}
+	else
+	{
+		if (water->canMove())
+		{
+			water->animate(9);
+		}
+	}
 
 	
-	if (this->allowVines)
+	if (this->hasVine)
 	{
 		vine->draw();
 	}
@@ -286,12 +419,12 @@ void World::drawOverlayers()
 		tunnelHole.at(i).drawOverlayer();
 	}
 
-	if (blackHole != NULL)
+	if (hasBlackHole)
 	{
 		blackHole->drawOverlayer();
 	}
 
-	if (water != NULL)
+	if (hasWater)
 	{
 		water->drawOverlayer();
 	}
@@ -319,28 +452,22 @@ void World::deleteWorld()
 			tunnelHole.at(i).~TunnelHole();
 		}
 		tunnelHole.clear();
-	}
-	
-	if (blackHole != NULL)
-	{
-		blackHole->~Hole();
-		delete blackHole;
-		blackHole = NULL;
 	}	
-
-	if (water != NULL)
-	{
-		water->~Hole();
-		delete water;
-		water = NULL;
-	}
-	
-	allowVines		= false;
 }
 
-bool World::hasAVine()
+bool World::allowsVines()
 {
-	return allowVines;
+	return hasVine;;
+}
+
+bool World::allowsBlackHole()
+{
+	return hasBlackHole;
+}
+
+bool World::allowsWater()
+{
+	return hasWater;
 }
 
 

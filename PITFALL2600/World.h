@@ -23,10 +23,17 @@ private:
 	Rect treeTrunk[4];
 	Polygon treeLeafs;
 	Rect tunnelWall;
-	Polygon branches[4];
-	bool allowVines;
-	
+	Polygon branches[4];	
 
+	bool hasStairs;
+	bool hasVine;
+	bool hasTunnelHoles;
+	bool hasBlackHole;
+	bool hasWater;
+	bool movingHole;
+	bool hasBrickWall;	
+	int brickWallSide;
+	
 public:
 	// Basic Scenario elements
 	Rect tunnelFloor;
@@ -45,7 +52,10 @@ public:
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
 	void drawOverlayers();
 	void deleteWorld();
-	bool hasAVine();	
+	bool allowsVines();	
+	bool allowsBlackHole();
+	bool allowsWater();
+	
 };
 #endif
 

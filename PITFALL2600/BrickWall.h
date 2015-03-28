@@ -8,6 +8,7 @@ class BrickWall :
 {
 public:
 	BrickWall();
+	BrickWall(int SIDE);
 	BrickWall(int startX, int startY);
 };
 

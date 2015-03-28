@@ -69,5 +69,5 @@ void Point::setY(float y)
 
 void Point::print(float x, float y)
 {
-	cout << x << " " << y << endl;
+	cout << "("<< x << "," << y << ") ";
 }

@@ -156,3 +156,5 @@ threesBranches
 . Finished Crocodile animation
 . Implemented crocodile vs player colision
 . Crocodiles fully working
+. Created scenarios 3, 4, -2
+. Changed the way the scenario elements are defined

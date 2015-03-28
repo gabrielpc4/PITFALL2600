@@ -2,8 +2,14 @@
 
 
 TunnelHole::TunnelHole()
-	:TunnelHole(0, 0)
+	:TunnelHole(LEFT_TUNNEL_HOLE, 96)
 {
+}
+
+TunnelHole::TunnelHole(int SIDE)
+	: TunnelHole(SIDE, 96)
+{
+
 }
 
 TunnelHole::TunnelHole(float startX, float startY)

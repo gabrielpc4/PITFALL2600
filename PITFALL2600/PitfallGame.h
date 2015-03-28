@@ -28,10 +28,16 @@ private:
 	bool paused;
 	bool allowCrocodiles;
 	bool DEBUG_MODE;
+	bool GOD_MODE;
 
-
+	int nScorpions;
+	int nLogs;
+	bool movingLogs;
+	int nCrocodiles;
+	
 	bool areCollidingX(Player* player, Crocodile* crocodile);
 	bool areColliding(Player* player, Sprite& object, int detectionType);	
+	bool areClose(Player* player, Scorpion* scorpion);
 	void checkBoundaries();
 	bool isOutOfBoundaries(Player* player);
 	void spawnEnemies();
@@ -53,6 +59,8 @@ private:
 	void drawOutline(Sprite& object);
 	void drawOutline(float x, float y, float width, float height);
 	void drawCollisionRectangles();
+	void freezeHoles();
+	void unFreezeHoles();
 public:
 	PitfallGame();
 	void run();

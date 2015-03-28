@@ -2,8 +2,14 @@
 
 
 Log::Log()
-	: Log(442,128, false)
+	: Log(LOG_POSITION_2, false)
 {
+}
+
+Log::Log(int LOG_POSITION, bool rolling)
+	: Log(LOG_POSITION, 128, rolling)
+{
+
 }
 
 

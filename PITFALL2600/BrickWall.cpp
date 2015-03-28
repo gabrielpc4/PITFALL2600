@@ -1,10 +1,17 @@
 #include "BrickWall.h"
 
 BrickWall::BrickWall() :
-	BrickWall(0, 0)
+	BrickWall(RIGHT)
 {
 
 }
+
+BrickWall::BrickWall(int SIDE) 
+	: BrickWall(SIDE, 32)
+{
+
+}
+
 
 BrickWall::BrickWall(int startX, int startY) 
 	: Sprite(startX,startY)	// Defines the brick wall sprite initial position

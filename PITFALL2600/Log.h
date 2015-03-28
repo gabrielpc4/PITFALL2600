@@ -7,6 +7,7 @@ class Log :
 {	
 public:
 	Log();
+	Log(int LOG_POSITION, bool rolling);
 	Log(GLint startX, GLint start, bool rolling);	
 	void roll();
 	bool isRolling();

@@ -1,20 +1,30 @@
 #pragma once
 #ifndef HOLE_H_
 #define HOLE_H_
-#include "Sprite.h"
+#include "AnimatedObject.h"
 class Hole :
-	public Sprite
+	public AnimatedObject
 {
 private:
-	long frames;
-	int animationFrame;	
 	Sprite topOverlayer;
 	Sprite bottomOverlayer;
-public:
+	vector<Point> movingHolePoints;
+	vector<Point> staticHolePoints;
+	bool changesSize;
+	bool moving;
+	
+public:	
 	Hole();
-	Hole(float startX, float startY, Color color);
-	void buildHole();
+	Hole(Color color, bool changesSize);
+	Hole(float startX, float startY, Color color, bool changesSize);
+	void buildSprite();
+	void draw();
 	void drawOverlayer();
+	void freeze();
+	void unFreeze();
+	bool canChangeSize();
+	void setMoving(bool state);
+	bool canMove();
 	~Hole();
 };
 #endif

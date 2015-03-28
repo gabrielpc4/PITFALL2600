@@ -10,6 +10,7 @@ private:
 	Sprite overlayer;
 public:
 	TunnelHole();
+	TunnelHole(int SIDE);
 	TunnelHole(float startX, float startY);	
 	void drawOverlayer();
 	~TunnelHole();
