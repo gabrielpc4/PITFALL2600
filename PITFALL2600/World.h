@@ -5,6 +5,7 @@
 #include "ScenarioObjects.h"
 #include "Shapes.h"
 #include "global_constants.h"
+#include "File.h"
 #include <vector>
 #include "glut.h" // Custom glut.h fixed for using namespace std
 #include <gl/gl.h>
@@ -24,14 +25,15 @@ private:
 	Polygon treeLeafs;
 	Rect tunnelWall;
 	Polygon branches[4];	
+	File worldElementsFile;
 
-	bool hasStairs;
-	bool hasVine;
-	bool hasTunnelHoles;
-	bool hasBlackHole;
-	bool hasWater;
-	bool movingHole;
-	bool hasBrickWall;	
+	bool allowStairs;
+	bool allowVines;
+	bool allowTunnelHoles;
+	bool allowBlackHoles;
+	bool allowWater;
+	bool allowMovingHoles;
+	bool allowBrickWalls;	
 	int brickWallSide;
 	
 public:
@@ -52,10 +54,9 @@ public:
 	void draw(int scenarioNumber);	// Calls the function drawBasicScenario and loads the first Scenario
 	void drawOverlayers();
 	void deleteWorld();
-	bool allowsVines();	
-	bool allowsBlackHole();
-	bool allowsWater();
-	
+	bool hasAVine();	
+	bool hasABlackHole();
+	bool hasWater();
 };
 #endif
 

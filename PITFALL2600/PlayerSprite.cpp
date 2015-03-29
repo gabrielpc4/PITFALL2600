@@ -7,7 +7,7 @@ PlayerSprite::PlayerSprite()
 }
 
 PlayerSprite::PlayerSprite(float startX, float startY)
-	: AnimatedObject(startX,startY)
+	: AnimatedObject(startX,startY, 8)
 {
 	pantsColor	= Color(16, 80, 0);
 	shirtColor	= Color(48, 192, 48);
@@ -68,6 +68,24 @@ void PlayerSprite::draw()
 	}
 
 	Sprite::draw();
+}
+
+void PlayerSprite::DRAW_ON_DEBUG_MODE()
+{
+	this->draw();
+	for (vector<Polygon>::iterator objectPolygon = this->begin(); objectPolygon != this->end(); objectPolygon++)
+	{
+		for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
+		{
+			glColor3ub(255, 0, 0);
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(objectRect->x(), objectRect->y());
+			glVertex2f(objectRect->x() + objectRect->width(), objectRect->y());
+			glVertex2f(objectRect->x() + objectRect->width(), objectRect->y() + objectRect->height());
+			glVertex2f(objectRect->x(), objectRect->y() + objectRect->height());
+			glEnd();
+		}
+	}
 }
 
 void PlayerSprite::animate(int minFrameNum, int maxFramenum)

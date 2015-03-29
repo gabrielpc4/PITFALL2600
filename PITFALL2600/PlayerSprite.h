@@ -44,6 +44,7 @@ public:
 	PlayerSprite();
 	PlayerSprite(float startX, float startY);	
 	void draw();
+	void DRAW_ON_DEBUG_MODE();
 	void animate(int minFrameNum, int maxFramenum);
 	void buildSprite();
 	float x();

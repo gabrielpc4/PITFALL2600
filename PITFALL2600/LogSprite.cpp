@@ -7,7 +7,7 @@ LogSprite::LogSprite()
 }
 
 LogSprite::LogSprite(GLint startX, GLint startY)	
-	: AnimatedObject(startX, startY)
+	: AnimatedObject(startX, startY, 1)
 {	
 	buildSprite();
 }

@@ -146,15 +146,26 @@ threesBranches
 . The classes PlayerSprite, LogSprite and ScorpionSprite now inherents the AnimatedObject class
 . Finished Scorpion animation
 . Added Scorpion AI
+
+03-27-2015
+. Moving Black Holes and Water logic created
+. Changed the way the game knows what to draw in the scenario
+
+03-28-2015
+- Fixed all the bugs of the Moving Black Holes and Water
 . Fixed Brick Wall Height
 . Fixed the player box colition
 . Added a pixel by pixel collision system
 . Sprite inherits now Rect, instead of Polygon
+. Changed the way the scenario elements are defined to a switch case
+. Created scenarios 3, 4, -2
 
 03-27-2015
 . Created the Crocodile Sprite
 . Finished Crocodile animation
 . Implemented crocodile vs player colision
 . Crocodiles fully working
-. Created scenarios 3, 4, -2
-. Changed the way the scenario elements are defined
+. Created scenario -3, -4
+. Scenario elements and scenario enemies are now defined in 
+ScenarioEnemies.txt and ScenarioWorldElements.txt
+

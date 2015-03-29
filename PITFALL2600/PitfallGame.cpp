@@ -1,6 +1,7 @@
 #include "PitfallGame.h"
 
 PitfallGame::PitfallGame()
+	: enemiesFile("ScenarioEnemies.txt")
 {
 	scenarioNumber		= 0;	
 	DEBUG_MODE			= false;
@@ -11,75 +12,22 @@ PitfallGame::PitfallGame()
 	scorpion			= NULL;
 	paused				= false;
 	allowCrocodiles		= false;
-	world->buildScenario(scenarioNumber);
+	world->buildScenario(scenarioNumber);	
 	spawnEnemies();
 	crocodiles.push_back(Crocodile(187, 136));
 	crocodiles.push_back(Crocodile(245, 136));
-	crocodiles.push_back(Crocodile(303, 136));
+	crocodiles.push_back(Crocodile(303, 136));				
 }
 
 void PitfallGame::spawnEnemies()
 {
-	switch (scenarioNumber)
-	{
-		case (-2) :
-		{
-			nScorpions  = 1;
-			nLogs		= 2;
-			movingLogs	= true;
-			nCrocodiles = 0;
-		}break;
-		case (-1) :
-		{
-			nScorpions  = 1;
-			nLogs		= 0;
-			movingLogs	= false;
-			nCrocodiles = 3;
-		}break;
-		case(0) :
-		{
-			nScorpions  = 0;
-			nLogs	    = 1;
-			movingLogs	= false;
-			nCrocodiles = 0;
-		}break;
-		case (1) :
-		{
-			nScorpions	= 0;
-			nLogs		= 2;
-			movingLogs	= true;
-			nCrocodiles = 0;
-		}break;
-		case (2) :
-		{
-			nScorpions  = 1;
-			nLogs	    = 2;
-			movingLogs	= true;
-			nCrocodiles = 0;
-		}break;
-		case (3) :
-		{
-			nScorpions	= 1;
-			nLogs		= 0;
-			movingLogs	= false;
-			nCrocodiles = 3;
-		}break;
-		case(4) :
-		{
-			nScorpions  = 0;
-			nLogs	    = 3;
-			movingLogs	= true;
-			nCrocodiles = 0;
-		}break;
-		default:
-		{
-			nScorpions	= 0;
-			nLogs		= 0;
-			movingLogs	= false;
-			nCrocodiles = 0;
-		}break;		
-	}
+	enemiesFile.seekToScenario(scenarioNumber);
 
+	nScorpions	= enemiesFile.nextCharAsInt();
+	nLogs		= enemiesFile.nextCharAsInt();
+	movingLogs	= enemiesFile.nextCharAsBool();
+	nCrocodiles	= enemiesFile.nextCharAsInt();
+	
 	switch (nLogs)
 	{
 		case (1) :
@@ -128,7 +76,7 @@ void PitfallGame::run()
 		physics();
 		checkCollisionsWithEnemies();
 
-		if (world->allowsVines())
+		if (world->hasAVine())
 		{
 			if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
 			{
@@ -153,7 +101,8 @@ void PitfallGame::run()
 		if (player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
 		{
 			player->respawn();
-			unFreezeHoles();
+			world->blackHole->enableSizeChanging();
+			world->water->enableSizeChanging();
 			paused = false;			
 		}
 	}
@@ -164,7 +113,15 @@ void PitfallGame::run()
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
-	player->draw();
+	if (DEBUG_MODE && player->isUndeground() && nScorpions != 0)
+	{
+		player->DRAW_ON_DEBUG_MODE();
+	}
+	else
+	{
+		player->draw();
+	}
+	
 	world->drawOverlayers();
 
 	for (unsigned i = 0; i < logs.size(); i++)
@@ -183,7 +140,7 @@ void PitfallGame::drawAll()
 	{
 		for (unsigned i = 0; i < crocodiles.size(); i++)
 		{
-			crocodiles.at(i).animate(1);
+			crocodiles.at(i).animate();
 		}
 	}
 
@@ -191,10 +148,7 @@ void PitfallGame::drawAll()
 	{
 		if (DEBUG_MODE)
 		{
-			if (scorpion->speed().x() != 0)
-			{
-				scorpion->animate(1);
-			}			
+			scorpion->DRAW_ON_DEBUG_MODE();
 		}
 		else
 		{
@@ -206,7 +160,7 @@ void PitfallGame::drawAll()
 	if (DEBUG_MODE)
 	{
 		drawCollisionRectangles();
-		if (world->allowsVines())
+		if (world->hasAVine())
 		{
 			world->vine->drawCircleTrack();
 		}
@@ -235,6 +189,11 @@ void PitfallGame::showHUD()
 	else if (GOD_MODE)
 	{		
 		printText("God Mode ON", Point(10, 5));
+	}
+	if (DEBUG_MODE)
+	{
+		label = "Scenario: ";
+		printText(label + std::to_string(scenarioNumber), Point(400, 5));		
 	}
 }
 
@@ -335,7 +294,7 @@ void PitfallGame::physics()
 	}	
 	// Falling in the Black Hole or in the Water
 	
-	if (world->allowsBlackHole())
+	if (world->hasABlackHole())
 	{
 		if (willFall(player, world->blackHole))
 		{			
@@ -343,7 +302,8 @@ void PitfallGame::physics()
 			{
 				if (GOD_MODE == false)
 				{
-					freezeHoles();
+					world->blackHole->disableSizeChanging();
+					world->water->disableSizeChanging();
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
@@ -352,7 +312,7 @@ void PitfallGame::physics()
 		}
 	}
 
-	if (world->allowsWater())
+	if (world->hasWater())
 	{
 		if (willFall(player, world->water) && player->isStandingOnCrocodile() == false)
 		{			
@@ -360,7 +320,8 @@ void PitfallGame::physics()
 			{
 				if (GOD_MODE == false)
 				{
-					freezeHoles();
+					world->blackHole->disableSizeChanging();
+					world->water->disableSizeChanging();
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
@@ -509,7 +470,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 
 bool PitfallGame::areCollidingX(Player* player, Crocodile* crocodile)
 {
-	if (player->isUndeground() == false)
+	if (player->y() >= 142)
 	{
 		if (player->rightX() > crocodile->x() && player->x() < crocodile->rightX())
 		{
@@ -705,6 +666,28 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			}
 		}
 	}
+	if (key == GLUT_KEY_PAGE_UP)
+	{
+		if (keyState == DOWN)
+		{
+			world->deleteWorld();
+			deleteEnemies();			
+			scenarioNumber++;		
+			world->buildScenario(scenarioNumber);
+			spawnEnemies();
+		}
+	}
+	else if (key == GLUT_KEY_PAGE_DOWN)
+	{
+		if (keyState == DOWN)
+		{
+			world->deleteWorld();
+			deleteEnemies();
+			scenarioNumber--;
+			world->buildScenario(scenarioNumber);
+			spawnEnemies();
+		}
+	}
 }
 
 void PitfallGame::handleKeyboardInput(unsigned char c)
@@ -769,41 +752,10 @@ void PitfallGame::reset()
 	
 	player->setY(140);	
 
-	unFreezeHoles();
+	world->blackHole->enableSizeChanging();
+	world->water->enableSizeChanging();
+
 	paused = false;
-}
-
-void PitfallGame::freezeHoles()
-{
-	if (world->blackHole != NULL)
-	{
-		world->blackHole->freeze();
-	}
-
-	if (world->water != NULL)
-	{
-		world->water->freeze();
-	}
-}
-
-void PitfallGame::unFreezeHoles()
-{
-
-	if (world->blackHole != NULL)
-	{
-		if (world->blackHole->canChangeSize())
-		{
-			world->blackHole->unFreeze();
-		}		
-	}
-
-	if (world->water != NULL)
-	{
-		if (world->water->canChangeSize())
-		{
-			world->water->unFreeze();
-		}		
-	}
 }
 
 bool  PitfallGame::isInside(Point& p, Rect& rect)
@@ -842,24 +794,10 @@ bool PitfallGame::isPaused()
 }
 
 void PitfallGame::drawCollisionRectangles()
-{
-	drawOutline(player->x(), player->y(), player->width(), player->height());
-
-	if (scorpion != NULL)
-	{		
-		for (vector<Polygon>::iterator playerPolygon = player->begin(); playerPolygon != player->end(); playerPolygon++)
-		{
-			for (vector<Rect>::iterator playerRect = playerPolygon->begin(); playerRect != playerPolygon->end(); playerRect++)
-			{
-				for (vector<Polygon>::iterator objectPolygon = scorpion->begin(); objectPolygon != scorpion->end(); objectPolygon++)
-				{
-					for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
-					{
-						drawOutline(objectRect->x(), objectRect->y(), objectRect->width(), objectRect->height());
-					}
-				}
-			}
-		}
+{	
+	if ((player->isUndeground()  == false)|| player->isUndeground() && nScorpions == 0)
+	{
+		drawOutline(player->x(), player->y(), player->width(), player->height());
 	}	
 
 	if (allowCrocodiles)
@@ -873,9 +811,7 @@ void PitfallGame::drawCollisionRectangles()
 	for (unsigned i = 0; i < logs.size(); i++)
 	{
 		drawOutline((Sprite)(logs[i]));
-	}
-
-	
+	}	
 }
 
 void PitfallGame::drawOutline(Sprite& object)

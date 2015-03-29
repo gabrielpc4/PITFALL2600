@@ -10,21 +10,22 @@ private:
 	Sprite bottomOverlayer;
 	vector<Point> movingHolePoints;
 	vector<Point> staticHolePoints;
-	bool changesSize;
-	bool moving;
-	
+	int type;
+	bool canChangeSize;	
+
+	void expandOrShrink();
+	void buildSprite();
 public:	
 	Hole();
-	Hole(Color color, bool changesSize);
-	Hole(float startX, float startY, Color color, bool changesSize);
-	void buildSprite();
+	Hole(Color color, int type);
+	Hole(float startX, float startY, Color color, int type);
+	void animate();
 	void draw();
+	void DRAW_OVERLAYER_ON_DEBUG_MODE();
 	void drawOverlayer();
-	void freeze();
-	void unFreeze();
-	bool canChangeSize();
-	void setMoving(bool state);
-	bool canMove();
+	void setType(int type);
+	void enableSizeChanging();
+	void disableSizeChanging();	
 	~Hole();
 };
 #endif

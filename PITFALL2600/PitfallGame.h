@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemies.h"
 #include "World.h"
+#include "File.h"
 #include <vector>
 
 using namespace std;
@@ -23,6 +24,7 @@ private:
 	vector<Log> logs;
 	Scorpion* scorpion;
 	vector<Crocodile> crocodiles;
+	File enemiesFile;
 	int scenarioNumber;
 	int score;
 	bool paused;

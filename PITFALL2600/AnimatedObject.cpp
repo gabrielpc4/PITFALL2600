@@ -2,18 +2,19 @@
 
 
 AnimatedObject::AnimatedObject()
-	: AnimatedObject(0,0)
+	: AnimatedObject(0,0,1)
 {
 	
 }
 
-AnimatedObject::AnimatedObject(float startX, float startY)
+AnimatedObject::AnimatedObject(float startX, float startY, int maxAnimationFrame)
 	: Sprite(startX,startY),
 	_speed(0, 0)
 {
-	animationFrame  = 0;
-	frames			= 0;
-	animationRefreshInterval = DEFAULT_ANIMATION_REFRESH_INTERVAL;
+	animationFrame				= 0;
+	frames						= 0;
+	this->maxAnimationFrame		= maxAnimationFrame;
+	animationRefreshInterval	= DEFAULT_ANIMATION_REFRESH_INTERVAL;
 }
 
 void AnimatedObject::move()
@@ -23,7 +24,7 @@ void AnimatedObject::move()
 
 void AnimatedObject::draw()
 {
-	animate(1);
+	animate();
 	Sprite::draw();
 }
 
@@ -35,7 +36,7 @@ void AnimatedObject::shiftSpriteOnly(float x, float y)
 	}
 }
 
-void AnimatedObject::animate(int maxAnimationFrame)
+void AnimatedObject::animate()
 {
 	frames++;
 

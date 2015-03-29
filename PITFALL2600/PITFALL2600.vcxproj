@@ -83,6 +83,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Crocodile.h" />
     <ClInclude Include="CrocodileSprite.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="global_constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Crocodile.cpp" />
     <ClCompile Include="CrocodileSprite.cpp" />
+    <ClCompile Include="File.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />

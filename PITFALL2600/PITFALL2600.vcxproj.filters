@@ -40,6 +40,12 @@
     <Filter Include="Header Files\Enemies">
       <UniqueIdentifier>{8ff23da5-4622-4d58-876a-7d0390edbafa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GeometricShapes">
+      <UniqueIdentifier>{278b18c5-818e-401e-85ed-8735b1b07abb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GeometricShapes">
+      <UniqueIdentifier>{050a72ac-de62-43c3-be28-32f2253ef60a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PitfallGame.h">
@@ -51,16 +57,7 @@
     <ClInclude Include="Point.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Color.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -96,9 +93,6 @@
     <ClInclude Include="Log.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Circle.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Shapes.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
@@ -129,6 +123,21 @@
     <ClInclude Include="Hole.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Header Files\GeometricShapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>Header Files\GeometricShapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Header Files\GeometricShapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\GeometricShapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -143,16 +152,7 @@
     <ClCompile Include="Point.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Rect.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -176,9 +176,6 @@
     <ClCompile Include="TunnelHole.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Circle.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Vine.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
@@ -199,6 +196,21 @@
     </ClCompile>
     <ClCompile Include="Hole.cpp">
       <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>Source Files\GeometricShapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>Source Files\GeometricShapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>Source Files\GeometricShapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\GeometricShapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
