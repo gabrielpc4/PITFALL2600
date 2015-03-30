@@ -17,7 +17,7 @@ Vine::Vine()
 		}
 	}
 	int j = i +1;
-	while (j < circle.points.size())
+	while (j < (int)circle.points.size())
 	{
 		if (circle.points[j].y() <= 198)
 		{

@@ -36,7 +36,7 @@ void Circle::buildCircle()
 	// We don't need that anymore
 	temp.clear();
 
-	for (int i = 0; i < points.size(); i++)
+	for (unsigned i = 0; i < points.size(); i++)
 	{
 		// Do the circle center shift
 		points[i] += center;
@@ -47,7 +47,7 @@ void Circle::draw()
 	glColor3f(1.0, 0.0, 0.0);
 
 	glBegin(GL_POINTS);			// Start defining the points to be lit
-	for (int i = 0; i < points.size(); i++)
+	for (unsigned i = 0; i < points.size(); i++)
 	{		
 		// Informs openGL the coordinates to be lit when the function glFlush is called	
 		glVertex2i(points[i].x(), points[i].y());

@@ -14,8 +14,55 @@ World::World()
 	vine				= new Vine();
 	blackHole			= new Hole(Color(BLACK), MOVING_HOLE);
 	water				= new Hole(Color(BLUE), MOVING_HOLE);
+
+	if (RANDOM_LEVELS)
+	{
+		srand(time(NULL));
+	}
+
+	if (worldElementsFile.is_open())
+	{		
+		ScenarioElements currentScenario;
+		for (int i = 0; i <= 15; i++)
+		{
+			worldElementsFile.seekToScenario(i);
+			currentScenario.allowStairs = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBrickWalls = worldElementsFile.nextCharAsBool();
+			currentScenario.brickWallSide = worldElementsFile.nextCharAsInt();
+			currentScenario.allowTunnelHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBlackHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowWater = worldElementsFile.nextCharAsBool();
+			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
+			currentScenario.allowGoldBars = worldElementsFile.nextCharAsBool();
+
+			positiveScenarios.push_back(currentScenario);
+		}
+
+		for (int i = 0; i >= -6; i--)
+		{
+			worldElementsFile.seekToScenario(i);
+			currentScenario.allowStairs = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBrickWalls = worldElementsFile.nextCharAsBool();
+			currentScenario.brickWallSide = worldElementsFile.nextCharAsInt();
+			currentScenario.allowTunnelHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBlackHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowWater = worldElementsFile.nextCharAsBool();
+			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
+			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
+			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
+			currentScenario.allowGoldBars = worldElementsFile.nextCharAsBool();
+
+			negativeScenarios.push_back(currentScenario);
+		}
+	}
+	else
+	{
+		srand(time(NULL));
+	}
+
 	buildBasicScenario();
-	scenariosWithTreasure = worldElementsFile.getAllScenarioNumbersWithTreasure();	
 }
 
 void World::raffleScenarioElements()
@@ -26,25 +73,52 @@ void World::raffleScenarioElements()
 
 	switch (n)
 	{
-	case(0) :
-	{
-		currentScenario.allowStairs = true;
-		currentScenario.allowTunnelHoles = (((rand() % 2) == 0) ? false : true);
-		currentScenario.allowBrickWalls = true;
-		currentScenario.brickWallSide = (((rand() % 2) == 0) ? LEFT : RIGHT);
-	}break;
-	case(1) :
-	{
-		currentScenario.allowBlackHoles = true;
-		currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);
-		currentScenario.allowVines = (((rand() % 2) == 0) ? false : true);
-	}break;
-	case(2) :
-	{
-		currentScenario.allowWater = true;
-		currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);
-		currentScenario.allowVines = (((rand() % 2) == 0) ? false : true);
-	}break;	
+		case(0) :
+		{
+			currentScenario.allowStairs = true;
+			currentScenario.allowTunnelHoles = (((rand() % 2) == 0) ? false : true);
+			
+			if (rand() % 2 == 0)
+			{
+				currentScenario.allowBrickWalls = true;
+				currentScenario.brickWallSide = (((rand() % 2) == 0) ? LEFT : RIGHT);
+			}
+			else
+			{
+				currentScenario.brickWallSide = NONE;
+				currentScenario.allowBrickWalls = false;
+			}
+		}break;
+		case(1) :
+		{
+			currentScenario.allowBlackHoles = true;
+			currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);
+
+			if (currentScenario.allowMovingHoles)
+			{
+				currentScenario.allowVines = (((rand() % 10) == 0) ? true : false);
+			}
+			else
+			{
+				currentScenario.allowVines = true;
+			}
+			
+		}break;
+		case(2) :
+		{
+			currentScenario.allowWater = true;
+			currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);		
+			
+			if (currentScenario.allowMovingHoles)
+			{
+				currentScenario.allowVines = (((rand() % 10) == 0) ? true : false);
+			}
+			else
+			{
+				currentScenario.allowVines = false;
+			}
+		}break;	
+		default:; break;
 	}
 
 	if ((rand() % 10) == 0)
@@ -52,32 +126,30 @@ void World::raffleScenarioElements()
 		currentScenario.allowGoldBars = true;
 	}
 
+	
+
 
 	if (scenarioNumber > 0)
 	{
 		if (scenarioNumber > (int)positiveScenarios.size() - 1)
-		{
+		{			
 			positiveScenarios.push_back(currentScenario);
-		}
+			preventSimilarScenarios();
+		}		
 	}
-	if (scenarioNumber < 0)
-	{
-		if (abs(scenarioNumber) >(int)negativeScenarios.size() - 1)
-		{
+	else if (scenarioNumber < 0)
+	{		
+		if (abs(scenarioNumber) > (int)negativeScenarios.size() - 1)
+		{		
 			negativeScenarios.push_back(currentScenario);
-		}
+			preventSimilarScenarios();
+		}		
 	}
 	else
 	{
-		if ((int)positiveScenarios.size() == 0)
-		{
-			positiveScenarios.push_back(currentScenario);
-		}
-		if ((int)negativeScenarios.size() == 0)
-		{
-			negativeScenarios.push_back(currentScenario);
-		}
-	}
+		positiveScenarios.push_back(currentScenario);
+		negativeScenarios.push_back(currentScenario);
+	}	
 }
 
 void World::createABonfire()
@@ -104,7 +176,14 @@ void World::buildScenario(int scenarioNumber)
 {		
 	this->scenarioNumber = scenarioNumber;
 
-	raffleScenarioElements();
+	if (scenarioNumber < -6 || scenarioNumber > 15 || worldElementsFile.is_open() == false)
+	{
+		if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1 || worldElementsFile.is_open() == false)
+		{			
+			raffleScenarioElements();
+		}
+	}
+	
 
 	if (thisScenario().allowStairs)
 	{
@@ -156,12 +235,19 @@ void World::buildScenario(int scenarioNumber)
 	}	
 }
 
-void World::forceStaticHoles()
+void World::createStaticWater()
 {
+	thisScenario().allowStairs = false;
+	thisScenario().allowTunnelHoles = false;
+	thisScenario().allowBrickWalls = false;
+	thisScenario().brickWallSide = NONE;
 	water->setType(STATIC_HOLE);
 	thisScenario().allowBlackHoles = false;
 	thisScenario().allowWater = true;
 	thisScenario().allowMovingHoles = false;
+	tunnelHole.clear();
+	delete stairs;
+	stairs = NULL;
 }
 
 void World::buildBasicScenario()
@@ -274,7 +360,7 @@ void World::draw(int scenarioNumber)
 		brickWall->draw();
 	}
 
-	if (tunnelHole.size() != 0)
+	if (thisScenario().allowTunnelHoles)
 	{
 		for (int i = 0; i < 2; i++)
 		{
@@ -498,20 +584,127 @@ bool World::hasMovingHoles()
 	return thisScenario().allowMovingHoles;
 }
 
-
-
 ScenarioElements& World::thisScenario()
 {
-	if (scenarioNumber >= 0)
+	return getScenario(this->scenarioNumber);
+}
+
+ScenarioElements& World::getScenario(int scenarioNumber)
+{
+	if (this->scenarioNumber >= 0)
 	{
 		return positiveScenarios.at(scenarioNumber);
+	}	
+	return negativeScenarios.at(abs(scenarioNumber));	
+}
+
+void World::preventSimilarScenarios()
+{		
+	if (getScenario(abs(this->scenarioNumber) - 1).allowMovingHoles && thisScenario().allowMovingHoles)
+	{
+		if (rand() % 2 == 0)
+		{
+			thisScenario().allowBlackHoles = false;
+			thisScenario().allowWater = false;
+			randomizeStairs();
+		}
+		else
+		{
+			thisScenario().allowMovingHoles = false;
+		}
+	}
+
+	if (getScenario(abs(this->scenarioNumber) - 1).allowMovingHoles == false && thisScenario().allowMovingHoles  == false)
+	{
+		if (getScenario(abs(this->scenarioNumber) - 1).allowBlackHoles && thisScenario().allowBlackHoles
+			|| getScenario(abs(this->scenarioNumber) - 1).allowWater && thisScenario().allowWater)
+		{
+			if (rand() % 2 == 0)
+			{
+				thisScenario().allowBlackHoles = false;
+				thisScenario().allowWater = false;
+				randomizeStairs();
+			}
+			else
+			{
+				thisScenario().allowMovingHoles = true;
+			}			
+		}		
+	}
+
+	if (getScenario(abs(this->scenarioNumber) - 1).allowBonfires && thisScenario().allowBonfires)
+	{		
+		thisScenario().allowBonfires = false;
+	}
+
+	if (getScenario(abs(this->scenarioNumber) - 1).allowGoldBars && thisScenario().allowGoldBars)
+	{
+		thisScenario().allowGoldBars = false;
+	}
+
+	if (getScenario(abs(this->scenarioNumber) - 1).allowStairs && getScenario(abs(this->scenarioNumber) - 1).allowTunnelHoles 
+		&& thisScenario().allowGoldBars && thisScenario().allowTunnelHoles)
+	{
+		thisScenario().allowStairs = false;
+		thisScenario().allowTunnelHoles = false;
+		thisScenario().allowBrickWalls = false;
+		randomizeHole();
+	}
+
+}
+
+void World::randomizeStairs()
+{
+	thisScenario().allowStairs = true;
+	thisScenario().allowTunnelHoles = (((rand() % 2) == 0) ? false : true);
+
+	if (rand() % 2 == 0)
+	{
+		thisScenario().allowBrickWalls = true;
+		thisScenario().brickWallSide = (((rand() % 2) == 0) ? LEFT : RIGHT);
 	}
 	else
 	{
-		return negativeScenarios.at(abs(scenarioNumber));
+		thisScenario().brickWallSide = NONE;
+		thisScenario().allowBrickWalls = false;
 	}
 }
 
+void World::randomizeHole()
+{
+	if (rand() % 2 == 0)
+	{
+		thisScenario().allowBlackHoles = true;
+		thisScenario().allowWater = false;
+	}
+	else
+	{
+		thisScenario().allowBlackHoles = false;
+		thisScenario().allowWater = true;
+	}
+
+	thisScenario().allowMovingHoles = (((rand() % 2) == 0) ? false : true);
+
+	if (thisScenario().allowMovingHoles)
+	{
+		thisScenario().allowVines = (((rand() % 10) == 0) ? true : false);
+	}
+	else
+	{
+		thisScenario().allowVines = true;
+	}
+}
+
+void World::denyBonfires()
+{
+	thisScenario().allowBonfires = false;
+}
+
+void World::createAGoldBar()
+{
+	thisScenario().allowGoldBars = true;
+	goldBar = new GoldBar();
+}
 
 
 

@@ -7,6 +7,8 @@
 #include "global_constants.h"
 #include "File.h"
 #include <vector>
+#include <stdlib.h> 
+#include <time.h> 
 #include "glut.h" // Custom glut.h fixed for using namespace std
 #include <gl/gl.h>
 
@@ -54,13 +56,13 @@ private:
 	Rect tunnelWall;
 	Polygon branches[4];		
 	File worldElementsFile;
-	list<int> scenariosWithTreasure;
 	int scenarioNumber;
+	vector<ScenarioElements> positiveScenarios;
+	vector<ScenarioElements> negativeScenarios;
+
 
 public:
 
-	vector<ScenarioElements> positiveScenarios;
-	vector<ScenarioElements> negativeScenarios;
 
 
 	// Basic Scenario elements
@@ -94,9 +96,15 @@ public:
 	void createABonfire();
 	void createAVine();
 	void deleteTreasure();
-	void forceStaticHoles();
+	void createStaticWater();
+	void createAGoldBar();
 	void raffleScenarioElements();
+	ScenarioElements& getScenario(int scenarioNumber);
 	ScenarioElements& thisScenario();
+	void preventSimilarScenarios();
+	void randomizeStairs();
+	void randomizeHole();
+	void denyBonfires();
 };
 #endif
 

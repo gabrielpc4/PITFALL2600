@@ -48,8 +48,7 @@ private:
 	File enemiesFile;
 	int scenarioNumber;
 	int score;
-	bool paused;
-	bool allowCrocodiles;
+	bool paused;	
 	bool DEBUG_MODE;
 	bool GOD_MODE;
 
@@ -84,13 +83,16 @@ private:
 	void freezeHoles();
 	void unFreezeHoles();
 	void raffleEnemies();
+	ScenarioEnemies& thisScenario();
+	void nextScenario();
+	void previousScenario();
 public:
 	PitfallGame();
 	void run();
 	void drawAll();
 	void handleKeyboardInput(int key, int keyState);
 	void handleKeyboardInput(unsigned char c);
-	ScenarioEnemies& thisScenario();
+
 };
 
 #endif
