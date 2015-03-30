@@ -67,6 +67,23 @@ void AnimatedObject::buildSprite()
 
 }
 
+void AnimatedObject::drawAllRectanglesOutlines()
+{
+	for (vector<Polygon>::iterator objectPolygon = this->begin(); objectPolygon != this->end(); objectPolygon++)
+	{
+		for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
+		{
+			glColor3ub(255, 0, 0);
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(objectRect->x(), objectRect->y());
+			glVertex2f(objectRect->x() + objectRect->width(), objectRect->y());
+			glVertex2f(objectRect->x() + objectRect->width(), objectRect->y() + objectRect->height());
+			glVertex2f(objectRect->x(), objectRect->y() + objectRect->height());
+			glEnd();
+		}
+	}
+}
+
 void AnimatedObject::push_back(Rect rect)
 {
 	Polygon p(Sprite::_x, Sprite::_y);

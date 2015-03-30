@@ -138,6 +138,15 @@
     <ClInclude Include="Sprite.h">
       <Filter>Header Files\GeometricShapes</Filter>
     </ClInclude>
+    <ClInclude Include="Snake.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonfire.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldBar.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -212,6 +221,15 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files\GeometricShapes</Filter>
     </ClCompile>
+    <ClCompile Include="Snake.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonfire.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldBar.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PITFALL2600.rc">
@@ -220,5 +238,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ScenarioEnemies.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="ScenarioWorldElements.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

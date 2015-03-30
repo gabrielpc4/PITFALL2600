@@ -10,40 +10,166 @@ PitfallGame::PitfallGame()
 	world				= new World();
 	player				= new Player(39, 140);
 	scorpion			= NULL;
+	snake				= NULL;
 	paused				= false;
 	allowCrocodiles		= false;
 	world->buildScenario(scenarioNumber);	
 	spawnEnemies();
 	crocodiles.push_back(Crocodile(187, 136));
 	crocodiles.push_back(Crocodile(245, 136));
-	crocodiles.push_back(Crocodile(303, 136));				
+	crocodiles.push_back(Crocodile(303, 136));		
+}
+
+void PitfallGame::raffleEnemies()
+{
+	ScenarioEnemies currentScenario;
+
+	if (world->hasATreasure() == false)
+	{
+		int n = rand() % 6;
+		switch (n)
+		{
+		case(0) :
+		{
+			if (world->hasABonfire() == false)
+			{
+				currentScenario.nLogs = 1;
+				currentScenario.movingLogs = (((rand() % 5) == 0) ? true : false);
+			}
+			else
+			{
+				raffleEnemies();
+			}
+		}break;
+		case(1) :
+		{
+			if (world->hasABonfire() == false)
+			{
+				currentScenario.nLogs = 3;
+				currentScenario.movingLogs = (((rand() % 5) == 0) ? false : true);
+			}
+			else
+			{
+				raffleEnemies();
+			}
+		}break;
+		case(2) :
+		{
+			if (world->hasABonfire() == false)
+			{
+				currentScenario.nLogs = 3;
+				currentScenario.movingLogs = (((rand() % 5) == 0) ? false : true);
+			}
+			else
+			{
+				raffleEnemies();
+			}
+		}break;
+		case(3) :
+		{
+			if (world->hasWater())
+			{
+				currentScenario.nCrocodiles = 3;
+				if (world->hasMovingHoles())
+				{
+					world->forceStaticHoles();
+				}
+			}
+			else
+			{
+				raffleEnemies();
+			}
+		}break;
+		case(4) :
+		{
+			currentScenario.nSnakes = 1;
+		}break;
+		case(5) :
+		{
+			world->createABonfire();
+		}break;
+		default:
+		{
+
+		}break;
+		}
+	}
+	
+	if (scenarioNumber > 0)
+	{
+		if (scenarioNumber > (int)positiveScenarios.size() - 1)
+		{
+			positiveScenarios.push_back(currentScenario);
+		}		
+	}
+	if (scenarioNumber < 0)
+	{
+		if (abs(scenarioNumber) > (int)negativeScenarios.size() - 1)
+		{
+			negativeScenarios.push_back(currentScenario);
+		}
+	}
+	else
+	{		
+		if ((int)positiveScenarios.size() == 0)
+		{		
+			positiveScenarios.push_back(currentScenario);
+		}
+		if ((int)negativeScenarios.size() == 0)
+		{			
+			negativeScenarios.push_back(currentScenario);
+		}				
+	}
+
+	if (world->hasABrickWall() == false && world->hasStairs() == false)
+	{
+		thisScenario().nScorpions = 1;
+	}
+
+	if ((world->hasABlackHole() || world->hasWater()) && world->hasAVine() == false)
+	{
+		world->createAVine();
+	}
+
+	
+	for (int i = 0; i <(int) negativeScenarios.size(); i++)
+	{
+		if (i != 0)
+		{
+			//cout << "scenario number: " << -i << endl;
+			//cout << "scorpions: " << negativeScenarios.at(i).nScorpions << " logs: " << negativeScenarios.at(i).nLogs << " moving logs: " << negativeScenarios.at(i).movingLogs << " crocodiles: " << negativeScenarios.at(i).nCrocodiles << " snakes: " << negativeScenarios.at(i).nSnakes << endl << endl;
+		}
+		
+	}
+	for (int i = 0; i <(int) positiveScenarios.size(); i++)
+	{
+		//cout << "scenario number: " << i << endl;
+		//cout << "scorpions: " << positiveScenarios.at(i).nScorpions << " logs: " << positiveScenarios.at(i).nLogs << " moving logs: " << positiveScenarios.at(i).movingLogs << " crocodiles: " << positiveScenarios.at(i).nCrocodiles << " snakes: " << positiveScenarios.at(i).nSnakes << endl << endl;
+	}
+
 }
 
 void PitfallGame::spawnEnemies()
 {
-	enemiesFile.seekToScenario(scenarioNumber);
 
-	nScorpions	= enemiesFile.nextCharAsInt();
-	nLogs		= enemiesFile.nextCharAsInt();
-	movingLogs	= enemiesFile.nextCharAsBool();
-	nCrocodiles	= enemiesFile.nextCharAsInt();
+	raffleEnemies();
 	
-	switch (nLogs)
+	switch (thisScenario().nLogs)
 	{
 		case (1) :
 		{
-			logs.push_back(Log(LOG_POSITION_2, movingLogs));
+			logs.push_back(Log(LOG_POSITION_2, thisScenario().movingLogs));
 		}break;
 		case(2) :
 		{
-			logs.push_back(Log(LOG_POSITION_2, movingLogs));
-			logs.push_back(Log(LOG_POSITION_3, movingLogs));
+			logs.push_back(Log(LOG_POSITION_2, thisScenario().movingLogs));
+			logs.push_back(Log(LOG_POSITION_3, thisScenario().movingLogs));
 		}break;
 		case(3):
 		{
-			logs.push_back(Log(LOG_POSITION_1, movingLogs));
-			logs.push_back(Log(LOG_POSITION_2, movingLogs));
-			logs.push_back(Log(LOG_POSITION_3, movingLogs));
+			logs.push_back(Log(LOG_POSITION_1, thisScenario().movingLogs));
+			logs.push_back(Log(LOG_POSITION_2, thisScenario().movingLogs));
+			logs.push_back(Log(LOG_POSITION_3, thisScenario().movingLogs));
 		}break;
 		default:
 		{
@@ -51,15 +177,21 @@ void PitfallGame::spawnEnemies()
 		}break;
 	}
 
-	if (nScorpions != 0)
+	if (thisScenario().nScorpions != 0)
 	{
 		scorpion = new Scorpion();
 	}
 
-	if (nCrocodiles != 0)
+	if (thisScenario().nCrocodiles != 0)
 	{
 		allowCrocodiles = true;
 	}
+
+	if (thisScenario().nSnakes != 0)
+	{
+		snake = new Snake();
+	}
+
 }
 
 void PitfallGame::run()
@@ -106,6 +238,15 @@ void PitfallGame::run()
 			paused = false;			
 		}
 	}
+
+	if (world->hasATreasure())
+	{
+		if (areColliding(player, *world->goldBar,BOX_DETECTION))
+		{
+			score += 4000;
+			world->deleteTreasure();
+		}
+	}	
 }
 
 
@@ -113,15 +254,57 @@ void PitfallGame::run()
 void PitfallGame::drawAll()
 {
 	world->draw(scenarioNumber);
-	if (DEBUG_MODE && player->isUndeground() && nScorpions != 0)
+
+	if (thisScenario().nSnakes != 0)
 	{
-		player->DRAW_ON_DEBUG_MODE();
+		snake->draw();
+	}
+	
+	if (DEBUG_MODE == false)
+	{
+		player->draw();
+
+		if (thisScenario().nScorpions != 0)
+		{
+			scorpion->draw();
+		}
 	}
 	else
 	{
-		player->draw();
+		if (player->isUndeground() && thisScenario().nScorpions != 0
+			|| world->hasABonfire() && areClose(player, (Sprite*)world->bonfire)
+			|| thisScenario().nSnakes != 0 && areClose(player, (Sprite*)snake))
+		{
+			player->DRAW_ON_DEBUG_MODE();
+		}
+		else
+		{
+			player->draw();
+		}
+
+		if (thisScenario().nScorpions != 0)
+		{
+			scorpion->DRAW_ON_DEBUG_MODE();
+		}
+
+		if (thisScenario().nSnakes != 0)
+		{
+			snake->DRAW_ON_DEBUG_MODE();
+		}
+
+		drawCollisionRectangles();
+
+		if (world->hasAVine())
+		{
+			world->vine->drawCircleTrack();
+		}	
+
+		if (world->hasABonfire())
+		{
+			world->bonfire->DRAW_ON_DEBUG_MODE();
+		}
 	}
-	
+
 	world->drawOverlayers();
 
 	for (unsigned i = 0; i < logs.size(); i++)
@@ -144,27 +327,10 @@ void PitfallGame::drawAll()
 		}
 	}
 
-	if (scorpion != NULL)
-	{
-		if (DEBUG_MODE)
-		{
-			scorpion->DRAW_ON_DEBUG_MODE();
-		}
-		else
-		{
-			scorpion->draw();
-		}		
-	}
+	
+
 	showHUD();
 
-	if (DEBUG_MODE)
-	{
-		drawCollisionRectangles();
-		if (world->hasAVine())
-		{
-			world->vine->drawCircleTrack();
-		}
-	}
 	
 	if ((player->isDead() == false) || (player->isDead()) && player->isFalling()) // Makes the game freeze, when the player dies
 	{
@@ -295,15 +461,14 @@ void PitfallGame::physics()
 	// Falling in the Black Hole or in the Water
 	
 	if (world->hasABlackHole())
-	{
+	{			
 		if (willFall(player, world->blackHole))
 		{			
 			if (player->isJumping() == false)
 			{
 				if (GOD_MODE == false)
 				{
-					world->blackHole->disableSizeChanging();
-					world->water->disableSizeChanging();
+					world->blackHole->disableSizeChanging();					
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
@@ -319,8 +484,7 @@ void PitfallGame::physics()
 			if (player->isJumping() == false)
 			{
 				if (GOD_MODE == false)
-				{
-					world->blackHole->disableSizeChanging();
+				{					
 					world->water->disableSizeChanging();
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
@@ -445,13 +609,18 @@ void PitfallGame::checkCollisionsWithEnemies()
 			if (areCollidingX(player, &crocodiles[i]))
 			{
 				player->standOnCrocodile(true);
-				player->setFloor(crocodiles[i].topY());
+
+				if (player->y() > crocodiles[i].topY())	// Prevents the bug when the crocodile closes it's mouth when the player is between the mouth
+				{
+					player->setFloor(crocodiles[i].topY());
+				}
+				
 			}
 		}
 	}
 	
 
-	if (scorpion != NULL)
+	if (thisScenario().nScorpions != 0)
 	{
 		// If the player is close to the scorpion
 		if (areClose(player, scorpion) )
@@ -465,6 +634,38 @@ void PitfallGame::checkCollisionsWithEnemies()
 				}				
 			}
 		}					
+	}
+
+	if (thisScenario().nSnakes != 0)
+	{
+		// If the player is close to the scorpion
+		if (areClose(player, snake))
+		{
+			// Only then to the pixel by pixel collision detection, because it costs a lot of processing
+			if (areColliding(player, (Sprite)(*snake), PIXEL_BY_PIXEL_DETECTION))
+			{
+				if (GOD_MODE == false)
+				{
+					player->die();
+				}
+			}
+		}
+	}
+
+	if (world->hasABonfire())
+	{
+		// If the player is close to the scorpion
+		if (areClose(player, world->bonfire))
+		{
+			// Only then to the pixel by pixel collision detection, because it costs a lot of processing
+			if (areColliding(player, (Sprite)(*world->bonfire), PIXEL_BY_PIXEL_DETECTION))
+			{
+				if (GOD_MODE == false)
+				{
+					player->die();
+				}
+			}
+		}
 	}
 }
 
@@ -732,8 +933,11 @@ void PitfallGame::deleteEnemies()
 {
 	logs.clear();
 	delete scorpion;
-	scorpion = NULL;	
+	delete snake;
+	
 	allowCrocodiles = false;
+	scorpion		= NULL;
+	snake			= NULL;
 }
 
 void PitfallGame::reset()
@@ -779,9 +983,9 @@ bool PitfallGame::isInside(Rect& rect1, Rect& rect2)
 	return false;
 }
 
-bool PitfallGame::areClose(Player* player, Scorpion* scorpion)
+bool PitfallGame::areClose(Player* player, Sprite* object)
 {
-	if (player->rightX() > scorpion->x() - 11 && player->x() < scorpion->rightX() + 11)
+	if (player->rightX() > object->x() - 11 && player->x() < object->rightX() + 11)
 	{
 		return true;
 	}
@@ -795,9 +999,30 @@ bool PitfallGame::isPaused()
 
 void PitfallGame::drawCollisionRectangles()
 {	
-	if ((player->isUndeground()  == false)|| player->isUndeground() && nScorpions == 0)
+	if ((player->isUndeground()  == false)
+		|| player->isUndeground() && thisScenario().nScorpions == 0)
 	{
-		drawOutline(player->x(), player->y(), player->width(), player->height());
+		if (world->hasABonfire() || thisScenario().nSnakes != 0)
+		{
+			if (world->hasABonfire())
+			{
+				if (areClose(player, (Sprite*)world->bonfire) == false)
+				{
+					drawOutline(player->x(), player->y(), player->width(), player->height());
+				}
+			}
+			if (thisScenario().nSnakes != 0)
+			{
+				if (areClose(player, (Sprite*)snake) == false)
+				{
+					drawOutline(player->x(), player->y(), player->width(), player->height());
+				}
+			}
+		}
+		else
+		{
+			drawOutline(player->x(), player->y(), player->width(), player->height());
+		}		
 	}	
 
 	if (allowCrocodiles)
@@ -829,3 +1054,16 @@ void PitfallGame::drawOutline(float x, float y, float width, float height)
 	glVertex2f(x , y + height);	
 	glEnd();
 }
+
+ScenarioEnemies& PitfallGame::thisScenario()
+{
+	if (scenarioNumber >= 0)
+	{
+		return positiveScenarios.at(scenarioNumber);
+	}
+	else
+	{
+		return negativeScenarios.at(abs(scenarioNumber));
+	}
+}
+

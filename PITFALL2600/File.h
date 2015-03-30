@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <list>
 using namespace std;
 class File :
 	public ifstream
@@ -16,6 +17,9 @@ public:
 	char nextChar();
 	int nextCharAsInt();
 	bool nextCharAsBool();
-	void seekToScenario(int scenarioNumber);
+	bool seekToScenario(int scenarioNumber);
+	list<int> getAllScenarioNumbersWithTreasure();
+	string nextLine();
+	int nextLineAsInt();
 };
 #endif

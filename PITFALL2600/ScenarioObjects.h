@@ -3,3 +3,5 @@
 #include "TunnelHole.h"
 #include "Hole.h"
 #include "Vine.h"
+#include "Bonfire.h"
+#include "GoldBar.h"

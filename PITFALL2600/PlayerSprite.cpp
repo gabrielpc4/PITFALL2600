@@ -138,7 +138,7 @@ void PlayerSprite::buildSprite()
 		case(0) :
 		{
 			Rect rightFeet(Point(0, 0), Point(7, 2), pantsColor);
-			Rect leftFeet(Point(3, 4), Point(11, 6), pantsColor);
+			Rect leftFeet(Point(4, 4), Point(11, 6), pantsColor);
 
 			this->push_back(rightFeet);
 			this->push_back(leftFeet);
@@ -473,9 +473,9 @@ void PlayerSprite::update()
 
 void PlayerSprite::mirrorX()
 {
-	for (unsigned i = 0; i < this->vector<Polygon>::size(); i++)
+	for (unsigned i = 0; i < this->size(); i++)
 	{
-		Polygon& currentPolygon = this->vector<Polygon>::at(i);		
+		Polygon& currentPolygon = this->at(i);		
 		currentPolygon.mirrorX(_x);				
 	}
 	if (_holdingVine)

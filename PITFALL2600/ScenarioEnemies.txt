@@ -1,0 +1,65 @@
+// This file defines how many of each enemy each scenario should have
+// The isolated number is the scenario number, the line right bellow it its the quantity of each enemy
+// The order of the enemies are:
+// nScorpions  = 0 or 1	
+// nLogs       = 0 to 3		   
+// movingLogs  = 1 for true, 0 for false
+// nCrocodiles = 0 or 3	
+// nSnakes	   = 0 or 1
+-6
+00001
+-5
+00000
+-4
+11000
+-3
+11100
+-2
+12100
+-1
+10030
+0
+01000
+1
+02100
+2
+12100
+3
+10030
+4
+03100
+5
+10001
+6
+10000
+// equals -4
+7
+11000
+// equals -3
+8
+11100
+// equals -2 less 1 log
+9
+11100
+// equals 3
+10
+10030
+// equals 0
+11
+01000
+// equals 3 (less tunnelHoles)
+12
+02100
+// equals 4 (less tunnelHoles)
+13
+03100
+// equals -5 (less tunnelHoles)
+14
+00000
+// equals 0 (plus tunnelHoles)
+15
+01000
+//default:
+52
+00000
+

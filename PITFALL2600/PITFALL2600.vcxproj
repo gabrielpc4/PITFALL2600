@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedObject.h" />
+    <ClInclude Include="Bonfire.h" />
     <ClInclude Include="BrickWall.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Color.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="global_constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
+    <ClInclude Include="GoldBar.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
     <ClInclude Include="Hole.h" />
@@ -102,6 +104,7 @@
     <ClInclude Include="Scorpion.h" />
     <ClInclude Include="ScorpionSprite.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="Snake.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Stairs.h" />
     <ClInclude Include="TunnelHole.h" />
@@ -110,12 +113,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedObject.cpp" />
+    <ClCompile Include="Bonfire.cpp" />
     <ClCompile Include="BrickWall.cpp" />
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Crocodile.cpp" />
     <ClCompile Include="CrocodileSprite.cpp" />
     <ClCompile Include="File.cpp" />
+    <ClCompile Include="GoldBar.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />
@@ -128,6 +133,7 @@
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scorpion.cpp" />
     <ClCompile Include="ScorpionSprite.cpp" />
+    <ClCompile Include="Snake.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Stairs.cpp" />
     <ClCompile Include="TunnelHole.cpp" />
@@ -139,6 +145,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ScenarioEnemies.txt" />
+    <Text Include="ScenarioWorldElements.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

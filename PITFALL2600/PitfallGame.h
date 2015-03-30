@@ -6,6 +6,8 @@
 #include "Enemies.h"
 #include "World.h"
 #include "File.h"
+#include <stdlib.h>     /* srand, rand */
+#include <time.h> 
 #include <vector>
 
 using namespace std;
@@ -16,6 +18,24 @@ using namespace std;
 #define BOX_DETECTION 0
 #define PIXEL_BY_PIXEL_DETECTION 1
 
+class ScenarioEnemies
+{
+public:
+	int nScorpions;
+	int nLogs;
+	bool movingLogs;
+	int nCrocodiles;
+	int nSnakes;
+	ScenarioEnemies()
+	{
+		nScorpions = 0;
+		nLogs = 0;
+		movingLogs = false;
+		nCrocodiles = 0;
+		nSnakes = 0;
+	}
+};
+
 class PitfallGame
 {
 private:
@@ -24,6 +44,7 @@ private:
 	vector<Log> logs;
 	Scorpion* scorpion;
 	vector<Crocodile> crocodiles;
+	Snake* snake;
 	File enemiesFile;
 	int scenarioNumber;
 	int score;
@@ -32,14 +53,13 @@ private:
 	bool DEBUG_MODE;
 	bool GOD_MODE;
 
-	int nScorpions;
-	int nLogs;
-	bool movingLogs;
-	int nCrocodiles;
+
+	vector<ScenarioEnemies> positiveScenarios;
+	vector<ScenarioEnemies> negativeScenarios;
 	
 	bool areCollidingX(Player* player, Crocodile* crocodile);
 	bool areColliding(Player* player, Sprite& object, int detectionType);	
-	bool areClose(Player* player, Scorpion* scorpion);
+	bool areClose(Player* player, Sprite* object);
 	void checkBoundaries();
 	bool isOutOfBoundaries(Player* player);
 	void spawnEnemies();
@@ -63,12 +83,14 @@ private:
 	void drawCollisionRectangles();
 	void freezeHoles();
 	void unFreezeHoles();
+	void raffleEnemies();
 public:
 	PitfallGame();
 	void run();
 	void drawAll();
 	void handleKeyboardInput(int key, int keyState);
 	void handleKeyboardInput(unsigned char c);
+	ScenarioEnemies& thisScenario();
 };
 
 #endif

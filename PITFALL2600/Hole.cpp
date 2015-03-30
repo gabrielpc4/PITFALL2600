@@ -19,8 +19,7 @@ void Hole::expandOrShrink()
 		{
 			if (animationFrame == 5)
 			{
-				movingHolePoints[i].setY(10);
-				_width = 0;
+				movingHolePoints[i].setY(10);		
 			}
 			else
 			{
@@ -40,8 +39,7 @@ void Hole::expandOrShrink()
 				}
 			}
 			
-		}
-		
+		}		
 	}
 	else
 	{
@@ -134,17 +132,23 @@ void Hole::animate()
 				frames = 0;
 			}		
 		}				
-	}
-		
+	}		
 }
 
 void Hole::draw()
 {
 	buildSprite();	
-	if (animationFrame == 4)
+
+	if (type == STATIC_HOLE)
+	{
+		_width = 230;
+	}
+	
+	if (type == MOVING_HOLE && animationFrame == 4)
 	{
 		_width = 0;
-	}
+	}	
+
 	Sprite::draw();
 }
 
@@ -189,6 +193,7 @@ void Hole::buildSprite()
 
 	bottomOverlayer.push_back(Rect(Point(this->x() - 10, 132 - 36), Point(this->x() + this->width() + 10, 132 - 6), Color(148, 91, 0)));
 	bottomOverlayer.push_back(Rect(Point(this->x() - 10, 132 - 6), Point(this->x() + this->width() + 10, 132 + 8), Color(187, 147, 0)));
+	
 }
 
 void Hole::drawOverlayer()
