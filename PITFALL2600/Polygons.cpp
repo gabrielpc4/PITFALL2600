@@ -1,12 +1,12 @@
-#include "Polygon.h"
+#include "Polygons.h"
 
-Polygon::Polygon()
-	: Polygon(0, 0)
+Polygons::Polygons()
+	: Polygons(0, 0)
 {
 
 }
 
-Polygon::Polygon(float startX, float startY)
+Polygons::Polygons(float startX, float startY)
 {
 	Point::_x = startX;
 	Point::_y = startY;
@@ -14,30 +14,30 @@ Polygon::Polygon(float startX, float startY)
 	this->startY = startY;
 }
 
-Polygon::Polygon(float startX, float startY, Color color)
-	: Polygon(startX, startY)	
+Polygons::Polygons(float startX, float startY, Color color)
+	: Polygons(startX, startY)	
 {
 	this->_color = color;
 }
 
-Polygon::Polygon(Rect rect, Color color)
-	: Polygon(rect)
+Polygons::Polygons(Rect rect, Color color)
+	: Polygons(rect)
 {
 	rect.setColor(color);
 
 }
-Polygon::Polygon(Rect rect)
+Polygons::Polygons(Rect rect)
 {
 	vector<Rect>::push_back(rect);
 }
 
-Polygon::Polygon(Color color)
-	: Polygon(0,0)
+Polygons::Polygons(Color color)
+	: Polygons(0,0)
 {
 	this->_color = color;
 }
 
-Polygon& Polygon::operator=(const Polygon& pol2)
+Polygons& Polygons::operator=(const Polygons& pol2)
 {
 	Point::_x = pol2._x;
 	Point::_y = pol2._y;
@@ -50,7 +50,7 @@ Polygon& Polygon::operator=(const Polygon& pol2)
 }
 
 
-Polygon& Polygon::operator+=(const Point& point)
+Polygons& Polygons::operator+=(const Point& point)
 {
 	for (vector<Rect>::iterator currentRect = vector<Rect>::begin(); currentRect != vector<Rect>::end(); ++currentRect)
 	{
@@ -59,7 +59,7 @@ Polygon& Polygon::operator+=(const Point& point)
 	return *this;
 }
 
-Polygon& Polygon::operator-=(const Point& point)
+Polygons& Polygons::operator-=(const Point& point)
 {
 	for (vector<Rect>::iterator currentRect = vector<Rect>::begin(); currentRect != vector<Rect>::end(); ++currentRect)
 	{
@@ -68,25 +68,25 @@ Polygon& Polygon::operator-=(const Point& point)
 	return *this;
 }
 
-void Polygon::setX(GLint x)
+void Polygons::setX(GLint x)
 {
 	*this -= Point(Point::x(), 0);
 	*this += Point(x, 0);
 }
 
-void Polygon::setY(GLint y)
+void Polygons::setY(GLint y)
 {
 	*this -= Point(0, Point::y());
 	*this += Point(0, y);
 }
 
-void Polygon::setPos(GLint x, GLint y)
+void Polygons::setPos(GLint x, GLint y)
 {
 	this->setX(x);
 	this->setY(y);
 }
 
-void Polygon::updateX()
+void Polygons::updateX()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
 
@@ -100,7 +100,7 @@ void Polygon::updateX()
 	Point::_x = smallerX;
 }
 
-void Polygon::update()
+void Polygons::update()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
 	int smallerY = WORLD_WINDOW_HEIGHT;
@@ -133,7 +133,7 @@ void Polygon::update()
 	Rect::_height = (biggerY - smallerY);
 }
 
-void Polygon::push_back(Rect rect)
+void Polygons::push_back(Rect rect)
 {
 
 	if (rect.color().notInformed())
@@ -147,7 +147,7 @@ void Polygon::push_back(Rect rect)
 
 
 
-void Polygon::push_back(Polygon pol)
+void Polygons::push_back(Polygons pol)
 {
 	for (vector<Rect>::iterator currentRect = pol.begin(); currentRect != pol.end(); ++currentRect)
 	{				
@@ -155,7 +155,7 @@ void Polygon::push_back(Polygon pol)
 	}
 }
 
-void Polygon::mirrorX()
+void Polygons::mirrorX()
 {
 	updateX();
 	for (vector<Rect>::iterator currentRect = vector<Rect>::begin(); currentRect != vector<Rect>::end(); ++currentRect)
@@ -165,7 +165,7 @@ void Polygon::mirrorX()
 	*this += Point(this->width(), 0);
 }
 
-void Polygon::mirrorX(int currentX)
+void Polygons::mirrorX(int currentX)
 {
 
 	for (vector<Rect>::iterator it = vector<Rect>::begin(); it != vector<Rect>::end(); ++it)
@@ -174,7 +174,7 @@ void Polygon::mirrorX(int currentX)
 	}
 }
 
-void Polygon::draw() 
+void Polygons::draw() 
 {
 	for (vector<Rect>::const_iterator currentRect = vector<Rect>::begin(); currentRect != vector<Rect>::end(); ++currentRect)
 	{	

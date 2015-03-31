@@ -3,67 +3,68 @@
 // The order of the elements are:
 // 		allowStairs			= 0 or 1
 //		allowBrickWalls		= 0 or 1 		
-//		brickWallSide		= 0:NONE ; 1:LEFT; 2: RIGHT		 
+//		brickWallSide		= 0:LEFT 1: RIGHT		 
 //		allowTunnelHoles	= 0 or 1
 //		allowBlackHoles	 	= 0 or 1
 //		allowWater	 		= 0 or 1
 //		allowMovingHoles	= 0 or 1	
 //		allowVines			= 0 or 1
 //      allowBonfires		= 0 or 1
-//      allowGoldBars		= 0 or 1
+//      allowTreasures		= 0 or 1
+//      treasureType		= 0: MONEY_BAG | 1: SILVER_BAR | 2: GOLD_BAR | 3: RING
 -6
-1110000000
+11000000000
 -5
-1121000010
+11110000100
 -4
-0000010100
+00000101000
 -3
-0000011000
+00000110000
 -2
-0000101100
+00001011000
 -1
-0000010100
+00000101000
 0
-1120000000
+11100000000
 1
-1121000000
+11110000000
 2
-0000100100
+00001001000
 3
-0000010000
+00000100000
 4
-1111000000
+11010000000
 5
-0000100100
+00001001000
 6
-0000101001
+00001010012
 // equals -4
 7
-0000010100
+00000101000
 // equals -3
 8
-0000011000
+00000110000
 // equals -2 less 1 log
 9
-0000101100
+00001011000
 // equals 3
 10
-0000010000
+00000100000
 // equals 0
 11
-1120000000
+11100000000
 // equals 1 (less tunnelHoles)
 12
-1120000000
+11100000000
 // equals 4 (less tunnelHoles)
 13
-1110000000
+11000000000
 // equals -5 (less tunnelHoles)
 14
-1121000010
+11110000100
 // equals 0 (plus tunnelHoles)
 15
-1121000000
+11110000000
 //default:
 52
-0000000000
+00000000000

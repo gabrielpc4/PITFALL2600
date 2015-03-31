@@ -1,14 +1,19 @@
 #pragma once
 #ifndef PITFALLGAME_H_
 #define PITFALLGAME_H_
+
 #include <string>
 #include "Player.h"
 #include "Enemies.h"
+#include "EnemiesGenerator.h"
 #include "World.h"
 #include "File.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h> 
+
 #include <vector>
+
+#include <windows.h>
 
 using namespace std;
 
@@ -18,23 +23,6 @@ using namespace std;
 #define BOX_DETECTION 0
 #define PIXEL_BY_PIXEL_DETECTION 1
 
-class ScenarioEnemies
-{
-public:
-	int nScorpions;
-	int nLogs;
-	bool movingLogs;
-	int nCrocodiles;
-	int nSnakes;
-	ScenarioEnemies()
-	{
-		nScorpions = 0;
-		nLogs = 0;
-		movingLogs = false;
-		nCrocodiles = 0;
-		nSnakes = 0;
-	}
-};
 
 class PitfallGame
 {
@@ -55,6 +43,7 @@ private:
 
 	vector<ScenarioEnemies> positiveScenarios;
 	vector<ScenarioEnemies> negativeScenarios;
+	EnemiesGenerator* enemiesGenerator;
 	
 	bool areCollidingX(Player* player, Crocodile* crocodile);
 	bool areColliding(Player* player, Sprite& object, int detectionType);	
@@ -81,8 +70,7 @@ private:
 	void drawOutline(float x, float y, float width, float height);
 	void drawCollisionRectangles();
 	void freezeHoles();
-	void unFreezeHoles();
-	void raffleEnemies();
+	void unFreezeHoles();	
 	ScenarioEnemies& thisScenario();
 	void nextScenario();
 	void previousScenario();

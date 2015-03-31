@@ -20,16 +20,16 @@ Sprite::Sprite(Rect rect, Color color)
 	push_back(rect);
 }
 
-Sprite::Sprite(Polygon pol)
+Sprite::Sprite(Polygons pol)
 {
 	push_back(pol);
 }
 
 Sprite& Sprite::operator += (const Point& point)
 {
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		*currentPolygon += point;
+		*currentPolygons += point;
 	}
 	_x += point.x();
 	_y += point.y();
@@ -38,9 +38,9 @@ Sprite& Sprite::operator += (const Point& point)
 
 Sprite& Sprite::operator -= (const Point& point)
 {
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		*currentPolygon -= point;
+		*currentPolygons -= point;
 	}
 	_x -= point.x();
 	_y -= point.y();
@@ -68,9 +68,9 @@ void Sprite::setPos(GLint x, GLint y)
 
 void Sprite::draw()
 {
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		currentPolygon->draw();
+		currentPolygons->draw();
 	}
 }
 
@@ -78,11 +78,11 @@ void Sprite::updateX()
 {
 	int smallerX = WORLD_WINDOW_WIDTH;
 
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		if (currentPolygon->x() < smallerX)
+		if (currentPolygons->x() < smallerX)
 		{
-			smallerX = currentPolygon->x();
+			smallerX = currentPolygons->x();
 		}
 	}
 	Point::_x = smallerX;
@@ -96,23 +96,23 @@ void Sprite::update()
 	int biggerX = 0;
 	int biggerY = 0;
 
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		if (currentPolygon->x() < smallerX)
+		if (currentPolygons->x() < smallerX)
 		{
-			smallerX = currentPolygon->x();
+			smallerX = currentPolygons->x();
 		}
-		if (currentPolygon->y() < smallerY)
+		if (currentPolygons->y() < smallerY)
 		{
-			smallerY = currentPolygon->y();
+			smallerY = currentPolygons->y();
 		}
-		if (currentPolygon->rightX() > biggerX)
+		if (currentPolygons->rightX() > biggerX)
 		{
-			biggerX = currentPolygon->rightX();
+			biggerX = currentPolygons->rightX();
 		}
-		if (currentPolygon->topY() > biggerY)
+		if (currentPolygons->topY() > biggerY)
 		{
-			biggerY = currentPolygon->topY();
+			biggerY = currentPolygons->topY();
 		}
 	}
 	_x = smallerX;
@@ -127,9 +127,9 @@ void Sprite::push_back(Rect rect)
 	{
 		rect.setColor(this->_color);
 	}
-	Polygon p(startX, startY);
+	Polygons p(startX, startY);
 	p.push_back(rect);
-	vector<Polygon>::push_back(p);
+	vector<Polygons>::push_back(p);
 	this->update();
 }
 
@@ -139,23 +139,23 @@ void Sprite::push_back(Rect rect, Color color)
 	Sprite::push_back(rect);
 }
 
-void Sprite::push_back(Polygon pol)
+void Sprite::push_back(Polygons pol)
 {
 	if (pol.color().notInformed())
 	{
 		pol.setColor(this->_color);
 	}
-	Polygon p(startX, startY);
+	Polygons p(startX, startY);
 	p.push_back(pol);
-	vector<Polygon>::push_back(p);
+	vector<Polygons>::push_back(p);
 	this->update();
 }
 
 void Sprite::push_back(Sprite sprite)
 {
-	for (vector<Polygon>::iterator currentPolygon = sprite.begin(); currentPolygon != sprite.end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = sprite.begin(); currentPolygons != sprite.end(); ++currentPolygons)
 	{
-		vector<Polygon>::push_back(*currentPolygon);
+		vector<Polygons>::push_back(*currentPolygons);
 	}
 	this->update();
 	
@@ -165,8 +165,8 @@ void Sprite::mirrorX()
 {		
 	for (unsigned i = 0; i < this->size(); i++)
 	{
-		Polygon& currentPolygon = this->at(i);
-		currentPolygon.mirrorX();
+		Polygons& currentPolygons = this->at(i);
+		currentPolygons.mirrorX();
 	}
 }
 

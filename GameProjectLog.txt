@@ -139,7 +139,7 @@ threesBranches
 .Scorpion added in two scenarios
 
 03-24-2015
-. Finished Scroption sprite creation
+. Finished Scorpion sprite creation
 
 03-26-2015
 . Created the class AnimatedObject
@@ -169,3 +169,18 @@ threesBranches
 . Scenario elements and scenario enemies are now defined in 
 ScenarioEnemies.txt and ScenarioWorldElements.txt
 
+03-28-2015
+. Created the Snake enemy
+. Implemented the snake and player collision and death
+. Created the bonfire
+. Implemented bonfire and player collision and death
+. Created the Gold Bar
+. Interaction of the player and the gold bar created
+
+03-29-215
+. Created a way to auto-generate all the levels
+. Created a function that prevents two similar levels to be generated in sequence
+. The player can now skip 3 levels using the tunnels
+. DEBUG MODE created
+. Added a GOD MODE to the game
+. Everything tested and working so far

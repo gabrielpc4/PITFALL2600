@@ -2,10 +2,9 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
-#include "ScenarioObjects.h"
 #include "Shapes.h"
-#include "global_constants.h"
 #include "File.h"
+#include "ScenarioGenerator.h"
 #include <vector>
 #include <stdlib.h> 
 #include <time.h> 
@@ -14,57 +13,27 @@
 
 using namespace std;
 
-class ScenarioElements
-{
-public:
-	bool allowStairs;
-	bool allowVines;
-	bool allowTunnelHoles;
-	bool allowBlackHoles;
-	bool allowWater;
-	bool allowMovingHoles;
-	bool allowBrickWalls;
-	bool allowBonfires;
-	bool allowGoldBars;
-	int brickWallSide;
-	ScenarioElements()
-	{
-		allowStairs = false;
-		allowVines = false;
-		allowTunnelHoles = false;
-		allowBlackHoles = false;
-		allowWater = false;
-		allowMovingHoles = false;
-		allowBrickWalls = false;
-		allowBonfires = false;
-		allowGoldBars = false;
-		brickWallSide = NONE;
-	}
-};
-
 class World
 {	
 private:
-	void drawBasicScenario();				// Draws a basic scenario, with the undeground, the ground, trees and leafs
-	void buildTreeBranch(Polygon& branch, int treeNum);		//Draws the branches corresponding to the tree number, given the tree color
+	void drawBasicScenario();				// Draws a basic scenario, with the underground, the ground, trees and leafs
+	void buildTreeBranch(Polygons& branch, int treeNum);		//Draws the branches corresponding to the tree number, given the tree color
 	void drawTreeLeafs();
 	void buildBasicScenario();
 	void buildTreeLeafs();
 	Rect sky;
 	Rect treeTrunk[4];
-	Polygon treeLeafs;
+	Polygons treeLeafs;
 	Rect tunnelWall;
-	Polygon branches[4];		
+	Polygons branches[4];		
 	File worldElementsFile;
 	int scenarioNumber;
 	vector<ScenarioElements> positiveScenarios;
 	vector<ScenarioElements> negativeScenarios;
+	ScenarioGenerator* scenarioGenerator;
 
 
 public:
-
-
-
 	// Basic Scenario elements
 	Rect tunnelFloor;
 	Rect tunnelTop;
@@ -78,7 +47,7 @@ public:
 	Hole* blackHole;
 	Hole* water;
 	Bonfire* bonfire;
-	GoldBar* goldBar;
+	Treasure* treasure;
 
 	World();				
 	void buildScenario(int scenarioNumber);
@@ -97,13 +66,8 @@ public:
 	void createAVine();
 	void deleteTreasure();
 	void createStaticWater();
-	void createAGoldBar();
-	void raffleScenarioElements();
-	ScenarioElements& getScenario(int scenarioNumber);
+	void createATreasure();		
 	ScenarioElements& thisScenario();
-	void preventSimilarScenarios();
-	void randomizeStairs();
-	void randomizeHole();
 	void denyBonfires();
 };
 #endif

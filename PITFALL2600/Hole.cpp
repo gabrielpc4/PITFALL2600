@@ -37,8 +37,7 @@ void Hole::expandOrShrink()
 						movingHolePoints[i].setY(movingHolePoints[i].y() - 2);
 					}
 				}
-			}
-			
+			}			
 		}		
 	}
 	else

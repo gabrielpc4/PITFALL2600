@@ -30,9 +30,9 @@ void AnimatedObject::draw()
 
 void AnimatedObject::shiftSpriteOnly(float x, float y)
 {
-	for (vector<Polygon>::iterator currentPolygon = this->begin(); currentPolygon != this->end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = this->begin(); currentPolygons != this->end(); ++currentPolygons)
 	{
-		*currentPolygon += Point(x,y);
+		*currentPolygons += Point(x,y);
 	}
 }
 
@@ -69,9 +69,9 @@ void AnimatedObject::buildSprite()
 
 void AnimatedObject::drawAllRectanglesOutlines()
 {
-	for (vector<Polygon>::iterator objectPolygon = this->begin(); objectPolygon != this->end(); objectPolygon++)
+	for (vector<Polygons>::iterator objectPolygons = this->begin(); objectPolygons != this->end(); objectPolygons++)
 	{
-		for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
+		for (vector<Rect>::iterator objectRect = objectPolygons->begin(); objectRect != objectPolygons->end(); objectRect++)
 		{
 			glColor3ub(255, 0, 0);
 			glBegin(GL_LINE_LOOP);
@@ -86,7 +86,7 @@ void AnimatedObject::drawAllRectanglesOutlines()
 
 void AnimatedObject::push_back(Rect rect)
 {
-	Polygon p(Sprite::_x, Sprite::_y);
+	Polygons p(Sprite::_x, Sprite::_y);
 	if (Sprite::_color.notInformed())
 	{
 		p.setColor(rect.color());
@@ -97,12 +97,12 @@ void AnimatedObject::push_back(Rect rect)
 	}
 	
 	p.push_back(rect);
-	vector<Polygon>::push_back(p);
+	vector<Polygons>::push_back(p);
 }
 
-void AnimatedObject::push_back(Polygon pol)
+void AnimatedObject::push_back(Polygons pol)
 {
-	Polygon p(Sprite::_x, Sprite::_y, pol.color());
+	Polygons p(Sprite::_x, Sprite::_y, pol.color());
 	p.push_back(pol);
 	Sprite::push_back(p);
 }
@@ -132,7 +132,7 @@ void AnimatedObject::setAnimationFrame(int number)
 	animationFrame = number;
 }
 
-unsigned AnimatedObject::totalPolygons()
+unsigned AnimatedObject::totalPolygonss()
 {
 	return Sprite::size();
 }

@@ -11,7 +11,8 @@ PitfallGame::PitfallGame()
 	player				= new Player(39, 140);
 	scorpion			= NULL;
 	snake				= NULL;
-	paused				= false;	
+	paused				= false;
+	enemiesGenerator	= new EnemiesGenerator(positiveScenarios, negativeScenarios, scenarioNumber, world);
 
 	if (RANDOM_LEVELS)
 	{
@@ -58,115 +59,6 @@ PitfallGame::PitfallGame()
 	crocodiles.push_back(Crocodile(303, 136));		
 }
 
-void PitfallGame::raffleEnemies()
-{
-	ScenarioEnemies currentScenario;
-
-	if (world->hasATreasure() == false)
-	{
-		int n = rand() % 6;
-		switch (n)
-		{
-		case(0) :
-		{			
-				currentScenario.nLogs = 1;
-				currentScenario.movingLogs = (((rand() % 5) == 0) ? true : false);
-		
-		}break;
-		case(1) :
-		{			
-				currentScenario.nLogs = 2;
-				currentScenario.movingLogs = true;
-		}break;
-		case(2) :
-		{
-				currentScenario.nLogs = 3;
-				currentScenario.movingLogs = (((rand() % 5) == 0) ? false : true);
-		}break;
-		case(3) :
-		{
-			
-			currentScenario.nCrocodiles = 3;
-
-		}break;
-		case(4) :
-		{
-			if (world->hasABonfire() == false)
-			{
-				currentScenario.nSnakes = 1;
-			}
-			else
-			{
-				raffleEnemies();
-			}			
-		}break;
-		case(5) :
-		{
-			world->createABonfire();
-		}break;
-		default:
-		{		
-		}break;
-		}
-	}
-
-	if (currentScenario.nCrocodiles != 0)
-	{
-		if (rand() % 2 == 0)
-		{
-			world->createAVine();
-		}
-		else
-		{
-			if (currentScenario.nSnakes == 0 && world->hasABonfire() == false)
-			{
-				if (rand() % 2 == 0)
-				{
-					world->createAGoldBar();
-				}				
-			}
-		}
-		world->createStaticWater();
-	}
-	
-	if (scenarioNumber > 0)
-	{
-		if (scenarioNumber > (int)positiveScenarios.size() - 1)
-		{
-			positiveScenarios.push_back(currentScenario);
-		}
-	}
-	else if (scenarioNumber < 0)
-	{		
-		if (abs(scenarioNumber) >(int)negativeScenarios.size() - 1)
-		{
-			negativeScenarios.push_back(currentScenario);
-		}
-	}
-	else
-	{
-		positiveScenarios.push_back(currentScenario);
-		negativeScenarios.push_back(currentScenario);
-	}
-
-	if (world->hasABrickWall() == false && world->hasStairs() == false)
-	{
-		thisScenario().nScorpions = 1;
-	}
-
-	if ((world->hasABlackHole() && world->hasMovingHoles() == false)
-		|| world->hasWater() && thisScenario().nCrocodiles == 0 && world->hasMovingHoles() == false && world->hasAVine() == false)
-	{
-		world->createAVine();
-	}
-
-	if (thisScenario().movingLogs == false && world->hasABonfire())
-	{
-		world->denyBonfires();
-	}
-}
-
-
 
 void PitfallGame::spawnEnemies()
 {
@@ -174,7 +66,7 @@ void PitfallGame::spawnEnemies()
 	{
 		if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1 || enemiesFile.is_open() == false)
 		{
-			raffleEnemies();
+			enemiesGenerator->generateNewEnemies();
 		}
 	}
 		
@@ -233,6 +125,7 @@ void PitfallGame::run()
 			if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
 			{
 				player->holdVine(true);
+				PlaySound(TEXT("PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 			if (player->isHoldingVine())
 			{
@@ -261,9 +154,10 @@ void PitfallGame::run()
 
 	if (world->hasATreasure())
 	{
-		if (areColliding(player, *world->goldBar,BOX_DETECTION))
+		if (areColliding(player, *world->treasure,BOX_DETECTION))
 		{
 			score += 4000;
+			PlaySound(TEXT("TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			world->deleteTreasure();
 		}
 	}	
@@ -429,9 +323,10 @@ void PitfallGame::physics()
 		if (willFall(player, world->stairs->exit) && (player->isClimbing() == false))
 		{
 			if (player->isJumping() == false)
-			{				
+			{	
 				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
+				PlaySound(TEXT("falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}		
 	}
@@ -467,9 +362,10 @@ void PitfallGame::physics()
 		if (willFall(player, &(world->tunnelHole.at(i))))
 		{
 			if (player->isJumping() == false)
-			{
+			{											
 				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
+				PlaySound(TEXT("falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
 	}	
@@ -487,6 +383,7 @@ void PitfallGame::physics()
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
+					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -504,6 +401,7 @@ void PitfallGame::physics()
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
+					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -639,9 +537,13 @@ void PitfallGame::checkCollisionsWithEnemies()
 	player->takeHit(false);
 	for (unsigned i = 0; i < logs.size(); i++)
 	{
-		if (areColliding(player, (Sprite)logs.at(i), BOX_DETECTION))
+		if (areColliding(player, (Sprite)logs.at(i), BOX_DETECTION) && player->isSwinging() == false)
 		{
 			player->takeHit(true);
+			if (player->isDead() == false)
+			{
+				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME);
+			}			
 		}
 	}
 
@@ -676,6 +578,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
+					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}				
 			}
 		}					
@@ -692,6 +595,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
+					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -708,6 +612,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
+					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -743,13 +648,13 @@ bool PitfallGame::areColliding(Player* player, Sprite& object, int detectionType
 	}
 	else
 	{		
-		for (vector<Polygon>::iterator playerPolygon = player->begin(); playerPolygon != player->end(); playerPolygon++)
+		for (vector<Polygons>::iterator playerPolygons = player->begin(); playerPolygons != player->end(); playerPolygons++)
 		{		
-			for (vector<Rect>::iterator playerRect = playerPolygon->begin(); playerRect != playerPolygon->end(); playerRect++)
+			for (vector<Rect>::iterator playerRect = playerPolygons->begin(); playerRect != playerPolygons->end(); playerRect++)
 			{
-				for (vector<Polygon>::iterator objectPolygon = object.begin(); objectPolygon != object.end(); objectPolygon++)
+				for (vector<Polygons>::iterator objectPolygons = object.begin(); objectPolygons != object.end(); objectPolygons++)
 				{
-					for (vector<Rect>::iterator objectRect = objectPolygon->begin(); objectRect != objectPolygon->end(); objectRect++)
+					for (vector<Rect>::iterator objectRect = objectPolygons->begin(); objectRect != objectPolygons->end(); objectRect++)
 					{				
 						if (isInside(*playerRect, *objectRect))
 						{
@@ -814,8 +719,9 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 		{
 			if (isAbleToClimbOut(player))
 			{
-				player->look(RIGHT);
+				player->look(RIGHT);				
 				player->climbOut(RIGHT);
+				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
 	}
@@ -843,6 +749,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			{
 				player->look(LEFT);
 				player->climbOut(LEFT);
+				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
 	}
@@ -874,6 +781,10 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					// Prevents the user from jumping while climbing or falling
 					if ((player->isClimbing() == false) && (player->isFalling() == false))
 					{
+						if (player->isJumping() == false && player->isDead() == false)
+						{
+							PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+						}
 						player->jumping(true);
 					}
 				}				
@@ -951,13 +862,18 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			// Prevents the user from jumping while climbing or falling
 			if ((player->isClimbing() == false) && (player->isFalling() == false))
 			{
+				if (player->isJumping() == false && player->isDead() == false)
+				{
+					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME );
+				}
 				player->jumping(true);
 			}
 			// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
 			if (player->isClimbing() && isAbleToClimbOut(player))
 			{
-				player->look(RIGHT);
+				player->look(RIGHT);				
 				player->climbOut(RIGHT);
+				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}		
 	}
@@ -968,6 +884,14 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 	if (c == 'g' || c == 'G')
 	{
 		GOD_MODE = !GOD_MODE;
+	}
+
+	if (c == 'l' || c == 'L')
+	{
+		if (DEBUG_MODE)
+		{
+			player->setLives(99);
+		}
 	}
 }
 
@@ -1086,7 +1010,7 @@ void PitfallGame::drawCollisionRectangles()
 
 	if (world->hasATreasure())
 	{
-		drawOutline(*world->goldBar);
+		drawOutline(*world->treasure);
 	}
 }
 

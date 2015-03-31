@@ -60,5 +60,6 @@ public:
 	bool isHoldingVine();	
 	bool isStandingOnCrocodile();
 	void standOnCrocodile(bool state);
+	void setLives(int number);
 };
 #endif

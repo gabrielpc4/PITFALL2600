@@ -60,17 +60,11 @@
     <ClInclude Include="Color.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerSprite.h">
       <Filter>Header Files\Sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenarioObjects.h">
-      <Filter>Header Files\includes</Filter>
     </ClInclude>
     <ClInclude Include="glut.h">
       <Filter>Header Files\includes</Filter>
@@ -108,9 +102,6 @@
     <ClInclude Include="ScorpionSprite.h">
       <Filter>Header Files\Sprites</Filter>
     </ClInclude>
-    <ClInclude Include="AnimatedObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="global_constants.h">
       <Filter>Header Files\includes</Filter>
     </ClInclude>
@@ -129,9 +120,6 @@
     <ClInclude Include="Circle.h">
       <Filter>Header Files\GeometricShapes</Filter>
     </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>Header Files\GeometricShapes</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Header Files\GeometricShapes</Filter>
     </ClInclude>
@@ -144,8 +132,23 @@
     <ClInclude Include="Bonfire.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GoldBar.h">
+    <ClInclude Include="Treasure.h">
       <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenarioElements.h">
+      <Filter>Header Files\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygons.h">
+      <Filter>Header Files\GeometricShapes</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedObject.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenarioGenerator.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemiesGenerator.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,9 +197,6 @@
     <ClCompile Include="ScorpionSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
-    <ClCompile Include="AnimatedObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CrocodileSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
     </ClCompile>
@@ -212,9 +212,6 @@
     <ClCompile Include="Circle.cpp">
       <Filter>Source Files\GeometricShapes</Filter>
     </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>Source Files\GeometricShapes</Filter>
-    </ClCompile>
     <ClCompile Include="Rect.cpp">
       <Filter>Source Files\GeometricShapes</Filter>
     </ClCompile>
@@ -227,17 +224,27 @@
     <ClCompile Include="Bonfire.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GoldBar.cpp">
+    <ClCompile Include="Treasure.cpp">
       <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="PITFALL2600.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
+    <ClCompile Include="ScenarioElements.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygons.cpp">
+      <Filter>Source Files\GeometricShapes</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedObject.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemies.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioGenerator.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemiesGenerator.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ScenarioEnemies.txt">

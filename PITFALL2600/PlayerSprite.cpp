@@ -151,7 +151,7 @@ void PlayerSprite::buildSprite()
 			Rect rightFeet(Point(-7, 4), Point(-3, 10), pantsColor);
 			this->push_back(rightFeet);
 
-			Polygon rightLeg(pantsColor);
+			Polygons rightLeg(pantsColor);
 			rightLeg.push_back(Rect(Point(-3, 8), Point(4, 10)));
 			rightLeg.push_back(Rect(Point(0, 10), Point(4, 14)));
 			rightLeg.push_back(Rect(Point(4, 12), Point(8, 14)));
@@ -162,7 +162,7 @@ void PlayerSprite::buildSprite()
 
 			this->push_back(leftLeg);
 
-			Polygon leftFeet(pantsColor);
+			Polygons leftFeet(pantsColor);
 			leftFeet.push_back(Rect(Point(11, 2), Point(15, 6)));
 			leftFeet.push_back(Rect(Point(15, 4), Point(18, 6)));
 
@@ -185,7 +185,7 @@ void PlayerSprite::buildSprite()
 			Rect rightFeet(Point(-4, 4), Point(0, 10), pantsColor);
 			this->push_back(rightFeet);
 
-			Polygon rightLeg(pantsColor);
+			Polygons rightLeg(pantsColor);
 			rightLeg.push_back(Rect(Point(0, 8), Point(11, 10)));
 			rightLeg.push_back(Rect(Point(11, 8), Point(15, 14)));
 			rightLeg.push_back(Rect(Point(4, 12), Point(11, 16)));
@@ -207,12 +207,12 @@ void PlayerSprite::buildSprite()
 			Rect leftFeet(Point(11, 4), Point(14, 6), pantsColor);
 			this->push_back(leftFeet);
 
-			Polygon rightLeg(pantsColor);
+			Polygons rightLeg(pantsColor);
 			rightLeg.push_back(Rect(Point(-4, 2), Point(0, 12)));
 			rightLeg.push_back(Rect(Point(0, 8), Point(3, 14)));
 			this->push_back(rightLeg);
 
-			Polygon leftLeg(pantsColor);
+			Polygons leftLeg(pantsColor);
 			leftLeg.push_back(Rect(Point(7, 6), Point(11, 10)));
 			leftLeg.push_back(Rect(Point(11, 10), Point(14, 16)));
 			leftLeg.push_back(Rect(Point(7, 12), Point(11, 18)));
@@ -229,14 +229,14 @@ void PlayerSprite::buildSprite()
 			Rect leftFeet(Point(11, 6), Point(18, 8), pantsColor);
 			this->push_back(leftFeet);
 
-			Polygon rightLeg(pantsColor);
+			Polygons rightLeg(pantsColor);
 			rightLeg.push_back(Rect(Point(-7, 6), Point(-4, 12)));
 			rightLeg.push_back(Rect(Point(-4, 8), Point(0, 14)));
 			rightLeg.push_back(Rect(Point(0, 12), Point(4, 14)));
 
 			this->push_back(rightLeg);
 
-			Polygon leftLeg(pantsColor);
+			Polygons leftLeg(pantsColor);
 			leftLeg.push_back(Rect(Point(11, 6), Point(14, 16)));
 			leftLeg.push_back(Rect(Point(7, 12), Point(11, 18)));
 			this->push_back(leftLeg);
@@ -260,13 +260,13 @@ void PlayerSprite::buildSprite()
 			Rect leftFeet(Point(12, 10), Point(19, 12), pantsColor);
 			this->push_back(leftFeet);
 
-			Polygon rightLeg(pantsColor);
+			Polygons rightLeg(pantsColor);
 			rightLeg.push_back(Rect(Point(-7, 12), Point(4, 14)));
 			rightLeg.push_back(Rect(Point(-3, 10), Point(4, 12)));
 
 			this->push_back(rightLeg);
 
-			Polygon leftLeg(pantsColor);
+			Polygons leftLeg(pantsColor);
 			leftLeg.push_back(Rect(Point(12, 10), Point(16, 18)));
 			leftLeg.push_back(Rect(Point(7, 16), Point(12, 20)));
 			this->push_back(leftLeg);
@@ -339,7 +339,7 @@ void PlayerSprite::buildClimbingSprite()
 	Rect leftFeet(Point(0, 8), Point(7, 10), pantsColor);
 	this->push_back(leftFeet);
 
-	Polygon leftLeg(pantsColor);
+	Polygons leftLeg(pantsColor);
 	leftLeg.push_back(Rect(Point(4, 10), Point(7, 16)));
 	leftLeg.push_back(Rect(Point(0, 14), Point(4, 22)));
 	leftLeg.push_back(Rect(Point(4, 18), Point(7, 24)));
@@ -358,7 +358,7 @@ void PlayerSprite::buildClimbingSprite()
 	Rect torso(Point(7, 24), Point(15, 36), shirtColor);
 	this->push_back(torso);
 
-	Polygon leftArm(shirtColor);
+	Polygons leftArm(shirtColor);
 	leftArm.push_back(Rect(Point(4, 30), Point(7, 34)));
 	leftArm.push_back(Rect(Point(0, 32), Point(4, 36)));
 	this->push_back(leftArm);
@@ -378,7 +378,7 @@ void PlayerSprite::buildClimbingSprite()
 
 void PlayerSprite::buildSwingingSprite()
 {
-	Polygon legs(pantsColor);
+	Polygons legs(pantsColor);
 	legs.push_back(Rect(Point(3, 12), Point(10, 18)));
 	legs.push_back(Rect(Point(10, 14), Point(14, 20)));
 	legs.push_back(Rect(Point(10, 18), Point(21, 20)));
@@ -388,7 +388,7 @@ void PlayerSprite::buildSwingingSprite()
 
 	this->push_back(legs);
 
-	Polygon arms(shirtColor);
+	Polygons arms(shirtColor);
 	arms.push_back(Rect(Point(7, 30), Point(14, 32)));
 	arms.push_back(Rect(Point(10, 32), Point(14, 34)));
 
@@ -401,7 +401,7 @@ void PlayerSprite::buildSwingingSprite()
 
 void PlayerSprite::push_back(Rect rect)
 {
-	Polygon p(Sprite::_x, Sprite::_y);
+	Polygons p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
 	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
@@ -409,12 +409,12 @@ void PlayerSprite::push_back(Rect rect)
 		rect += Point(0, -10);
 	}
 	p.push_back(rect);
-	vector<Polygon>::push_back(p);
+	vector<Polygons>::push_back(p);
 }
 
-void PlayerSprite::push_back(Polygon pol)
+void PlayerSprite::push_back(Polygons pol)
 {
-	Polygon p(Sprite::_x, Sprite::_y);
+	Polygons p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
 	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
@@ -422,7 +422,7 @@ void PlayerSprite::push_back(Polygon pol)
 		pol += Point(0, -10);
 	}
 	p.push_back(pol);
-	vector<Polygon>::push_back(p);
+	vector<Polygons>::push_back(p);
 }
 
 void PlayerSprite::update()
@@ -433,23 +433,23 @@ void PlayerSprite::update()
 	int biggerX = INT_MIN;
 	int biggerY = INT_MIN;
 
-	for (vector<Polygon>::iterator currentPolygon = vector<Polygon>::begin(); currentPolygon != vector<Polygon>::end(); ++currentPolygon)
+	for (vector<Polygons>::iterator currentPolygons = vector<Polygons>::begin(); currentPolygons != vector<Polygons>::end(); ++currentPolygons)
 	{
-		if (currentPolygon->x() < smallerX)
+		if (currentPolygons->x() < smallerX)
 		{
-			smallerX = currentPolygon->x();
+			smallerX = currentPolygons->x();
 		}
-		if (currentPolygon->y() < smallerY)
+		if (currentPolygons->y() < smallerY)
 		{
-			smallerY = currentPolygon->y();
+			smallerY = currentPolygons->y();
 		}
-		if (currentPolygon->rightX() > biggerX)
+		if (currentPolygons->rightX() > biggerX)
 		{
-			biggerX = currentPolygon->rightX();
+			biggerX = currentPolygons->rightX();
 		}
-		if (currentPolygon->topY() > biggerY)
+		if (currentPolygons->topY() > biggerY)
 		{
-			biggerY = currentPolygon->topY();
+			biggerY = currentPolygons->topY();
 		}
 	}	
 	_width = (biggerX - smallerX);
@@ -462,8 +462,8 @@ void PlayerSprite::mirrorX()
 {
 	for (unsigned i = 0; i < this->size(); i++)
 	{
-		Polygon& currentPolygon = this->at(i);		
-		currentPolygon.mirrorX(_x);				
+		Polygons& currentPolygons = this->at(i);		
+		currentPolygons.mirrorX(_x);				
 	}
 	if (_holdingVine)
 	{		

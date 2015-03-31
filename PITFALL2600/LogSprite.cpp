@@ -14,7 +14,7 @@ LogSprite::LogSprite(GLint startX, GLint startY)
 
 void LogSprite::buildSprite()
 {
-	Polygon log(Color(80, 32, 0));
+	Polygons log(Color(80, 32, 0));
 
 	log.push_back(Rect(Point(7, 0), Point(14, 2)));
 	log.push_back(Rect(Point(4, 2), Point(7, 4)));

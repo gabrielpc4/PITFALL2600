@@ -3,7 +3,7 @@
 
 #include "Point.h"
 #include "Rect.h"
-#include "Polygon.h"
+#include "Polygons.h"
 #include "Color.h"
 #include <vector>
 #include "glut.h" // Custom glut.h fixed for using namespace std
@@ -11,7 +11,7 @@
 using namespace std;
 
 class Sprite :
-	public vector < Polygon >,
+	public vector < Polygons >,
 	public Rect
 {
 protected:
@@ -21,7 +21,7 @@ public:
 	Sprite();
 	Sprite(GLint startX, GLint startY);
 	Sprite(Rect rect, Color color);
-	Sprite(Polygon pol);
+	Sprite(Polygons pol);
 	Sprite& operator+=(const Point& point);
 	Sprite& operator -= (const Point& point);
 	void setX(GLint x);
@@ -31,7 +31,7 @@ public:
 	void updateX();
 	void push_back(Rect rect);
 	void push_back(Rect rect, Color color);
-	void push_back(Polygon pol);
+	void push_back(Polygons pol);
 	void push_back(Sprite sprite);
 	void mirrorX();
 	void draw();

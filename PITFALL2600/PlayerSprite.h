@@ -37,7 +37,7 @@ private:
 	void buildBasicShape();
 	void buildClimbingSprite();
 	void push_back(Rect rect);
-	void push_back(Polygon pol);
+	void push_back(Polygons pol);
 	void mirrorX();
 	void update();
 public:

@@ -1,7 +1,0 @@
-#include "Stairs.h"
-#include "BrickWall.h"
-#include "TunnelHole.h"
-#include "Hole.h"
-#include "Vine.h"
-#include "Bonfire.h"
-#include "GoldBar.h"

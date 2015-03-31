@@ -10,11 +10,11 @@ World::World()
 	blackHole			= NULL;
 	water				= NULL;	
 	bonfire				= NULL;
-	goldBar				= NULL;
+	treasure			= NULL;
 	vine				= new Vine();
 	blackHole			= new Hole(Color(BLACK), MOVING_HOLE);
 	water				= new Hole(Color(BLUE), MOVING_HOLE);
-
+	scenarioGenerator	= new ScenarioGenerator(positiveScenarios, negativeScenarios, scenarioNumber);
 	if (RANDOM_LEVELS)
 	{
 		srand(time(NULL));
@@ -35,7 +35,8 @@ World::World()
 			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
 			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
 			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
-			currentScenario.allowGoldBars = worldElementsFile.nextCharAsBool();
+			currentScenario.allowTreasures = worldElementsFile.nextCharAsBool();
+			currentScenario.treasureType = worldElementsFile.nextCharAsInt();
 
 			positiveScenarios.push_back(currentScenario);
 		}
@@ -52,7 +53,8 @@ World::World()
 			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
 			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
 			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
-			currentScenario.allowGoldBars = worldElementsFile.nextCharAsBool();
+			currentScenario.allowTreasures = worldElementsFile.nextCharAsBool();
+			currentScenario.treasureType = worldElementsFile.nextCharAsInt();
 
 			negativeScenarios.push_back(currentScenario);
 		}
@@ -65,113 +67,6 @@ World::World()
 	buildBasicScenario();
 }
 
-void World::raffleScenarioElements()
-{
-	int n = rand() % 3;
-
-	ScenarioElements currentScenario;
-
-	switch (n)
-	{
-		case(0) :
-		{
-			currentScenario.allowStairs = true;
-			currentScenario.allowTunnelHoles = (((rand() % 2) == 0) ? false : true);
-			
-			if (rand() % 2 == 0)
-			{
-				currentScenario.allowBrickWalls = true;
-				currentScenario.brickWallSide = (((rand() % 2) == 0) ? LEFT : RIGHT);
-			}
-			else
-			{
-				currentScenario.brickWallSide = NONE;
-				currentScenario.allowBrickWalls = false;
-			}
-		}break;
-		case(1) :
-		{
-			currentScenario.allowBlackHoles = true;
-			currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);
-
-			if (currentScenario.allowMovingHoles)
-			{
-				currentScenario.allowVines = (((rand() % 10) == 0) ? true : false);
-			}
-			else
-			{
-				currentScenario.allowVines = true;
-			}
-			
-		}break;
-		case(2) :
-		{
-			currentScenario.allowWater = true;
-			currentScenario.allowMovingHoles = (((rand() % 2) == 0) ? false : true);		
-			
-			if (currentScenario.allowMovingHoles)
-			{
-				currentScenario.allowVines = (((rand() % 10) == 0) ? true : false);
-			}
-			else
-			{
-				currentScenario.allowVines = false;
-			}
-		}break;	
-		default:; break;
-	}
-
-	if ((rand() % 10) == 0)
-	{
-		currentScenario.allowGoldBars = true;
-	}
-
-	
-
-
-	if (scenarioNumber > 0)
-	{
-		if (scenarioNumber > (int)positiveScenarios.size() - 1)
-		{			
-			positiveScenarios.push_back(currentScenario);
-			preventSimilarScenarios();
-		}		
-	}
-	else if (scenarioNumber < 0)
-	{		
-		if (abs(scenarioNumber) > (int)negativeScenarios.size() - 1)
-		{		
-			negativeScenarios.push_back(currentScenario);
-			preventSimilarScenarios();
-		}		
-	}
-	else
-	{
-		positiveScenarios.push_back(currentScenario);
-		negativeScenarios.push_back(currentScenario);
-	}	
-}
-
-void World::createABonfire()
-{
-	thisScenario().allowBonfires = true;
-	bonfire = new Bonfire();
-}
-void World::createAVine()
-{
-	thisScenario().allowVines = true;
-}
-
-bool World::hasATreasure()
-{
-	return thisScenario().allowGoldBars;
-}
-
-void World::deleteTreasure()
-{	
-	thisScenario().allowGoldBars = false;
-}
-
 void World::buildScenario(int scenarioNumber)
 {		
 	this->scenarioNumber = scenarioNumber;
@@ -180,11 +75,10 @@ void World::buildScenario(int scenarioNumber)
 	{
 		if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1 || worldElementsFile.is_open() == false)
 		{			
-			raffleScenarioElements();
+			scenarioGenerator->generateNewScenario();
 		}
 	}
 	
-
 	if (thisScenario().allowStairs)
 	{
 		stairs = new Stairs();
@@ -222,15 +116,15 @@ void World::buildScenario(int scenarioNumber)
 		createABonfire();
 	}
 
-	if (thisScenario().allowGoldBars)
+	if (thisScenario().allowTreasures)
 	{
 		if (hasATreasure())
 		{
-			goldBar = new GoldBar();
+			treasure = new Treasure(thisScenario().treasureType);
 		}
 		else
 		{
-			thisScenario().allowGoldBars = false;
+			thisScenario().allowTreasures = false;
 		}		
 	}	
 }
@@ -307,7 +201,7 @@ void World::buildBasicScenario()
 
 void World::buildTreeLeafs()
 {
-	treeLeafs = Polygon(0, 262, Color(27, 83, 11));
+	treeLeafs = Polygons(0, 262, Color(27, 83, 11));
 	treeLeafs.push_back(Rect(Point(0, 4), Point(14, WORLD_WINDOW_HEIGHT)));
 	treeLeafs.push_back(Rect(Point(14, 8), Point(43, WORLD_WINDOW_HEIGHT)));
 	treeLeafs.push_back(Rect(Point(43, 4), Point(57, WORLD_WINDOW_HEIGHT)));
@@ -392,9 +286,9 @@ void World::draw(int scenarioNumber)
 		bonfire->draw();
 	}
 
-	if (thisScenario().allowGoldBars)
+	if (thisScenario().allowTreasures)
 	{
-		goldBar->draw();
+		treasure->draw();
 	}
 	
 	treeLeafs.draw();
@@ -429,9 +323,9 @@ void World::drawBasicScenario()
 * Method Name: drawTreeBranch
 * Description: Draws the branches corresponding to the tree number
 ******************************************************************************************/
-void World::buildTreeBranch(Polygon& branch, int treeNum)
+void World::buildTreeBranch(Polygons& branch, int treeNum)
 {
-	branch = Polygon(treeTrunk[treeNum].x(), treeTrunk[treeNum].topY(), Color(83, 43, 0));
+	branch = Polygons(treeTrunk[treeNum].x(), treeTrunk[treeNum].topY(), Color(83, 43, 0));
 
 	// Defines the branches rectangles, according with the tree that is being drawn
 	switch (treeNum)
@@ -542,10 +436,10 @@ void World::deleteWorld()
 		bonfire = NULL;
 	}
 
-	if (goldBar != NULL)
+	if (treasure != NULL)
 	{
-		delete goldBar;
-		goldBar = NULL;
+		delete treasure;
+		treasure = NULL;
 	}
 }
 
@@ -584,115 +478,34 @@ bool World::hasMovingHoles()
 	return thisScenario().allowMovingHoles;
 }
 
-ScenarioElements& World::thisScenario()
+void World::createABonfire()
 {
-	return getScenario(this->scenarioNumber);
+	thisScenario().allowBonfires = true;
+	bonfire = new Bonfire();
+}
+void World::createAVine()
+{
+	thisScenario().allowVines = true;
 }
 
-ScenarioElements& World::getScenario(int scenarioNumber)
+bool World::hasATreasure()
+{
+	return thisScenario().allowTreasures;
+}
+
+void World::deleteTreasure()
+{
+	thisScenario().allowTreasures = false;
+	thisScenario().treasureType = NONE;
+}
+
+ScenarioElements& World::thisScenario()
 {
 	if (this->scenarioNumber >= 0)
 	{
 		return positiveScenarios.at(scenarioNumber);
-	}	
-	return negativeScenarios.at(abs(scenarioNumber));	
-}
-
-void World::preventSimilarScenarios()
-{		
-	if (getScenario(abs(this->scenarioNumber) - 1).allowMovingHoles && thisScenario().allowMovingHoles)
-	{
-		if (rand() % 2 == 0)
-		{
-			thisScenario().allowBlackHoles = false;
-			thisScenario().allowWater = false;
-			randomizeStairs();
-		}
-		else
-		{
-			thisScenario().allowMovingHoles = false;
-		}
 	}
-
-	if (getScenario(abs(this->scenarioNumber) - 1).allowMovingHoles == false && thisScenario().allowMovingHoles  == false)
-	{
-		if (getScenario(abs(this->scenarioNumber) - 1).allowBlackHoles && thisScenario().allowBlackHoles
-			|| getScenario(abs(this->scenarioNumber) - 1).allowWater && thisScenario().allowWater)
-		{
-			if (rand() % 2 == 0)
-			{
-				thisScenario().allowBlackHoles = false;
-				thisScenario().allowWater = false;
-				randomizeStairs();
-			}
-			else
-			{
-				thisScenario().allowMovingHoles = true;
-			}			
-		}		
-	}
-
-	if (getScenario(abs(this->scenarioNumber) - 1).allowBonfires && thisScenario().allowBonfires)
-	{		
-		thisScenario().allowBonfires = false;
-	}
-
-	if (getScenario(abs(this->scenarioNumber) - 1).allowGoldBars && thisScenario().allowGoldBars)
-	{
-		thisScenario().allowGoldBars = false;
-	}
-
-	if (getScenario(abs(this->scenarioNumber) - 1).allowStairs && getScenario(abs(this->scenarioNumber) - 1).allowTunnelHoles 
-		&& thisScenario().allowGoldBars && thisScenario().allowTunnelHoles)
-	{
-		thisScenario().allowStairs = false;
-		thisScenario().allowTunnelHoles = false;
-		thisScenario().allowBrickWalls = false;
-		randomizeHole();
-	}
-
-}
-
-void World::randomizeStairs()
-{
-	thisScenario().allowStairs = true;
-	thisScenario().allowTunnelHoles = (((rand() % 2) == 0) ? false : true);
-
-	if (rand() % 2 == 0)
-	{
-		thisScenario().allowBrickWalls = true;
-		thisScenario().brickWallSide = (((rand() % 2) == 0) ? LEFT : RIGHT);
-	}
-	else
-	{
-		thisScenario().brickWallSide = NONE;
-		thisScenario().allowBrickWalls = false;
-	}
-}
-
-void World::randomizeHole()
-{
-	if (rand() % 2 == 0)
-	{
-		thisScenario().allowBlackHoles = true;
-		thisScenario().allowWater = false;
-	}
-	else
-	{
-		thisScenario().allowBlackHoles = false;
-		thisScenario().allowWater = true;
-	}
-
-	thisScenario().allowMovingHoles = (((rand() % 2) == 0) ? false : true);
-
-	if (thisScenario().allowMovingHoles)
-	{
-		thisScenario().allowVines = (((rand() % 10) == 0) ? true : false);
-	}
-	else
-	{
-		thisScenario().allowVines = true;
-	}
+	return negativeScenarios.at(abs(scenarioNumber));
 }
 
 void World::denyBonfires()
@@ -700,10 +513,10 @@ void World::denyBonfires()
 	thisScenario().allowBonfires = false;
 }
 
-void World::createAGoldBar()
-{
-	thisScenario().allowGoldBars = true;
-	goldBar = new GoldBar();
+void World::createATreasure()
+{	
+		thisScenario().allowTreasures = true;
+		treasure = new Treasure(rand() % 4);
 }
 
 

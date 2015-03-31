@@ -52,10 +52,10 @@ void Bonfire::mirrorX()
 {
 	for (unsigned i = 0; i < this->size(); i++)
 	{
-		Polygon& currentPolygon = this->at(i);
+		Polygons& currentPolygons = this->at(i);
 
 		this->updateX();
-		for (vector<Rect>::iterator currentRect = currentPolygon.begin(); currentRect != currentPolygon.end(); ++currentRect)
+		for (vector<Rect>::iterator currentRect = currentPolygons.begin(); currentRect != currentPolygons.end(); ++currentRect)
 		{
 			*currentRect -= Point((2 * (currentRect->x() - this->x()) + currentRect->width()), 0);
 		}		

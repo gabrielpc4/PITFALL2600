@@ -84,23 +84,24 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Crocodile.h" />
     <ClInclude Include="CrocodileSprite.h" />
+    <ClInclude Include="EnemiesGenerator.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="global_constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
-    <ClInclude Include="GoldBar.h" />
+    <ClInclude Include="ScenarioElements.h" />
+    <ClInclude Include="ScenarioGenerator.h" />
+    <ClInclude Include="Treasure.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogSprite.h" />
     <ClInclude Include="Hole.h" />
-    <ClInclude Include="ScenarioObjects.h" />
     <ClInclude Include="glut.h" />
     <ClInclude Include="PitfallGame.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerSprite.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Polygons.h" />
     <ClInclude Include="Rect.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scorpion.h" />
     <ClInclude Include="ScorpionSprite.h" />
     <ClInclude Include="Shapes.h" />
@@ -119,8 +120,12 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Crocodile.cpp" />
     <ClCompile Include="CrocodileSprite.cpp" />
+    <ClCompile Include="Enemies.cpp" />
+    <ClCompile Include="EnemiesGenerator.cpp" />
     <ClCompile Include="File.cpp" />
-    <ClCompile Include="GoldBar.cpp" />
+    <ClCompile Include="ScenarioElements.cpp" />
+    <ClCompile Include="ScenarioGenerator.cpp" />
+    <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogSprite.cpp" />
     <ClCompile Include="main.cpp" />
@@ -129,7 +134,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSprite.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Polygons.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scorpion.cpp" />
     <ClCompile Include="ScorpionSprite.cpp" />
@@ -139,12 +144,6 @@
     <ClCompile Include="TunnelHole.cpp" />
     <ClCompile Include="Vine.cpp" />
     <ClCompile Include="World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="PITFALL2600.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ScenarioEnemies.txt" />

@@ -396,3 +396,8 @@ void Player::standOnCrocodile(bool state)
 {
 	_standingOnCrocodile = state;
 }
+
+void Player::setLives(int number)
+{
+	_lives = number;
+}
