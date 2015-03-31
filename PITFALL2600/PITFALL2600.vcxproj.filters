@@ -150,6 +150,9 @@
     <ClInclude Include="EnemiesGenerator.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="IntroScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -244,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="EnemiesGenerator.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScreen.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

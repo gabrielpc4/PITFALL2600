@@ -3,16 +3,19 @@
 PitfallGame::PitfallGame()
 	: enemiesFile("ScenarioEnemies.txt")
 {
-	scenarioNumber		= 0;	
-	DEBUG_MODE			= false;
-	GOD_MODE			= false;
-	score				= 2000;
-	world				= new World();
-	player				= new Player(39, 140);
-	scorpion			= NULL;
-	snake				= NULL;
-	paused				= false;
-	enemiesGenerator	= new EnemiesGenerator(positiveScenarios, negativeScenarios, scenarioNumber, world);
+	scenarioNumber			= 0;	
+	DEBUG_MODE				= false;
+	GOD_MODE				= false;
+	score					= 2000;
+	world					= new World();
+	player					= new Player(39, 140);
+	scorpion				= NULL;
+	snake					= NULL;
+	paused					= false;
+	playingHitSound			= false;
+	playingTreasureSound	= false;
+	frames					= 0;
+	enemiesGenerator		= new EnemiesGenerator(positiveScenarios, negativeScenarios, scenarioNumber, world);
 
 	if (RANDOM_LEVELS)
 	{
@@ -57,6 +60,47 @@ PitfallGame::PitfallGame()
 	crocodiles.push_back(Crocodile(187, 136));
 	crocodiles.push_back(Crocodile(245, 136));
 	crocodiles.push_back(Crocodile(303, 136));		
+}
+
+void PitfallGame::playSounds()
+{
+	
+
+	if (player->isDead())
+	{		
+		if (player->framesDead() == 1)
+		{
+			PlaySound(NULL, NULL, SND_ASYNC);
+			PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
+		}
+	}
+	else if (player->isFalling() == false && player->isJumping() == false)
+	{
+		if (player->isTakingHit())
+		{
+			if (playingHitSound == false)
+			{
+				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+				playingHitSound = true;
+			}			
+		}
+		else
+		{
+			if (playingHitSound)
+			{
+				PlaySound(NULL, NULL, SND_ASYNC);
+				playingHitSound = false;
+			}
+
+			if (player->isWalking() && player->getAnimationFrame() == 1)
+			{	
+				if (playingTreasureSound == false)
+				{
+					PlaySound(TEXT("footstep.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				}				
+			}
+		}
+	}	
 }
 
 
@@ -125,6 +169,7 @@ void PitfallGame::run()
 			if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
 			{
 				player->holdVine(true);
+				PlaySound(NULL, NULL, SND_ASYNC);
 				PlaySound(TEXT("PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 			if (player->isHoldingVine())
@@ -157,11 +202,28 @@ void PitfallGame::run()
 		if (areColliding(player, *world->treasure,BOX_DETECTION))
 		{
 			score += 4000;
+			PlaySound(NULL,NULL,NULL);
 			PlaySound(TEXT("TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
+			playingTreasureSound = true;
 			world->deleteTreasure();
 		}
-	}	
+	}
+
+	if (playingTreasureSound)
+	{
+		cout << frames << endl;
+		if (frames > 30)
+		{
+			frames = 0;
+			playingTreasureSound = false;
+		}
+		else
+		{
+			frames++;
+		}		
+	}
 	
+	playSounds();
 }
 
 
@@ -325,7 +387,8 @@ void PitfallGame::physics()
 			if (player->isJumping() == false)
 			{	
 				player->setFloor(world->tunnelFloor.topY());
-				player->falling(true);
+				player->falling(true);				
+				PlaySound(NULL, NULL, SND_ASYNC);
 				PlaySound(TEXT("falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}		
@@ -383,7 +446,7 @@ void PitfallGame::physics()
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
-					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					
 				}
 			}
 		}
@@ -401,7 +464,6 @@ void PitfallGame::physics()
 					player->setFloor(world->tunnelTop.y());
 					player->falling(true);
 					player->die();
-					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -460,34 +522,15 @@ void PitfallGame::checkBoundaries()
 	if (isOutOfBoundaries(player))
 	{
 		if (player->rightX() >= WORLD_WINDOW_WIDTH)
-		{
-			if (player->isUndeground() == false)
-			{
-				nextScenario();
-			}
-			else
-			{
-				nextScenario();
-				nextScenario();
-				nextScenario();
-			}
-			
+		{							
+			nextScenario();
 			player->setX(22);
 		}
 		else
 		{
 			if (player->x() < 0)
-			{
-				if (player->isUndeground() == false)
-				{
-					previousScenario();
-				}
-				else
-				{
-					previousScenario();
-					previousScenario();
-					previousScenario();
-				}
+			{				
+				previousScenario();
 				player->setX(WORLD_WINDOW_WIDTH - 32);
 			}
 		}
@@ -539,11 +582,7 @@ void PitfallGame::checkCollisionsWithEnemies()
 	{
 		if (areColliding(player, (Sprite)logs.at(i), BOX_DETECTION) && player->isSwinging() == false)
 		{
-			player->takeHit(true);
-			if (player->isDead() == false)
-			{
-				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME);
-			}			
+			player->takeHit(true);	
 		}
 	}
 
@@ -578,7 +617,6 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
-					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}				
 			}
 		}					
@@ -595,7 +633,6 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
-					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -612,7 +649,6 @@ void PitfallGame::checkCollisionsWithEnemies()
 				if (GOD_MODE == false)
 				{
 					player->die();
-					PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -721,6 +757,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			{
 				player->look(RIGHT);				
 				player->climbOut(RIGHT);
+				PlaySound(NULL, NULL, SND_ASYNC);
 				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
@@ -749,6 +786,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 			{
 				player->look(LEFT);
 				player->climbOut(LEFT);
+				PlaySound(NULL, NULL, SND_ASYNC);
 				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
@@ -783,6 +821,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					{
 						if (player->isJumping() == false && player->isDead() == false)
 						{
+							PlaySound(NULL, NULL, SND_ASYNC);
 							PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 						}
 						player->jumping(true);
@@ -864,6 +903,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			{
 				if (player->isJumping() == false && player->isDead() == false)
 				{
+					PlaySound(NULL, NULL, SND_ASYNC);
 					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME );
 				}
 				player->jumping(true);
@@ -873,6 +913,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 			{
 				player->look(RIGHT);				
 				player->climbOut(RIGHT);
+				PlaySound(NULL, NULL, SND_ASYNC);
 				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}		

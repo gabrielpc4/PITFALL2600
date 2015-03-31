@@ -12,7 +12,7 @@ PlayerSprite::PlayerSprite(float startX, float startY)
 	pantsColor	= Color(16, 80, 0);
 	shirtColor	= Color(48, 192, 48);
 	skinColor	= Color(240, 176, 144);
-	hatColor	= Color(80, 32, 0);
+	hatColor	= Color(80, 32, 0);	
 	buildSprite();	
 }
 
@@ -513,4 +513,8 @@ float PlayerSprite::y()
 	return _realY;
 }
 
+int PlayerSprite::getAnimationFrame()
+{
+	return animationFrame;
+}
 

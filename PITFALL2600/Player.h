@@ -10,7 +10,6 @@
 #define JUMP_SPEED 3
 #define JUMP_MAX_HEIGHT 22
 
-
 class Player 
 	: public PlayerSprite	  
 {

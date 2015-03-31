@@ -4,6 +4,9 @@
 #include "Sprite.h"
 #include "AnimatedObject.h"
 
+#include <windows.h>
+
+
 #define CLIMBING_ANIMATION_REFRESH_INTERVAL 4
 #define PLAYER_ANIMATION_0_WIDTH 11
 #define PLAYER_ANIMATION_0_HEIGHT 42
@@ -52,5 +55,6 @@ public:
 	float width();
 	float y();
 	float topY();
+	int getAnimationFrame();
 };
 #endif

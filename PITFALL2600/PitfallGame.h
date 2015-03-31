@@ -39,6 +39,9 @@ private:
 	bool paused;	
 	bool DEBUG_MODE;
 	bool GOD_MODE;
+	bool playingHitSound;
+	bool playingTreasureSound;
+	int frames;
 
 
 	vector<ScenarioEnemies> positiveScenarios;
@@ -74,6 +77,7 @@ private:
 	ScenarioEnemies& thisScenario();
 	void nextScenario();
 	void previousScenario();
+	void playSounds();
 public:
 	PitfallGame();
 	void run();

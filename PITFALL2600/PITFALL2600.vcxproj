@@ -89,6 +89,7 @@
     <ClInclude Include="global_constants.h" />
     <ClInclude Include="echo.h" />
     <ClInclude Include="Enemies.h" />
+    <ClInclude Include="IntroScreen.h" />
     <ClInclude Include="ScenarioElements.h" />
     <ClInclude Include="ScenarioGenerator.h" />
     <ClInclude Include="Treasure.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Enemies.cpp" />
     <ClCompile Include="EnemiesGenerator.cpp" />
     <ClCompile Include="File.cpp" />
+    <ClCompile Include="IntroScreen.cpp" />
     <ClCompile Include="ScenarioElements.cpp" />
     <ClCompile Include="ScenarioGenerator.cpp" />
     <ClCompile Include="Treasure.cpp" />
