@@ -13,6 +13,7 @@ AnimatedObject::AnimatedObject(float startX, float startY, int maxAnimationFrame
 {
 	animationFrame				= 0;
 	frames						= 0;
+	allowAnimation				= true;
 	this->maxAnimationFrame		= maxAnimationFrame;
 	animationRefreshInterval	= DEFAULT_ANIMATION_REFRESH_INTERVAL;
 }
@@ -24,7 +25,15 @@ void AnimatedObject::move()
 
 void AnimatedObject::draw()
 {
-	animate();
+	if (allowAnimation)
+	{
+		animate();
+	}
+	else
+	{
+		clear();
+		buildSprite();
+	}
 	Sprite::draw();
 }
 
@@ -65,6 +74,11 @@ void AnimatedObject::animate()
 void AnimatedObject::buildSprite()
 {
 
+}
+
+void AnimatedObject::canAnimate(bool state)
+{
+	allowAnimation = state;
 }
 
 void AnimatedObject::drawAllRectanglesOutlines()
@@ -137,6 +151,10 @@ unsigned AnimatedObject::totalPolygonss()
 	return Sprite::size();
 }
 
+int AnimatedObject::getAnimationFrame()
+{
+	return animationFrame;
+}
 AnimatedObject::~AnimatedObject()
 {
 }

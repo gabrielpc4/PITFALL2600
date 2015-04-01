@@ -4,18 +4,20 @@ PitfallGame::PitfallGame()
 	: enemiesFile("ScenarioEnemies.txt")
 {
 	scenarioNumber			= 0;	
-	DEBUG_MODE				= false;
-	GOD_MODE				= false;
+	frames					= 0;
 	score					= 2000;
-	world					= new World();
-	player					= new Player(39, 140);
-	scorpion				= NULL;
-	snake					= NULL;
+	DEBUG_MODE				= false;
+	GOD_MODE				= false;	
 	paused					= false;
+	showCollisionRectangles = false;
 	playingHitSound			= false;
 	playingTreasureSound	= false;
-	frames					= 0;
+	gameStarted				= false;
+	world					= new World();
+	player					= new Player(39, 140);
 	enemiesGenerator		= new EnemiesGenerator(positiveScenarios, negativeScenarios, scenarioNumber, world);
+	scorpion				= NULL;
+	snake					= NULL;	
 
 	if (RANDOM_LEVELS)
 	{
@@ -28,11 +30,11 @@ PitfallGame::PitfallGame()
 		for (int i = 0; i <= 15; i++)
 		{
 			enemiesFile.seekToScenario(i);
-			currentScenario.nScorpions = enemiesFile.nextCharAsInt();
-			currentScenario.nLogs = enemiesFile.nextCharAsInt();
-			currentScenario.movingLogs = enemiesFile.nextCharAsBool();
+			currentScenario.nScorpions	= enemiesFile.nextCharAsInt();
+			currentScenario.nLogs		= enemiesFile.nextCharAsInt();
+			currentScenario.movingLogs	= enemiesFile.nextCharAsBool();
 			currentScenario.nCrocodiles = enemiesFile.nextCharAsInt();
-			currentScenario.nSnakes = enemiesFile.nextCharAsInt();
+			currentScenario.nSnakes		= enemiesFile.nextCharAsInt();
 
 			positiveScenarios.push_back(currentScenario);
 
@@ -41,11 +43,11 @@ PitfallGame::PitfallGame()
 		for (int i = 0; i >= -6; i--)
 		{
 			enemiesFile.seekToScenario(i);
-			currentScenario.nScorpions = enemiesFile.nextCharAsInt();
-			currentScenario.nLogs = enemiesFile.nextCharAsInt();
-			currentScenario.movingLogs = enemiesFile.nextCharAsBool();
+			currentScenario.nScorpions	= enemiesFile.nextCharAsInt();
+			currentScenario.nLogs		= enemiesFile.nextCharAsInt();
+			currentScenario.movingLogs	= enemiesFile.nextCharAsBool();
 			currentScenario.nCrocodiles = enemiesFile.nextCharAsInt();
-			currentScenario.nSnakes = enemiesFile.nextCharAsInt();
+			currentScenario.nSnakes		= enemiesFile.nextCharAsInt();
 
 			negativeScenarios.push_back(currentScenario);
 		}
@@ -62,57 +64,14 @@ PitfallGame::PitfallGame()
 	crocodiles.push_back(Crocodile(303, 136));		
 }
 
-void PitfallGame::playSounds()
-{
-	
-
-	if (player->isDead())
-	{		
-		if (player->framesDead() == 1)
-		{
-			PlaySound(NULL, NULL, SND_ASYNC);
-			PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
-		}
-	}
-	else if (player->isFalling() == false && player->isJumping() == false)
-	{
-		if (player->isTakingHit())
-		{
-			if (playingHitSound == false)
-			{
-				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
-				playingHitSound = true;
-			}			
-		}
-		else
-		{
-			if (playingHitSound)
-			{
-				PlaySound(NULL, NULL, SND_ASYNC);
-				playingHitSound = false;
-			}
-
-			if (player->isWalking() && player->getAnimationFrame() == 1)
-			{	
-				if (playingTreasureSound == false)
-				{
-					PlaySound(TEXT("footstep.wav"), NULL, SND_ASYNC | SND_FILENAME);
-				}				
-			}
-		}
-	}	
-}
-
 
 void PitfallGame::spawnEnemies()
 {
-	if (scenarioNumber < -6 || scenarioNumber > 15 || enemiesFile.is_open() == false)
+	if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1)
 	{
-		if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1 || enemiesFile.is_open() == false)
-		{
-			enemiesGenerator->generateNewEnemies();
-		}
+		enemiesGenerator->generateNewEnemies();
 	}
+	
 		
 	switch (thisScenario().nLogs)
 	{
@@ -152,162 +111,206 @@ void PitfallGame::spawnEnemies()
 
 void PitfallGame::run()
 {
-	if (player->isDead() && player->isFalling() == false)
+	if (gameStarted)
 	{
-		paused = true;
-	}
-
-	if (isPaused() == false)
-	{	
-		moveAll();
-		checkBoundaries();
-		physics();
-		checkCollisionsWithEnemies();
-
-		if (world->hasAVine())
+		if (player->isDead() && player->isFalling() == false)
 		{
-			if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
+			paused = true;
+		}
+
+		if (isPaused() == false)
+		{
+			moveAll();
+			checkBoundaries();
+			physics();
+			checkCollisionsWithEnemies();
+
+			if (world->hasAVine())
 			{
-				player->holdVine(true);
-				PlaySound(NULL, NULL, SND_ASYNC);
-				PlaySound(TEXT("PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				if ((player->isSwinging() == false) && player->isJumping() && canGrabVine(player))
+				{
+					player->holdVine(true);
+					PlaySound(NULL, NULL, SND_ASYNC);
+					PlaySound(TEXT("PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				}
+				if (player->isHoldingVine())
+				{
+					player->swing(world->vine);
+				}
 			}
-			if (player->isHoldingVine())
+
+			if (player->isTakingHit() && player->isDead() == false && score > 0)
 			{
-				player->swing(world->vine);
+				score--;
 			}
 		}
 
-		if (player->isTakingHit() && player->isDead() == false && score > 0)
+		if (player->isDead() || player->isDead() && player->isFalling() == false)
 		{
-			score--;
+			player->incrementFramesDead();
+
+			if (player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
+			{
+				player->respawn();
+				world->blackHole->enableSizeChanging();
+				world->water->enableSizeChanging();
+				paused = false;
+			}
+		}
+
+		if (world->hasATreasure())
+		{
+			if (areColliding(player, *world->treasure, BOX_DETECTION))
+			{
+				score += 4000;
+				PlaySound(NULL, NULL, NULL);
+				PlaySound(TEXT("TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				playingTreasureSound = true;
+				world->deleteTreasure();
+			}
+		}
+
+		if (playingTreasureSound)
+		{
+			if (frames > 30)
+			{
+				frames = 0;
+				playingTreasureSound = false;
+			}
+			else
+			{
+				frames++;
+			}
+		}
+
+		playSounds();
+	}	
+}
+
+void PitfallGame::playSounds()
+{
+	if (player->isDead())
+	{
+		if (player->framesDead() == 1)
+		{
+			PlaySound(NULL, NULL, SND_ASYNC);
+			PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
-
-	if (player->isDead() || player->isDead() && player->isFalling() == false)
+	else if (player->isFalling() == false && player->isJumping() == false)
 	{
-		player->incrementFramesDead();
-
-		if (player->framesDead() > RESPAWN_FRAMES && player->livesLeft() > 0)
+		if (player->isTakingHit())
 		{
-			player->respawn();
-			world->blackHole->enableSizeChanging();
-			world->water->enableSizeChanging();
-			paused = false;			
-		}
-	}
-
-	if (world->hasATreasure())
-	{
-		if (areColliding(player, *world->treasure,BOX_DETECTION))
-		{
-			score += 4000;
-			PlaySound(NULL,NULL,NULL);
-			PlaySound(TEXT("TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
-			playingTreasureSound = true;
-			world->deleteTreasure();
-		}
-	}
-
-	if (playingTreasureSound)
-	{
-		cout << frames << endl;
-		if (frames > 30)
-		{
-			frames = 0;
-			playingTreasureSound = false;
+			if (playingHitSound == false)
+			{
+				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+				playingHitSound = true;
+			}
 		}
 		else
 		{
-			frames++;
-		}		
+			if (playingHitSound)
+			{
+				PlaySound(NULL, NULL, SND_ASYNC);
+				playingHitSound = false;
+			}
+
+			if (player->isWalking() && player->getAnimationFrame() == 1)
+			{
+				if (playingTreasureSound == false)
+				{
+					PlaySound(TEXT("footstep.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				}
+			}
+		}
 	}
-	
-	playSounds();
 }
-
-
 
 void PitfallGame::drawAll()
 {
-	world->draw(scenarioNumber);
-	player->draw();
-	world->drawOverlayers();
-
-	if (thisScenario().nSnakes != 0)
+	if (gameStarted == false)
 	{
-		snake->draw();
-	}
-
-
-	if (thisScenario().nScorpions != 0)
-	{
-		if (DEBUG_MODE == false)
-		{ 
-			scorpion->draw();
-		}		
-	}
-
-	for (unsigned i = 0; i < logs.size(); i++)
-	{
-		logs.at(i).draw();
-	}
-
-	if (thisScenario().nCrocodiles != 0)
-	{
-		for (unsigned i = 0; i < crocodiles.size(); i++)
-		{
-			crocodiles.at(i).draw();
-		}
+		introScreen.show();
 	}
 	else
 	{
-		for (unsigned i = 0; i < crocodiles.size(); i++)
-		{
-			crocodiles.at(i).animate();
-		}
-	}
-
-	if (DEBUG_MODE)
-	{
-		if (player->isUndeground() && thisScenario().nScorpions != 0
-			|| world->hasABonfire() && areClose(player, (Sprite*)world->bonfire)
-			|| thisScenario().nSnakes != 0 && areClose(player, (Sprite*)snake))
-		{
-			player->DRAW_ON_DEBUG_MODE();
-		}
-		
-
-		if (thisScenario().nScorpions != 0)
-		{
-			scorpion->DRAW_ON_DEBUG_MODE();
-		}
+		world->draw(scenarioNumber);
+		player->draw();
+		world->drawOverlayers();
 
 		if (thisScenario().nSnakes != 0)
 		{
-			snake->DRAW_ON_DEBUG_MODE();
+			snake->draw();
 		}
 
-		drawCollisionRectangles();
-
-		if (world->hasAVine())
+		if (thisScenario().nScorpions != 0)
 		{
-			world->vine->drawCircleTrack();
+			if (showCollisionRectangles == false)
+			{
+				scorpion->draw();
+			}
 		}
 
-		if (world->hasABonfire())
+		for (unsigned i = 0; i < logs.size(); i++)
 		{
-			world->bonfire->DRAW_ON_DEBUG_MODE();
+			logs.at(i).draw();
 		}
-	}
-	
-	showHUD();
 
-	if ((player->isDead() == false) || (player->isDead()) && player->isFalling()) // Makes the game freeze, when the player dies
-	{
-		glutSwapBuffers();
-	}
-	
+		if (thisScenario().nCrocodiles != 0)
+		{
+			for (unsigned i = 0; i < crocodiles.size(); i++)
+			{
+				crocodiles.at(i).draw();
+			}
+		}
+		else
+		{
+			for (unsigned i = 0; i < crocodiles.size(); i++)
+			{
+				crocodiles.at(i).animate();
+			}
+		}
+
+		if (showCollisionRectangles)
+		{
+			if (player->isUndeground() && thisScenario().nScorpions != 0
+				|| world->hasABonfire() && areClose(player, (Sprite*)world->bonfire)
+				|| thisScenario().nSnakes != 0 && areClose(player, (Sprite*)snake))
+			{
+				player->DRAW_ON_DEBUG_MODE();
+			}
+
+
+			if (thisScenario().nScorpions != 0)
+			{
+				scorpion->DRAW_ON_DEBUG_MODE();
+			}
+
+			if (thisScenario().nSnakes != 0)
+			{
+				snake->DRAW_ON_DEBUG_MODE();
+			}
+
+			drawCollisionRectangles();
+
+			if (world->hasAVine())
+			{
+				world->vine->drawCircleTrack();
+			}
+
+			if (world->hasABonfire())
+			{
+				world->bonfire->DRAW_ON_DEBUG_MODE();
+			}
+		}
+
+		showHUD();
+
+		if ((player->isDead() == false) || (player->isDead()) && player->isFalling()) // Makes the game freeze, when the player dies
+		{
+			glutSwapBuffers();
+		}
+	}	
 }
 
 void PitfallGame::showHUD()
@@ -319,18 +322,23 @@ void PitfallGame::showHUD()
 	printText(label + std::to_string(player->livesLeft()), Point(10, 340));
 	
 	if (player->isDead() && player->livesLeft() == 0 && player->framesDead() == RESPAWN_FRAMES)
-	{		
-		printText("Press Space to Restart the Game", Point(10, 5));
+	{ 
+		printText("Press Space to Restart the Game", Point(10, 5));			
 		glutSwapBuffers();
 	}
-	else if (GOD_MODE)
-	{		
-		printText("God Mode ON", Point(10, 5));
-	}
-	if (DEBUG_MODE)
+	else if (DEBUG_MODE)
 	{
+		if (GOD_MODE)
+		{
+			printText("God Mode ON", Point(10, 5));
+		}
+		else
+		{
+			printText("Debug Mode ON", Point(10, 5));
+		}
+
 		label = "Scenario: ";
-		printText(label + std::to_string(scenarioNumber), Point(400, 5));		
+		printText(label + std::to_string(scenarioNumber), Point(400, 5));				
 	}
 }
 
@@ -343,7 +351,7 @@ void PitfallGame::moveAll()
 	{
 		if (player->climbingDirection() == DOWN)
 		{
-			// If the player has climbed all the way down the stairs
+			// If the player has climbed all the way down the ladder
 			if (player->y() - CLIMBING_SPEED < world->tunnelFloor.topY())
 			{
 				// Prevent him from going below the floor
@@ -379,10 +387,10 @@ void PitfallGame::moveAll()
 
 void PitfallGame::physics()
 {	
-	if (world->stairs != NULL)
+	if (world->ladder != NULL)
 	{
 		// Makes the player fall
-		if (willFall(player, world->stairs->exit) && (player->isClimbing() == false))
+		if (willFall(player, world->ladder->exit) && (player->isClimbing() == false))
 		{
 			if (player->isJumping() == false)
 			{	
@@ -474,12 +482,12 @@ void PitfallGame::physics()
 
 bool PitfallGame::isAbleToClimbOut(Player* player)
 {
-	return (player->topY() > (world->stairs->exit->y() + 10));
+	return (player->topY() > (world->ladder->exit->y() + 10));
 }
 
 void PitfallGame::centerOnStair(Player* player)
 {
-	player->setX(world->stairs->x() + 5);
+	player->setX(world->ladder->x() + 5);
 }
 
 bool  PitfallGame::willFall(Player* player, Sprite* hole)
@@ -733,152 +741,155 @@ void  PitfallGame::printText(string text, Point p)
 
 void PitfallGame::handleKeyboardInput(int key, int keyState)
 {
-	if (key == GLUT_KEY_RIGHT)
+	if (gameStarted)
 	{
-		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the right key is pressed
+		if (key == GLUT_KEY_RIGHT)
 		{
-			if (keyState == DOWN)
+			if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the right key is pressed
 			{
-				if (player->isJumping() == false
-					&& player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
+				if (keyState == DOWN)
+				{
+					if (player->isJumping() == false
+						&& player->isFalling() == false)	// Prevents the player sprite from changing direction while jumping
+					{
+						player->look(RIGHT);
+						player->walking(true);
+					}
+				}
+				else // If the user releases the key
+				{
+					player->walking(false);
+				}
+			}
+			else // If the player is climbing
+			{
+				if (isAbleToClimbOut(player))
 				{
 					player->look(RIGHT);
-					player->walking(true);
+					player->climbOut(RIGHT);
+					PlaySound(NULL, NULL, SND_ASYNC);
+					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
-			else // If the user releases the key
-			{
-				player->walking(false);
-			}
 		}
-		else // If the player is climbing
+		if (key == GLUT_KEY_LEFT)
 		{
-			if (isAbleToClimbOut(player))
+			if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the left key is pressed
 			{
-				player->look(RIGHT);				
-				player->climbOut(RIGHT);
-				PlaySound(NULL, NULL, SND_ASYNC);
-				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				if (keyState == DOWN)
+				{
+					if (player->isJumping() == false && player->isFalling() == false) // Prevents the player sprite from changing direction while jumping
+					{
+						player->look(LEFT);
+						player->walking(true);
+					}
+				}
+
+				else // If the user releases the key
+				{
+					player->walking(false);
+				}
 			}
-		}
-	}
-	if (key == GLUT_KEY_LEFT)
-	{
-		if (player->isClimbing() == false) // Prevents the player sprite from changing the animation if the left key is pressed
-		{
-			if (keyState == DOWN)
+			else // If the player is climbing
 			{
-				if (player->isJumping() == false && player->isFalling() == false) // Prevents the player sprite from changing direction while jumping
+				if (isAbleToClimbOut(player))
 				{
 					player->look(LEFT);
-					player->walking(true);
+					player->climbOut(LEFT);
+					PlaySound(NULL, NULL, SND_ASYNC);
+					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
-
-			else // If the user releases the key
-			{
-				player->walking(false);
-			}
 		}
-		else // If the player is climbing
+		if (player->isFalling() == false)
 		{
-			if (isAbleToClimbOut(player))
+			if (key == GLUT_KEY_UP)
 			{
-				player->look(LEFT);
-				player->climbOut(LEFT);
-				PlaySound(NULL, NULL, SND_ASYNC);
-				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
-			}
-		}
-	}
-	if (player->isFalling() == false)
-	{
-		if (key == GLUT_KEY_UP)
-		{
-			if (keyState == DOWN)
-			{
-				if (player->isSwinging())
+				if (keyState == DOWN)
 				{
-					player->holdVine(false);
-				}
-				else // If the player is not swinging
-				{
-					if (world->stairs != NULL)
+					if (player->isSwinging())
 					{
-						// If the player is in contact with the stairs and not about to climb out
-						if (areColliding(player, *world->stairs, BOX_DETECTION) && (isAbleToClimbOut(player) == false))
+						player->holdVine(false);
+					}
+					else // If the player is not swinging
+					{
+						if (world->ladder != NULL)
 						{
-							centerOnStair(player);
-							player->walking(false);
-							player->climbing(true);
-							player->setAnimationFrame(6);
-							player->climb(UP);
+							// If the player is in contact with the ladder and not about to climb out
+							if (areColliding(player, *world->ladder, BOX_DETECTION) && (isAbleToClimbOut(player) == false))
+							{
+								centerOnStair(player);
+								player->walking(false);
+								player->climbing(true);
+								player->setAnimationFrame(6);
+								player->climb(UP);
+							}
+						}
+
+						// Prevents the user from jumping while climbing or falling
+						if ((player->isClimbing() == false) && (player->isFalling() == false))
+						{
+							if (player->isJumping() == false && player->isDead() == false)
+							{
+								PlaySound(NULL, NULL, SND_ASYNC);
+								PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+							}
+							player->jumping(true);
 						}
 					}
-
-					// Prevents the user from jumping while climbing or falling
-					if ((player->isClimbing() == false) && (player->isFalling() == false))
-					{
-						if (player->isJumping() == false && player->isDead() == false)
-						{
-							PlaySound(NULL, NULL, SND_ASYNC);
-							PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
-						}
-						player->jumping(true);
-					}
-				}				
-			}
-			else // If the user releases the UP arrow key
-			{
-				if (player->isClimbing())
-				{
-					player->stopClimbing();
-				}				
-			}
-		}
-		if (key == GLUT_KEY_DOWN)
-		{
-			if (keyState == DOWN)
-			{
-				if (player->isSwinging())
-				{
-					player->holdVine(false);
 				}
-				else // If the player is not swinging
+				else // If the user releases the UP arrow key
 				{
 					if (player->isClimbing())
 					{
-						player->climb(DOWN);
+						player->stopClimbing();
 					}
-				}				
+				}
 			}
-			else // If the user releases the DOWN arrow key
+			if (key == GLUT_KEY_DOWN)
 			{
-				if (player->isClimbing())
+				if (keyState == DOWN)
 				{
-					player->stopClimbing();
+					if (player->isSwinging())
+					{
+						player->holdVine(false);
+					}
+					else // If the player is not swinging
+					{
+						if (player->isClimbing())
+						{
+							player->climb(DOWN);
+						}
+					}
+				}
+				else // If the user releases the DOWN arrow key
+				{
+					if (player->isClimbing())
+					{
+						player->stopClimbing();
+					}
 				}
 			}
 		}
-	}
-	if (key == GLUT_KEY_PAGE_UP)
-	{
-		if (keyState == DOWN)
+		if (key == GLUT_KEY_PAGE_UP)
 		{
-			if (DEBUG_MODE)
+			if (keyState == DOWN)
 			{
-				nextScenario();
-			}			
+				if (DEBUG_MODE)
+				{
+					nextScenario();
+				}
+			}
 		}
-	}
-	else if (key == GLUT_KEY_PAGE_DOWN)
-	{
-		if (keyState == DOWN)
+		else if (key == GLUT_KEY_PAGE_DOWN)
 		{
-			if (DEBUG_MODE)
+			if (keyState == DOWN)
 			{
-				previousScenario();
-			}			
+				if (DEBUG_MODE)
+				{
+					previousScenario();
+				}
+			}
 		}
 	}
 }
@@ -887,44 +898,62 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 {
 	if (c == SPACE_BAR)
 	{
-		// Makes the player release the vine when the space-bar is pressed
-		if (player->isSwinging())
-		{
-			player->holdVine(false);						
-		}
-		else if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
-		{
-			PitfallGame::reset();
+		if (gameStarted)
+		{	
+			// Makes the player release the vine when the space-bar is pressed
+			if (player->isSwinging())
+			{
+				player->holdVine(false);
+			}
+			else if (player->isDead() && player->livesLeft() == 0 && player->framesDead() >= RESPAWN_FRAMES)
+			{
+				PitfallGame::reset();
+			}
+			else
+			{
+				// Prevents the user from jumping while climbing or falling
+				if ((player->isClimbing() == false) && (player->isFalling() == false))
+				{
+					if (player->isJumping() == false && player->isDead() == false)
+					{
+						PlaySound(NULL, NULL, SND_ASYNC);
+						PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					}
+					player->jumping(true);
+				}
+				// Allows the player to climb out of the tunnel, when he reaches the top of the ladder and press the SPACE_BAR
+				if (player->isClimbing() && isAbleToClimbOut(player))
+				{
+					player->look(RIGHT);
+					player->climbOut(RIGHT);
+					PlaySound(NULL, NULL, SND_ASYNC);
+					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				}
+			}
 		}
 		else
 		{
-			// Prevents the user from jumping while climbing or falling
-			if ((player->isClimbing() == false) && (player->isFalling() == false))
-			{
-				if (player->isJumping() == false && player->isDead() == false)
-				{
-					PlaySound(NULL, NULL, SND_ASYNC);
-					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME );
-				}
-				player->jumping(true);
-			}
-			// Allows the player to climb out of the tunnel, when he reaches the top of the stairs and press the SPACE_BAR
-			if (player->isClimbing() && isAbleToClimbOut(player))
-			{
-				player->look(RIGHT);				
-				player->climbOut(RIGHT);
-				PlaySound(NULL, NULL, SND_ASYNC);
-				PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
-			}
-		}		
+			// Starts the game
+			gameStarted = true;
+		}
 	}
 	if (c == 'd' || c == 'D')
 	{
-		DEBUG_MODE = !DEBUG_MODE;
+		DEBUG_MODE				= !DEBUG_MODE;
+		showCollisionRectangles = DEBUG_MODE;	
+
+		if (DEBUG_MODE == false)
+		{
+			GOD_MODE = false;
+		}
+		
 	}
 	if (c == 'g' || c == 'G')
 	{
-		GOD_MODE = !GOD_MODE;
+		if (DEBUG_MODE)
+		{
+			GOD_MODE = !GOD_MODE;
+		}		
 	}
 
 	if (c == 'l' || c == 'L')
@@ -932,6 +961,14 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 		if (DEBUG_MODE)
 		{
 			player->setLives(99);
+		}
+	}
+
+	if (c == 'h' || c == 'H')
+	{
+		if (DEBUG_MODE)
+		{
+			showCollisionRectangles = !showCollisionRectangles;
 		}
 	}
 }

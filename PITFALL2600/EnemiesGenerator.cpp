@@ -14,6 +14,7 @@ void EnemiesGenerator::generateNewEnemies()
 	if (world->hasATreasure() == false)
 	{
 		int n = rand() % 6;
+		
 		switch (n)
 		{
 		case(0) :
@@ -59,6 +60,23 @@ void EnemiesGenerator::generateNewEnemies()
 		}
 	}
 
+	if (currentScenario.nCrocodiles != 0)
+	{
+		if (rand() % 2 == 0)
+		{
+			world->createAVine();
+		}
+		else
+		{
+			if (currentScenario.nSnakes == 0 && world->hasABonfire() == false && world->hasATreasure() == false)
+			{
+				world->createATreasure();
+			}
+		}
+
+		world->createStaticWater();
+	}
+
 	if (scenarioNumber > 0)
 	{
 		if (scenarioNumber > (int)positiveScenarios.size() - 1)
@@ -69,7 +87,7 @@ void EnemiesGenerator::generateNewEnemies()
 	else if (scenarioNumber < 0)
 	{
 		if (abs(scenarioNumber) >(int)negativeScenarios.size() - 1)
-		{
+		{			
 			negativeScenarios.push_back(currentScenario);
 		}
 	}
@@ -95,24 +113,7 @@ void EnemiesGenerator::generateNewEnemies()
 		world->denyBonfires();
 	}
 
-	if (thisScenario().nCrocodiles != 0)
-	{
-		if (rand() % 2 == 0)
-		{
-			world->createAVine();
-		}
-		else
-		{
-			if (thisScenario().nSnakes == 0 && world->hasABonfire() == false && world->hasATreasure() == false)
-			{
-				if (rand() % 2 == 0)
-				{
-					world->createATreasure();
-				}
-			}
-		}
-		world->createStaticWater();
-	}
+	
 }
 
 ScenarioEnemies& EnemiesGenerator::thisScenario()

@@ -41,7 +41,7 @@ public:
 		
 	// Other elements	
 	Vine* vine;
-	Stairs* stairs;
+	Ladder* ladder;
 	BrickWall* brickWall;
 	vector<TunnelHole> tunnelHole;
 	Hole* blackHole;

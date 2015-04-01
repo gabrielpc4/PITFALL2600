@@ -81,9 +81,6 @@
     <ClInclude Include="BrickWall.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Stairs.h">
-      <Filter>Header Files\WorldObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
@@ -135,9 +132,6 @@
     <ClInclude Include="Treasure.h">
       <Filter>Header Files\WorldObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ScenarioElements.h">
-      <Filter>Header Files\includes</Filter>
-    </ClInclude>
     <ClInclude Include="Polygons.h">
       <Filter>Header Files\GeometricShapes</Filter>
     </ClInclude>
@@ -152,6 +146,12 @@
     </ClInclude>
     <ClInclude Include="IntroScreen.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.h">
+      <Filter>Header Files\WorldObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenarioElements.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -178,9 +178,6 @@
     </ClCompile>
     <ClCompile Include="LogSprite.cpp">
       <Filter>Source Files\Sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="Stairs.cpp">
-      <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
     <ClCompile Include="BrickWall.cpp">
       <Filter>Source Files\WorldObjects</Filter>
@@ -250,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="IntroScreen.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder.cpp">
+      <Filter>Source Files\WorldObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

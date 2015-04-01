@@ -11,7 +11,7 @@
 //		allowVines			= 0 or 1
 //      allowBonfires		= 0 or 1
 //      allowTreasures		= 0 or 1
-//      treasureType		= 0: MONEY_BAG | 1: SILVER_BAR | 2: GOLD_BAR | 3: RING
+//      treasureType		= 0: MONEY_BAG | 1: SILVER_BAR | 2: GOLD_BAR | 3: DIAMOND_RING
 -6
 11000000000
 -5

@@ -1,10 +1,8 @@
 #pragma once
-#ifndef STAIRS_H
-#define STAIRS_H
-
+#ifndef LADDER_H
+#define LADDER_H
 #include "Sprite.h"
-
-class Stairs :
+class Ladder :
 	public Sprite
 {
 private:
@@ -12,12 +10,12 @@ private:
 	Rect step;	
 	Sprite overlayer;
 public:
-	Stairs();
-	Stairs(GLint startX, GLint startY);
+	Ladder();
+	Ladder(GLint startX, GLint startY);
 	void draw();
 	Sprite* exit;
 	void drawOverlayer();
-	~Stairs();
+	~Ladder();
 };
 
 #endif

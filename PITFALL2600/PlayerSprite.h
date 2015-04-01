@@ -40,8 +40,7 @@ private:
 	void buildBasicShape();
 	void buildClimbingSprite();
 	void push_back(Rect rect);
-	void push_back(Polygons pol);
-	void mirrorX();
+	void push_back(Polygons pol);	
 	void update();
 public:
 	PlayerSprite();
@@ -55,6 +54,6 @@ public:
 	float width();
 	float y();
 	float topY();
-	int getAnimationFrame();
+	void mirrorX();
 };
 #endif

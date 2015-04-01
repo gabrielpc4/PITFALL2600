@@ -3,7 +3,7 @@
 #include "glut.h"  //Custom glut.h fixed to work with stdlib.h
 #include <gl/gl.h>
 
-#define MAGNIFICATION (2.5F)
+#define MAGNIFICATION (2.4F)
 #define TIMER_FUNC_WAIT_TIME 25
 
 PitfallGame *pit;
@@ -38,13 +38,6 @@ void display()
 }
 
 
-void reshape_func(int w, int h)
-{
-	glLoadIdentity();
-	gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
 void idle_func()
 {
 	glutPostRedisplay();
@@ -75,7 +68,6 @@ int main(int argc, char* argv[])
 	glutCreateWindow("Pitfall 2600");				// Creates a top-level window. The name will be provided to the window system as the window's name.
 	init();											// Custom function created to define the background color and configures the scale interpretation			
 	glutDisplayFunc(display);						// Sets the display callback for the current window.		
-	glutReshapeFunc(reshape_func);
 	glutSpecialFunc(arrows_keys_func_down);;
 	glutSpecialUpFunc(arrows_keys_func_up);
 	glutKeyboardFunc(keyboard_func);

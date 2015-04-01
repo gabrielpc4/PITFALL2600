@@ -5,7 +5,7 @@ World::World()
 	: worldElementsFile("ScenarioWorldElements.txt")
 {	
 	vine				= NULL;
-	stairs				= NULL;
+	ladder				= NULL;
 	brickWall			= NULL;
 	blackHole			= NULL;
 	water				= NULL;	
@@ -26,17 +26,17 @@ World::World()
 		for (int i = 0; i <= 15; i++)
 		{
 			worldElementsFile.seekToScenario(i);
-			currentScenario.allowStairs = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBrickWalls = worldElementsFile.nextCharAsBool();
-			currentScenario.brickWallSide = worldElementsFile.nextCharAsInt();
-			currentScenario.allowTunnelHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBlackHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowWater = worldElementsFile.nextCharAsBool();
-			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
-			currentScenario.allowTreasures = worldElementsFile.nextCharAsBool();
-			currentScenario.treasureType = worldElementsFile.nextCharAsInt();
+			currentScenario.allowStairs			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBrickWalls		= worldElementsFile.nextCharAsBool();
+			currentScenario.brickWallSide		= worldElementsFile.nextCharAsInt();
+			currentScenario.allowTunnelHoles	= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBlackHoles		= worldElementsFile.nextCharAsBool();
+			currentScenario.allowWater			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowMovingHoles	= worldElementsFile.nextCharAsBool();
+			currentScenario.allowVines			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBonfires		= worldElementsFile.nextCharAsBool();
+			currentScenario.allowTreasures		= worldElementsFile.nextCharAsBool();
+			currentScenario.treasureType		= worldElementsFile.nextCharAsInt();
 
 			positiveScenarios.push_back(currentScenario);
 		}
@@ -44,23 +44,23 @@ World::World()
 		for (int i = 0; i >= -6; i--)
 		{
 			worldElementsFile.seekToScenario(i);
-			currentScenario.allowStairs = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBrickWalls = worldElementsFile.nextCharAsBool();
-			currentScenario.brickWallSide = worldElementsFile.nextCharAsInt();
-			currentScenario.allowTunnelHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBlackHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowWater = worldElementsFile.nextCharAsBool();
-			currentScenario.allowMovingHoles = worldElementsFile.nextCharAsBool();
-			currentScenario.allowVines = worldElementsFile.nextCharAsBool();
-			currentScenario.allowBonfires = worldElementsFile.nextCharAsBool();
-			currentScenario.allowTreasures = worldElementsFile.nextCharAsBool();
-			currentScenario.treasureType = worldElementsFile.nextCharAsInt();
+			currentScenario.allowStairs			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBrickWalls		= worldElementsFile.nextCharAsBool();
+			currentScenario.brickWallSide		= worldElementsFile.nextCharAsInt();
+			currentScenario.allowTunnelHoles	= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBlackHoles		= worldElementsFile.nextCharAsBool();
+			currentScenario.allowWater			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowMovingHoles	= worldElementsFile.nextCharAsBool();
+			currentScenario.allowVines			= worldElementsFile.nextCharAsBool();
+			currentScenario.allowBonfires		= worldElementsFile.nextCharAsBool();
+			currentScenario.allowTreasures		= worldElementsFile.nextCharAsBool();
+			currentScenario.treasureType		= worldElementsFile.nextCharAsInt();
 
 			negativeScenarios.push_back(currentScenario);
 		}
 	}
 	else
-	{
+	{		
 		srand(time(NULL));
 	}
 
@@ -71,17 +71,14 @@ void World::buildScenario(int scenarioNumber)
 {		
 	this->scenarioNumber = scenarioNumber;
 
-	if (scenarioNumber < -6 || scenarioNumber > 15 || worldElementsFile.is_open() == false)
+	if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1)
 	{
-		if (scenarioNumber > (int)positiveScenarios.size() - 1 || abs(scenarioNumber) >(int)negativeScenarios.size() - 1 || worldElementsFile.is_open() == false)
-		{			
-			scenarioGenerator->generateNewScenario();
-		}
+		scenarioGenerator->generateNewScenario();
 	}
-	
+		
 	if (thisScenario().allowStairs)
 	{
-		stairs = new Stairs();
+		ladder = new Ladder();
 	}
 	if (thisScenario().allowBrickWalls)
 	{
@@ -140,8 +137,8 @@ void World::createStaticWater()
 	thisScenario().allowWater = true;
 	thisScenario().allowMovingHoles = false;
 	tunnelHole.clear();
-	delete stairs;
-	stairs = NULL;
+	delete ladder;
+	ladder = NULL;
 }
 
 void World::buildBasicScenario()
@@ -246,7 +243,7 @@ void World::draw(int scenarioNumber)
 
 	if (thisScenario().allowStairs)
 	{
-		stairs->draw();
+		ladder->draw();
 	}
 
 	if (thisScenario().allowBrickWalls)
@@ -387,7 +384,7 @@ void World::drawOverlayers()
 {
 	if (thisScenario().allowStairs)
 	{
-		stairs->drawOverlayer();
+		ladder->drawOverlayer();
 	}
 
 	for (unsigned i = 0; i < tunnelHole.size(); i++)
@@ -408,11 +405,11 @@ void World::drawOverlayers()
 
 void World::deleteWorld()
 {
-	if (stairs != NULL)
+	if (ladder != NULL)
 	{
-		stairs->~Stairs();
-		delete stairs;
-		stairs = NULL;
+		ladder->~Ladder();
+		delete ladder;
+		ladder = NULL;
 	}
 
 	if (brickWall != NULL)

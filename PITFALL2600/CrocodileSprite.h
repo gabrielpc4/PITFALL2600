@@ -12,7 +12,7 @@ protected:
 public:
 	CrocodileSprite();
 	CrocodileSprite(float startX, float startY);
-	void buildSprite();
+	void buildSprite();	
 	~CrocodileSprite();
 };
 #endif

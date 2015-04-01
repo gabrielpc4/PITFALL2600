@@ -8,11 +8,10 @@
 #include "EnemiesGenerator.h"
 #include "World.h"
 #include "File.h"
+#include "IntroScreen.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h> 
-
 #include <vector>
-
 #include <windows.h>
 
 using namespace std;
@@ -34,14 +33,18 @@ private:
 	vector<Crocodile> crocodiles;
 	Snake* snake;
 	File enemiesFile;
+	IntroScreen introScreen;
+	bool gameStarted;
 	int scenarioNumber;
 	int score;
 	bool paused;	
 	bool DEBUG_MODE;
 	bool GOD_MODE;
+	bool showCollisionRectangles;
 	bool playingHitSound;
 	bool playingTreasureSound;
 	int frames;
+	
 
 
 	vector<ScenarioEnemies> positiveScenarios;

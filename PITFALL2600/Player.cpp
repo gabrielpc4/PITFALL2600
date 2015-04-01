@@ -33,7 +33,7 @@ void Player::jumping(bool state)
 	_jumping = state;
 
 	// Resets the _down jumping variable
-	// (Prevents the bug when you grab the stairs while falling down on a jump, 
+	// (Prevents the bug when you grab the ladder while falling down on a jump, 
 	//  and when you want to climb out, the player falls back again into the tunnel)
 	if (state == false)
 	{
@@ -107,7 +107,7 @@ void Player::move()
 		// Not swinging but climbing
 		if (isClimbing())
 		{
-			// Prevents the player from false jumping, when getting off the stairs, when he initially got on the stairs while jumping
+			// Prevents the player from false jumping, when getting off the ladder, when he initially got on the ladder while jumping
 			if (isJumping())
 			{
 				jumping(false);

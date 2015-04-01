@@ -1,23 +1,35 @@
 #pragma once
+#ifndef INTROSCREEN_H_
+#define INTROSCREEN_H_
+#include "global_constants.h"
 #include "Treasure.h"
 #include "Enemies.h"
-#include "PlayerSprite.h"
+#include "Player.h"
 #include "ScenarioElements.h"
+#include "Rect.h"
+#include <iostream>
+#include <string>
+
 class IntroScreen
 {
 private:
-	PlayerSprite player;
-	LogSprite log;
-	ScorpionSprite scorpion;
-	Snake snake;
 	vector<Crocodile> crocodiles;
-	Bonfire bonfire;
-	Hole blackhole;
+	vector<Treasure> treasures;
+	Rect background;
+	Rect tunnelTop;
+	Rect ground;
+	Rect sky;
+	Rect treeTrunk1;
+	Rect treeTrunk2;
+	PlayerSprite playerSprite;
 	Hole water;
-	vector<Treasure> treasure;
+	vector<Crocodile> staticCrocodiles;
+	int frames;
+	void output1(int x, int y, char *string);
+	void static printText(string text, Point p, float size);
 public:
 	IntroScreen();
-	void show();
+	void show();	
 	~IntroScreen();
 };
-
+#endif

@@ -18,51 +18,59 @@ PlayerSprite::PlayerSprite(float startX, float startY)
 
 void PlayerSprite::draw()
 {
-	if (_holdingVine)
+	if (allowAnimation)
 	{
-		animationFrame = 8;
-	}
-	else
-	{
-		// Falling sprite
-		if (_falling && _jumping == false)
+		if (_holdingVine)
 		{
-			animationFrame = 0;
+			animationFrame = 8;
 		}
 		else
 		{
-			// Climbing sprite
-			if (_climbing)
+			// Falling sprite
+			if (_falling && _jumping == false)
 			{
-				// Switches between the climbing animations
-				animate(6, 7);
+				animationFrame = 0;
 			}
 			else
 			{
-				if (_walking)
+				// Climbing sprite
+				if (_climbing)
 				{
-					// Animate the walking
-					animate(1, 5);
+					// Switches between the climbing animations
+					animate(6, 7);
 				}
 				else
 				{
-					animationFrame = 0;
+					if (_walking)
+					{
+						// Animate the walking
+						animate(1, 5);
+					}
+					else
+					{
+						animationFrame = 0;
+					}
 				}
 			}
-		}
 
-		// Jumping, and taking hit sprite
-		if ((_jumping)
-			|| (_takingHit && _falling == false) && (_climbing == false)
-			|| (_falling) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
-		{
-			animationFrame = 5;
+			// Jumping, and taking hit sprite
+			if ((_jumping)
+				|| (_takingHit && _falling == false) && (_climbing == false)
+				|| (_falling) && (this->y() + (this->height() / 2.0) < 96)) // Makes the player open the legs, when there's room for it, when falling
+			{
+				animationFrame = 5;
+			}
 		}
-	}	
-	// UPDATES THE SPRITE (ANIMATION)
-	if (_dead == false || _falling) // Prevents the animation to change when the player is dead, 												
-	{											// but allows to change to the falling sprite, for the case the player falls into the pit
-		// Rebuilds the sprite, with the new animation sprite
+		// UPDATES THE SPRITE (ANIMATION)
+		if (_dead == false || _falling) // Prevents the animation to change when the player is dead, 												
+		{											// but allows to change to the falling sprite, for the case the player falls into the pit
+			// Rebuilds the sprite, with the new animation sprite
+			Sprite::clear();
+			buildSprite();
+		}
+	}
+	else
+	{
 		Sprite::clear();
 		buildSprite();
 	}
@@ -114,7 +122,7 @@ void PlayerSprite::animate(int minFrameNum, int maxFramenum)
 			
 void PlayerSprite::buildSprite()
 {
-	if (_climbing == false)
+	if (_climbing == false || allowAnimation == false)
 	{
 		buildBasicShape();
 	}
@@ -306,15 +314,20 @@ void PlayerSprite::buildSprite()
 	}
 
 
-	this->update();
-	
-	// Makes the player sprite change its looking direction or animates the climbing sprite
-	if ((_lookingDirection != RIGHT
-		&& _climbing == false)	// Prevents the clmbing sprite being mirrored twice
-		|| animationFrame == 7) // Reverses the climbing sprite to make the climbing animation
+
+	if (allowAnimation)
 	{
-		this->mirrorX();
+		// Makes the player sprite change its looking direction or animates the climbing sprite
+		if ((_lookingDirection != RIGHT
+			&& _climbing == false)	// Prevents the clmbing sprite being mirrored twice
+			|| animationFrame == 7) // Reverses the climbing sprite to make the climbing animation
+		{
+			this->mirrorX();
+		}
 	}
+	
+
+	this->update();
 	
 }
 
@@ -404,7 +417,7 @@ void PlayerSprite::push_back(Rect rect)
 	Polygons p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
-	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
+	if (_takingHit && _falling == false && _jumping == false && _climbing == false && allowAnimation)
 	{
 		rect += Point(0, -10);
 	}
@@ -417,7 +430,7 @@ void PlayerSprite::push_back(Polygons pol)
 	Polygons p(Sprite::_x, Sprite::_y);
 
 	// Makes the player sprite appear lower, when taking hit from a log
-	if (_takingHit && _falling == false && _jumping == false && _climbing == false)
+	if (_takingHit && _falling == false && _jumping == false && _climbing == false && allowAnimation)
 	{
 		pol += Point(0, -10);
 	}
@@ -511,10 +524,5 @@ float PlayerSprite::topY()
 float PlayerSprite::y()
 {
 	return _realY;
-}
-
-int PlayerSprite::getAnimationFrame()
-{
-	return animationFrame;
 }
 
