@@ -3,7 +3,7 @@
 #include "glut.h"  //Custom glut.h fixed to work with stdlib.h
 #include <gl/gl.h>
 
-#define MAGNIFICATION (2.4F)
+#define MAGNIFICATION 1.8F
 #define TIMER_FUNC_WAIT_TIME 25
 
 PitfallGame *pit;

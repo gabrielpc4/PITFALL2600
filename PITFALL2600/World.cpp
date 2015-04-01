@@ -2,7 +2,7 @@
 
 // Defines the Positions of the basic scenario
 World::World()
-	: worldElementsFile("ScenarioWorldElements.txt")
+	: worldElementsFile("scenario_files/ScenarioWorldElements.txt")
 {	
 	vine				= NULL;
 	ladder				= NULL;

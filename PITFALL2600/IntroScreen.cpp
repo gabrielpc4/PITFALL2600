@@ -20,6 +20,12 @@ IntroScreen::IntroScreen()
 	treasures.push_back(Treasure(220, (treasures[0].y() - 35), SILVER_BAR));
 	treasures.push_back(Treasure(220, (treasures[1].y() - 35), GOLD_BAR));
 	treasures.push_back(Treasure(222, (treasures[2].y() - 35), DIAMOND_RING));
+	for (unsigned i = 0; i < crocodiles.size(); i++)
+	{
+		staticCrocodiles[i].canAnimate(false);
+		staticCrocodiles[i].setAnimationFrame(1);
+	}
+	PlaySound(TEXT("sounds/PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
 }
 
 void IntroScreen::show()
@@ -28,11 +34,13 @@ void IntroScreen::show()
 
 	background.draw();
 
-	printText("PITFALL 2600", Point(190, WORLD_WINDOW_HEIGHT - 40), 2);
+	printText("PITFALL 2600", Point(190, WORLD_WINDOW_HEIGHT - 35), 2);
+
+	output1(330, 336, "by Gabriel Pinheiro de Carvalho");
 	
 	glPushMatrix();
 	glScalef(0.8, 0.8, 0.8);
-	glTranslatef(80, 70, 0);
+	glTranslatef(80, 65, 0);
 	
 
 	tunnelTop.draw();
@@ -43,9 +51,7 @@ void IntroScreen::show()
 	water.draw();
 
 	for (unsigned i = 0; i < crocodiles.size(); i++)
-	{
-		staticCrocodiles[i].canAnimate(false);
-		staticCrocodiles[i].setAnimationFrame(1);
+	{		
 		staticCrocodiles[i].draw();
 	}
 
@@ -64,26 +70,28 @@ void IntroScreen::show()
 	playerSprite.draw();
 	glPopMatrix();
 
-	output1(200, 215, "Objective: Collect 10 treasures to win the game");
+	glPushMatrix();	
+	glTranslatef(-3, 0 , 0);
+	output1(170, 210, "Objective: Collect 10 treasures to win the game");
 
 	output1(10, 210, "Controls:");
-	output1(30, 200, "Walk: LEFT or RIGHT ARROWS");
-	output1(30, 190, "Jump: SPACE or UP ARROW");
-	output1(30, 180, "Climb Ladder: UP ARROW");
+	output1(30, 200, "Walk: LEFT or RIGHT");
+	output1(30, 190, "Jump: SPACE or UP ");
+	output1(30, 180, "Climb Ladder: UP ");
 	output1(20, 160, "While Climbing Ladders:");
-	output1(30, 150, "Climb Up  : UP ARROW");
-	output1(30, 140, "Climb Down: DOWN ARROW");
+	output1(30, 150, "Climb Up  : UP ");
+	output1(30, 140, "Climb Down: DOWN ");
 	output1(20, 130, "When reached the top:");
-	output1(30, 120, "Climb Out Left : LEFT ARROW");
-	output1(30, 110, "Climb Out Right: RIGHT ARROW or SPACE");
-	output1(20, 90, "While Swinging on vines (Jump to grab it):");
-	output1(30, 80, "Release vine: UP ARROW or DOWN ARROW or SPACE");
+	output1(30, 120, "Climb Out Left : LEFT");
+	output1(30, 110, "Climb Out Right: RIGHT or SPACE");
+	output1(20, 90, "While Swinging on Vines:");
+	output1(30, 80, "Release Vine: UP or DOWN or SPACE");
+
 
 	output1(20, 60, "Cheats:");
 	output1(30, 50, "D: Enable/Disable DEBUG MODE");
-	output1(40, 40, "On Debug Mode:");
-	output1(40, 30, "G: God Mode   L: 99 lives   H: Toggle Collision Boxes   PageUp: Next Scenario    PageDown: Previous Scenario");
-	
+	output1(30, 37, "[On Debug Mode]");
+	output1(30, 27, "G: God Mode  L: 99 lives  H: Toggle Collision Boxes  PageUp: Next Scenario  PageDown: Previous Scenario");	
 
 	for (unsigned i = 0; i < treasures.size(); i++)
 	{
@@ -122,8 +130,8 @@ void IntroScreen::show()
 	playerSprite.draw();
 	glPopMatrix();
 
-	output1(340, 75, "Stay top of the crocodile's eyes to stay alive");
-	output1(395, 65, "when it's mouth open");
+	output1(335, 75, "Stay on top of the crocodile's eyes to ");
+	output1(348, 65, "stay alive when it's mouth opens");
 	
 	if (frames <= 15)
 	{

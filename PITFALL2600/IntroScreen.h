@@ -9,7 +9,7 @@
 #include "Rect.h"
 #include <iostream>
 #include <string>
-
+#include <windows.h>
 class IntroScreen
 {
 private:

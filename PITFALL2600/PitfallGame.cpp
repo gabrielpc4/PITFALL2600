@@ -1,7 +1,7 @@
 #include "PitfallGame.h"
 
 PitfallGame::PitfallGame()
-	: enemiesFile("ScenarioEnemies.txt")
+	: enemiesFile("scenario_files/ScenarioEnemies.txt")
 {
 	scenarioNumber			= 0;	
 	frames					= 0;
@@ -131,7 +131,7 @@ void PitfallGame::run()
 				{
 					player->holdVine(true);
 					PlaySound(NULL, NULL, SND_ASYNC);
-					PlaySound(TEXT("PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					PlaySound(TEXT("sounds/PitfallTheme.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 				if (player->isHoldingVine())
 				{
@@ -164,7 +164,7 @@ void PitfallGame::run()
 			{
 				score += 4000;
 				PlaySound(NULL, NULL, NULL);
-				PlaySound(TEXT("TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				PlaySound(TEXT("sounds/TreasureCollected.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				playingTreasureSound = true;
 				world->deleteTreasure();
 			}
@@ -194,7 +194,7 @@ void PitfallGame::playSounds()
 		if (player->framesDead() == 1)
 		{
 			PlaySound(NULL, NULL, SND_ASYNC);
-			PlaySound(TEXT("death.wav"), NULL, SND_ASYNC | SND_FILENAME);
+			PlaySound(TEXT("sounds/death.wav"), NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 	else if (player->isFalling() == false && player->isJumping() == false)
@@ -203,7 +203,7 @@ void PitfallGame::playSounds()
 		{
 			if (playingHitSound == false)
 			{
-				PlaySound(TEXT("playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+				PlaySound(TEXT("sounds/playerHit.wav"), NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
 				playingHitSound = true;
 			}
 		}
@@ -219,7 +219,7 @@ void PitfallGame::playSounds()
 			{
 				if (playingTreasureSound == false)
 				{
-					PlaySound(TEXT("footstep.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					PlaySound(TEXT("sounds/footstep.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -397,7 +397,7 @@ void PitfallGame::physics()
 				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);				
 				PlaySound(NULL, NULL, SND_ASYNC);
-				PlaySound(TEXT("falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				PlaySound(TEXT("sounds/falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}		
 	}
@@ -436,7 +436,7 @@ void PitfallGame::physics()
 			{											
 				player->setFloor(world->tunnelFloor.topY());
 				player->falling(true);
-				PlaySound(TEXT("falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
+				PlaySound(TEXT("sounds/falling.wav"), NULL, SND_ASYNC | SND_FILENAME);
 			}
 		}
 	}	
@@ -768,7 +768,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					player->look(RIGHT);
 					player->climbOut(RIGHT);
 					PlaySound(NULL, NULL, SND_ASYNC);
-					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					PlaySound(TEXT("sounds/jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -797,7 +797,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 					player->look(LEFT);
 					player->climbOut(LEFT);
 					PlaySound(NULL, NULL, SND_ASYNC);
-					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					PlaySound(TEXT("sounds/jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
@@ -832,7 +832,7 @@ void PitfallGame::handleKeyboardInput(int key, int keyState)
 							if (player->isJumping() == false && player->isDead() == false)
 							{
 								PlaySound(NULL, NULL, SND_ASYNC);
-								PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+								PlaySound(TEXT("sounds/jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 							}
 							player->jumping(true);
 						}
@@ -917,7 +917,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 					if (player->isJumping() == false && player->isDead() == false)
 					{
 						PlaySound(NULL, NULL, SND_ASYNC);
-						PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+						PlaySound(TEXT("sounds/jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 					}
 					player->jumping(true);
 				}
@@ -927,7 +927,7 @@ void PitfallGame::handleKeyboardInput(unsigned char c)
 					player->look(RIGHT);
 					player->climbOut(RIGHT);
 					PlaySound(NULL, NULL, SND_ASYNC);
-					PlaySound(TEXT("jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
+					PlaySound(TEXT("sounds/jump.wav"), NULL, SND_ASYNC | SND_FILENAME);
 				}
 			}
 		}
